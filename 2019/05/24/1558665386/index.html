@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>LoadRunner使用google浏览器脚本录制 | FlyingFish&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="maiyikai,maiyude,FlyingFish,FlyingFish's blog">
+  
+  <meta name="description" content="莫名其妙的接到压力测试的任务 工具：LoadRunner v.11、Google Chrome">
+<meta name="keywords" content="LoadRunner,Test">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LoadRunner使用google浏览器脚本录制">
+<meta property="og:url" content="https://maiyikai.github.io/2019/05/24/1558665386/index.html">
+<meta property="og:site_name" content="FlyingFish&#39;s Blog">
+<meta property="og:description" content="莫名其妙的接到压力测试的任务 工具：LoadRunner v.11、Google Chrome">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://maiyikai.github.io/img/LoadRunner/1558666511.png">
+<meta property="og:image" content="https://maiyikai.github.io/img/LoadRunner/1558666512.png">
+<meta property="og:image" content="https://maiyikai.github.io/img/LoadRunner/1558666513.png">
+<meta property="og:image" content="https://maiyikai.github.io/img/LoadRunner/1558666514.png">
+<meta property="og:image" content="https://maiyikai.github.io/img/LoadRunner/1558666515.png">
+<meta property="og:image" content="https://maiyikai.github.io/img/LoadRunner/1558666516.png">
+<meta property="og:image" content="https://maiyikai.github.io/img/LoadRunner/1558666517.png">
+<meta property="og:image" content="https://maiyikai.github.io/img/LoadRunner/1558666518.png">
+<meta property="og:image" content="https://maiyikai.github.io/img/LoadRunner/1558666519.png">
+<meta property="og:image" content="https://maiyikai.github.io/img/LoadRunner/1558666520.png">
+<meta property="og:image" content="https://maiyikai.github.io/img/LoadRunner/1558666521.png">
+<meta property="og:image" content="https://maiyikai.github.io/img/LoadRunner/1558666522.png">
+<meta property="og:updated_time" content="2019-10-12T12:21:09.265Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LoadRunner使用google浏览器脚本录制">
+<meta name="twitter:description" content="莫名其妙的接到压力测试的任务 工具：LoadRunner v.11、Google Chrome">
+<meta name="twitter:image" content="https://maiyikai.github.io/img/LoadRunner/1558666511.png">
+  
+  
+    <link rel="icon" href="/pen_logo.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?a53f82c21dd876a0b4f165d79cffff9a";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">FlyingFish&#39;s Blog</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo2.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        FlyingFish&#39;s Blog
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        随笔记
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="maiyikai" target="_blank" href="//maiyikai.github.io/">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/maiyikai/">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                        <a title="Weibo" target="_blank" href="//weibo.com/maiyikai">
+                            <i class="fa fa-weibo fa-2x"></i></a>
+                    
+                        <a title="Weixin" target="_blank" href="//maiyikai.github.io/images/user_weixin.jpg">
+                            <i class="fa fa-weixin fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-1558665386" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      LoadRunner使用google浏览器脚本录制
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/LoadRunner/">LoadRunner</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-05-24
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <p>莫名其妙的接到压力测试的任务</p>
+<p>工具：LoadRunner v.11、Google Chrome<br><a id="more"></a><br>其实LoadRunner支持多个浏览器的，ie浏览器是最好的选择，奈何项目不支持ie，而使用Google Chrome，LoadRunner又不能将它直接打开录制，所以只能是找找找资料了，功夫不负有心人，网上很多都是“渣”，不可用。</p>
+<h4 id="浏览器"><a href="#浏览器" class="headerlink" title="浏览器"></a>浏览器</h4><p>LoadRunner支持的浏览器：</p>
+<ol>
+<li>8.0 最高ie6</li>
+<li>8.1 最高ie6</li>
+<li>9.0 最高ie7</li>
+<li>9.5 最高ie8</li>
+<li>11.0 最高ie9( win7 32位+LR11+IE10可用，但win7 64位+LR11+IE10不可用，降至IE9可用)，支持firefox3.6、24.0</li>
+<li>12.0 支持IE11</li>
+</ol>
+<h4 id="LoadRunner"><a href="#LoadRunner" class="headerlink" title="LoadRunner"></a>LoadRunner</h4><ol>
+<li>打开LoadRunner</li>
+</ol>
+<p><img src="https://maiyikai.github.io/img/LoadRunner/1558666511.png" alt="LoadRunner"></p>
+<ol start="2">
+<li>创建脚本，点击上图“创建/编辑脚本”</li>
+</ol>
+<p><img src="https://maiyikai.github.io/img/LoadRunner/1558666512.png" alt="LoadRunner"></p>
+<ol start="3">
+<li>进入到开始录制界面</li>
+</ol>
+<p><img src="https://maiyikai.github.io/img/LoadRunner/1558666513.png" alt="LoadRunner"></p>
+<ol start="4">
+<li>设置<ol>
+<li>选择要录制的程序–&gt;到LoadRunner的安装路径下查找：C:\Program Files (x86)\HP\LoadRunner\bin文件名为“wplus_init_wsock”的程序</li>
+</ol>
+</li>
+</ol>
+<p><img src="https://maiyikai.github.io/img/LoadRunner/1558666514.png" alt="LoadRunner"></p>
+<pre><code>2. 输入要录制的URL(隐私保护，这是假的): http://www.baidu.com
+3. 点击下方选项按钮
+</code></pre><p><img src="https://maiyikai.github.io/img/LoadRunner/1558666515.png" alt="LoadRunner"></p>
+<pre><code>4. 创建条目
+</code></pre><p><img src="https://maiyikai.github.io/img/LoadRunner/1558666516.png" alt="LoadRunner"></p>
+<pre><code>5. 更新之后确认即可
+6. 返回到第一步，先不要录制，需要等到浏览器设置好之后才能录制
+</code></pre><h4 id="Google-Chrome设置"><a href="#Google-Chrome设置" class="headerlink" title="Google Chrome设置"></a>Google Chrome设置</h4><ol>
+<li>打开浏览器，进入设置，选择系统设置，再选择打开代理设置</li>
+</ol>
+<p><img src="https://maiyikai.github.io/img/LoadRunner/1558666517.png" alt="LoadRunner"></p>
+<ol start="2">
+<li>设置代理</li>
+</ol>
+<p><img src="https://maiyikai.github.io/img/LoadRunner/1558666518.png" alt="LoadRunner"></p>
+<h4 id="开始录制"><a href="#开始录制" class="headerlink" title="开始录制"></a>开始录制</h4><ol>
+<li>进入LoadRunner,开始录制</li>
+</ol>
+<p><img src="https://maiyikai.github.io/img/LoadRunner/1558666519.png" alt="LoadRunner"><br><img src="https://maiyikai.github.io/img/LoadRunner/1558666520.png" alt="LoadRunner"></p>
+<ol start="2">
+<li>打开浏览器，在地址栏输入你要录制的服务器地址</li>
+<li>录制完成</li>
+</ol>
+<p><img src="https://maiyikai.github.io/img/LoadRunner/1558666521.png" alt="LoadRunner"><br><img src="https://maiyikai.github.io/img/LoadRunner/1558666522.png" alt="LoadRunner"></p>
+<p>到这里，就基本结束了</p>
+<h5 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h5><ol>
+<li><a href="https://blog.csdn.net/qq_43485197/article/details/83652797" target="_blank" rel="noopener">Loadrunner如何使用谷歌浏览器录制脚本https://blog.csdn.net/qq_43485197/article/details/83652797</a></li>
+</ol>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2019年10月12日 20:21</p>
+        <p>原始链接： <a class="post-url" href="/2019/05/24/1558665386/" title="LoadRunner使用google浏览器脚本录制">https://maiyikai.github.io/2019/05/24/1558665386/</a></p>
+        <footer>
+            <a href="https://maiyikai.github.io">
+                <img src="/images/logo2.png" alt="maiyikai">
+                maiyikai
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        ~谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://maiyikai.github.io/2019/05/24/1558665386/&title=《LoadRunner使用google浏览器脚本录制》 — FlyingFish's Blog&pic=https://maiyikai.github.io/img/LoadRunner/1558666500.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://maiyikai.github.io/2019/05/24/1558665386/&title=《LoadRunner使用google浏览器脚本录制》 — FlyingFish's Blog&source=莫名其妙的接到压力测试的任务
+工具：LoadRunner v.11、Google Chrome" data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://maiyikai.github.io/2019/05/24/1558665386/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《LoadRunner使用google浏览器脚本录制》 — FlyingFish's Blog&url=https://maiyikai.github.io/2019/05/24/1558665386/&via=https://maiyikai.github.io" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://maiyikai.github.io/2019/05/24/1558665386/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://maiyikai.github.io/2019/05/24/1558665386/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/LoadRunner/" class="color1">LoadRunner</a>
+      
+    <a href="/tags/Test/" class="color5">Test</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#浏览器"><span class="post-toc-text">浏览器</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#LoadRunner"><span class="post-toc-text">LoadRunner</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Google-Chrome设置"><span class="post-toc-text">Google Chrome设置</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#开始录制"><span class="post-toc-text">开始录制</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#参考资料"><span class="post-toc-text">参考资料</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+    <a href="/2019/07/23/1563873556/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          正则表达式的简单使用
+        
+      </span>
+    </a>
+  
+  
+    <a href="/2019/05/21/1558423260/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">CenterOS服务器搭建--网络配置</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+        <div id="SOHUCS" sid="1558665386"></div>
+<script type="text/javascript">
+    (function(){
+        var appid = 'cyu3qrrJt';
+        var conf = '3f0da4017453d35b0c5dafb035646863';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2019 maiyikai<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "https://maiyikai.github.io",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/CenterOS/">CenterOS</a><a class="category-link" href="/categories/DataSource/">DataSource</a><a class="category-link" href="/categories/Hexo/">Hexo</a><a class="category-link" href="/categories/Java/">Java</a><a class="category-link" href="/categories/LoadRunner/">LoadRunner</a><a class="category-link" href="/categories/MyBatis/">MyBatis</a><a class="category-link" href="/categories/SpringBoot/">SpringBoot</a><a class="category-link" href="/categories/error/">error</a><a class="category-link" href="/categories/regex/">regex</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/LoadRunner/" style="font-size: 13.33px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 13.33px;">Test</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 10px;">script</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/LoadRunner/" style="font-size: 13.33px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 13.33px;">Test</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 10px;">script</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>

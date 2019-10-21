@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>Spring Boot启动原理 | FlyingFish&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="maiyikai,maiyude,FlyingFish,FlyingFish's blog">
+  
+  <meta name="description" content="SpringBoot启动原理参考1：Spring Boot的启动过程三：SpringApplication.run()参考2：面试官问我，SpringApplication.run做了哪些事？">
+<meta name="keywords" content="SpringBoot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Boot启动原理">
+<meta property="og:url" content="https://maiyikai.github.io/2019/03/22/1553480412/index.html">
+<meta property="og:site_name" content="FlyingFish&#39;s Blog">
+<meta property="og:description" content="SpringBoot启动原理参考1：Spring Boot的启动过程三：SpringApplication.run()参考2：面试官问我，SpringApplication.run做了哪些事？">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-10-12T12:21:09.264Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring Boot启动原理">
+<meta name="twitter:description" content="SpringBoot启动原理参考1：Spring Boot的启动过程三：SpringApplication.run()参考2：面试官问我，SpringApplication.run做了哪些事？">
+  
+  
+    <link rel="icon" href="/pen_logo.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?a53f82c21dd876a0b4f165d79cffff9a";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">FlyingFish&#39;s Blog</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo2.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        FlyingFish&#39;s Blog
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        随笔记
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="maiyikai" target="_blank" href="//maiyikai.github.io/">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/maiyikai/">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                        <a title="Weibo" target="_blank" href="//weibo.com/maiyikai">
+                            <i class="fa fa-weibo fa-2x"></i></a>
+                    
+                        <a title="Weixin" target="_blank" href="//maiyikai.github.io/images/user_weixin.jpg">
+                            <i class="fa fa-weixin fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-1553480412" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      Spring Boot启动原理
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/SpringBoot/">SpringBoot</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-03-22
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <p>SpringBoot启动原理<br><a href="https://www.jianshu.com/p/13fd8128c955" target="_blank" rel="noopener">参考1：Spring Boot的启动过程三：SpringApplication.run()</a><br><a href="https://mp.weixin.qq.com/s/O2zS2yyLy1Vu_aPtR28wiQ" target="_blank" rel="noopener">参考2：面试官问我，SpringApplication.run做了哪些事？</a><br><a id="more"></a></p>
+<h4 id="如何启动一个SpringBoot应用？"><a href="#如何启动一个SpringBoot应用？" class="headerlink" title="如何启动一个SpringBoot应用？"></a>如何启动一个SpringBoot应用？</h4><pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class Test&#123;</span><br><span class="line">	public static void main(String[] args)&#123;</span><br><span class="line">		SpringApplication springApplication = new SpringApplication(Test.class);</span><br><span class="line">		springApplication.run(args);	</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</code></pre><h4 id="解析创建SpringApplication对象"><a href="#解析创建SpringApplication对象" class="headerlink" title="解析创建SpringApplication对象"></a>解析创建SpringApplication对象</h4><h5 id="源码1"><a href="#源码1" class="headerlink" title="源码1"></a>源码1</h5><p>SpringApplication构造方法：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public SpringApplication(Object... sources) &#123;</span><br><span class="line">	initialize(sources);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="源码2（initialize-…-）"><a href="#源码2（initialize-…-）" class="headerlink" title="源码2（initialize(…)）"></a>源码2（initialize(…)）</h5><p>初始化SpringAppcation<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">private void initialize(Object[] sources) &#123;</span><br><span class="line">	//保存主配置类</span><br><span class="line">	if (sources != null &amp;&amp; sources.length &gt; 0) &#123;</span><br><span class="line">		this.sources.addAll(Arrays.asList(sources));</span><br><span class="line">	&#125;</span><br><span class="line">	//判断当前应用是否为WEB应用</span><br><span class="line">	this.webEnvironment = deduceWebEnvironment();</span><br><span class="line">	//通过类路径META-INF/spring.factories文件获取ApplicationContextInitializer类型的实例，并保存</span><br><span class="line">	setInitializers((Collection) getSpringFactoriesInstances(</span><br><span class="line">			ApplicationContextInitializer.class));</span><br><span class="line">	//通过类路径META-INF/spring.factories文件获取ApplicationListener类型的实例，并保存</span><br><span class="line">	setListeners((Collection) getSpringFactoriesInstances(ApplicationListener.class));</span><br><span class="line">	//从多个配置类中找到有main方法的主配置类</span><br><span class="line">	this.mainApplicationClass = deduceMainApplicationClass();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="源码3-getSpringFactoriesInstances（…）"><a href="#源码3-getSpringFactoriesInstances（…）" class="headerlink" title="源码3 getSpringFactoriesInstances（…）"></a>源码3 getSpringFactoriesInstances（…）</h5><p>获取通过META-INF/spring.factories文件获取到的对应的类路径下的实例<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//通过类路径META-INF/spring.factories文件获取ApplicationContextInitializer类型的实例</span><br><span class="line">private &lt;T&gt; Collection&lt;? extends T&gt; getSpringFactoriesInstances(Class&lt;T&gt; type) &#123;</span><br><span class="line">	return getSpringFactoriesInstances(type, new Class&lt;?&gt;[] &#123;&#125;);</span><br><span class="line">&#125;</span><br><span class="line">	</span><br><span class="line">private &lt;T&gt; Collection&lt;? extends T&gt; getSpringFactoriesInstances(Class&lt;T&gt; type,</span><br><span class="line">		Class&lt;?&gt;[] parameterTypes, Object... args) &#123;</span><br><span class="line">	ClassLoader classLoader = Thread.currentThread().getContextClassLoader();</span><br><span class="line">	// Use names and ensure unique to protect against duplicates</span><br><span class="line">	//通过类路径META-INF/spring.factories文件获取ApplicationContextInitializer.class类型的类名</span><br><span class="line">	Set&lt;String&gt; names = new LinkedHashSet&lt;String&gt;(</span><br><span class="line">			SpringFactoriesLoader.loadFactoryNames(type, classLoader));</span><br><span class="line">	//获取实例</span><br><span class="line">	List&lt;T&gt; instances = createSpringFactoriesInstances(type, parameterTypes,</span><br><span class="line">			classLoader, args, names);</span><br><span class="line">	AnnotationAwareOrderComparator.sort(instances);</span><br><span class="line">	return instances;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="源码4-deduceMainApplicationClass"><a href="#源码4-deduceMainApplicationClass" class="headerlink" title="源码4(deduceMainApplicationClass())"></a>源码4(deduceMainApplicationClass())</h5><p>从运行类的堆栈中获取含有main方法的类<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">//从运行类的堆栈中获取含有main方法的类</span><br><span class="line">private Class&lt;?&gt; deduceMainApplicationClass() &#123;</span><br><span class="line">	try &#123;</span><br><span class="line">		StackTraceElement[] stackTrace = new RuntimeException().getStackTrace();</span><br><span class="line">		for (StackTraceElement stackTraceElement : stackTrace) &#123;</span><br><span class="line">			if (&quot;main&quot;.equals(stackTraceElement.getMethodName())) &#123;</span><br><span class="line">				return Class.forName(stackTraceElement.getClassName());</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	catch (ClassNotFoundException ex) &#123;</span><br><span class="line">		// Swallow and continue</span><br><span class="line">	&#125;</span><br><span class="line">	return null;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="解析springApplication-run-args"><a href="#解析springApplication-run-args" class="headerlink" title="解析springApplication.run(args)"></a>解析springApplication.run(args)</h4><h5 id="源码1-run-…"><a href="#源码1-run-…" class="headerlink" title="源码1(run(…))"></a>源码1(run(…))</h5><p>run方法<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">public ConfigurableApplicationContext run(String... args) &#123;</span><br><span class="line">	//跑马灯对象--用于记录运行时间</span><br><span class="line">	StopWatch stopWatch = new StopWatch();</span><br><span class="line">	stopWatch.start();</span><br><span class="line">	ConfigurableApplicationContext context = null;</span><br><span class="line">	FailureAnalyzers analyzers = null;</span><br><span class="line">	configureHeadlessProperty();</span><br><span class="line">	//通过META-INF/spring.factories获取SpringApplicationRunListener类型的实例</span><br><span class="line">	SpringApplicationRunListeners listeners = getRunListeners(args);</span><br><span class="line">	//遍历回调SpringApplicationRunListener的starting方法--既启动监听器</span><br><span class="line">	listeners.starting();</span><br><span class="line">	try &#123;</span><br><span class="line">		//封装命令行参数</span><br><span class="line">		ApplicationArguments applicationArguments = new DefaultApplicationArguments(</span><br><span class="line">				args);</span><br><span class="line">		//环境准备，完成后遍历回调SpringApplicationRunListener的environmentPrepared方法对监听器配置环境</span><br><span class="line">		ConfigurableEnvironment environment = prepareEnvironment(listeners,</span><br><span class="line">				applicationArguments);</span><br><span class="line">		//打印Banner-既控制台显示的Spring....</span><br><span class="line">		Banner printedBanner = printBanner(environment);</span><br><span class="line">		//根据创建的环境判断，是创建web容器，还是普通的IOC容器</span><br><span class="line">		context = createApplicationContext();</span><br><span class="line">		//注册异常分析器</span><br><span class="line">		analyzers = new FailureAnalyzers(context);</span><br><span class="line">		//准备上下文</span><br><span class="line">		//遍历回调ApplicationContextInitializer的initialize事件</span><br><span class="line">		//遍历回调SpringApplicationRunListeners中的contextPrepared事件</span><br><span class="line">		//环境准备完成之后，遍历回调SpringApplicationRunListeners中的contextLoaded事件</span><br><span class="line">		prepareContext(context, environment, listeners, applicationArguments,</span><br><span class="line">				printedBanner);</span><br><span class="line">		//刷新上下文，初始化所有自动配置类</span><br><span class="line">		refreshContext(context);</span><br><span class="line">		//遍历所有注册的ApplicationRunner和CommandLineRunner，并执行其run()方法</span><br><span class="line">		afterRefresh(context, applicationArguments);</span><br><span class="line">		//调用所有的SpringApplicationRunListener的finished()方法，广播SpringBoot已经完成了ApplicationContext初始化的全部过程</span><br><span class="line">		listeners.finished(context, null);</span><br><span class="line">		stopWatch.stop();</span><br><span class="line">		if (this.logStartupInfo) &#123;</span><br><span class="line">			new StartupInfoLogger(this.mainApplicationClass)</span><br><span class="line">					.logStarted(getApplicationLog(), stopWatch);</span><br><span class="line">		&#125;</span><br><span class="line">		return context;</span><br><span class="line">	&#125;</span><br><span class="line">	catch (Throwable ex) &#123;</span><br><span class="line">		handleRunFailure(context, listeners, analyzers, ex);</span><br><span class="line">		throw new IllegalStateException(ex);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="源码2-getRunListeners-…"><a href="#源码2-getRunListeners-…" class="headerlink" title="源码2(getRunListeners(…))"></a>源码2(getRunListeners(…))</h5><p>通过类路径META-INF/spring.factories文件获取ApplicationContextInitializer类型的实例，并将其封装到SpringApplicationRunListeners实例<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//创建实例 SpringApplicationRunListeners</span><br><span class="line">private SpringApplicationRunListeners getRunListeners(String[] args) &#123;</span><br><span class="line">	Class&lt;?&gt;[] types = new Class&lt;?&gt;[] &#123; SpringApplication.class, String[].class &#125;;</span><br><span class="line">	//通过META-INF/spring.factories获取SpringApplicationRunListener类型的实例</span><br><span class="line">	return new SpringApplicationRunListeners(logger, getSpringFactoriesInstances(</span><br><span class="line">			SpringApplicationRunListener.class, types, this, args));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="源码3-prepareEnvironment-…"><a href="#源码3-prepareEnvironment-…" class="headerlink" title="源码3(prepareEnvironment(…))"></a>源码3(prepareEnvironment(…))</h5><p>准备环境<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">//准备环境</span><br><span class="line">private ConfigurableEnvironment prepareEnvironment(</span><br><span class="line">		SpringApplicationRunListeners listeners,</span><br><span class="line">		ApplicationArguments applicationArguments) &#123;</span><br><span class="line">	// Create and configure the environment</span><br><span class="line">	//创建环境</span><br><span class="line">	ConfigurableEnvironment environment = getOrCreateEnvironment();</span><br><span class="line">	//配置环境</span><br><span class="line">	configureEnvironment(environment, applicationArguments.getSourceArgs());</span><br><span class="line">	//遍历回调SpringApplicationRunListener的environmentPrepared方法</span><br><span class="line">	listeners.environmentPrepared(environment);</span><br><span class="line">	if (!this.webEnvironment) &#123;</span><br><span class="line">		environment = new EnvironmentConverter(getClassLoader())</span><br><span class="line">				.convertToStandardEnvironmentIfNecessary(environment);</span><br><span class="line">	&#125;</span><br><span class="line">	return environment;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="源码4-createApplicationContext"><a href="#源码4-createApplicationContext" class="headerlink" title="源码4(createApplicationContext())"></a>源码4(createApplicationContext())</h5><p>根据创建的环境判断，是创建web容器，还是普通的IOC容器<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">//根据创建的环境判断，是创建web容器，还是普通的IOC容器</span><br><span class="line">protected ConfigurableApplicationContext createApplicationContext() &#123;</span><br><span class="line">	Class&lt;?&gt; contextClass = this.applicationContextClass;</span><br><span class="line">	if (contextClass == null) &#123;</span><br><span class="line">		try &#123;</span><br><span class="line">			contextClass = Class.forName(this.webEnvironment</span><br><span class="line">					? DEFAULT_WEB_CONTEXT_CLASS : DEFAULT_CONTEXT_CLASS);</span><br><span class="line">		&#125;</span><br><span class="line">		catch (ClassNotFoundException ex) &#123;</span><br><span class="line">			throw new IllegalStateException(</span><br><span class="line">					&quot;Unable create a default ApplicationContext, &quot;</span><br><span class="line">							+ &quot;please specify an ApplicationContextClass&quot;,</span><br><span class="line">					ex);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	return (ConfigurableApplicationContext) BeanUtils.instantiate(contextClass);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="源码5-prepareContext-…"><a href="#源码5-prepareContext-…" class="headerlink" title="源码5(prepareContext(…))"></a>源码5(prepareContext(…))</h5><p>准备上下文<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">//准备上下文</span><br><span class="line">private void prepareContext(ConfigurableApplicationContext context,</span><br><span class="line">		ConfigurableEnvironment environment, SpringApplicationRunListeners listeners,</span><br><span class="line">		ApplicationArguments applicationArguments, Banner printedBanner) &#123;</span><br><span class="line">	//设置环境</span><br><span class="line">	context.setEnvironment(environment);</span><br><span class="line">	postProcessApplicationContext(context);</span><br><span class="line">	//遍历回调ApplicationContextInitializer的initialize事件--即上下文注入并初始化</span><br><span class="line">	applyInitializers(context);</span><br><span class="line">	//遍历回调SpringApplicationRunListeners中的contextPrepared事件--即上下注入</span><br><span class="line">	listeners.contextPrepared(context);</span><br><span class="line">	if (this.logStartupInfo) &#123;</span><br><span class="line">		logStartupInfo(context.getParent() == null);</span><br><span class="line">		logStartupProfileInfo(context);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	// Add boot specific singleton beans</span><br><span class="line">	context.getBeanFactory().registerSingleton(&quot;springApplicationArguments&quot;,</span><br><span class="line">			applicationArguments);</span><br><span class="line">	if (printedBanner != null) &#123;</span><br><span class="line">		context.getBeanFactory().registerSingleton(&quot;springBootBanner&quot;, printedBanner);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	// Load the sources</span><br><span class="line">	Set&lt;Object&gt; sources = getSources();</span><br><span class="line">	Assert.notEmpty(sources, &quot;Sources must not be empty&quot;);</span><br><span class="line">	load(context, sources.toArray(new Object[sources.size()]));</span><br><span class="line">	//遍历回调SpringApplicationRunListeners中的contextLoaded事件--即加载上下文</span><br><span class="line">	listeners.contextLoaded(context);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>综上，SpringApplication.run()总共做了两件是：</p>
+<ol>
+<li>创建了SpringApplication对象，初始化的时候，判断是否为WEB应用，并将通过配置文件META-INF/spring.factories找到对应的上下文类路径和监听器路径，将其实例化并且保存起来。</li>
+<li>运行run方法，通过配置文件META-INF/spring.factories找到对应的监听器路径，将其实例化并启动。创建环境和创建上下文，并为监听器配置。刷新上下文，然后调用所有的监听器的finished()方法，广播SpringBoot已经完成了。</li>
+</ol>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2019年10月12日 20:21</p>
+        <p>原始链接： <a class="post-url" href="/2019/03/22/1553480412/" title="Spring Boot启动原理">https://maiyikai.github.io/2019/03/22/1553480412/</a></p>
+        <footer>
+            <a href="https://maiyikai.github.io">
+                <img src="/images/logo2.png" alt="maiyikai">
+                maiyikai
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        ~谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://maiyikai.github.io/2019/03/22/1553480412/&title=《Spring Boot启动原理》 — FlyingFish's Blog&pic=https://maiyikai.github.io/img/SpringBoot/SpringBoot/20190325095667.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://maiyikai.github.io/2019/03/22/1553480412/&title=《Spring Boot启动原理》 — FlyingFish's Blog&source=SpringBoot启动原理参考1：Spring Boot的启动过程三：SpringApplication.run()参考2：面试官问我，SpringAp..." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://maiyikai.github.io/2019/03/22/1553480412/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Spring Boot启动原理》 — FlyingFish's Blog&url=https://maiyikai.github.io/2019/03/22/1553480412/&via=https://maiyikai.github.io" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://maiyikai.github.io/2019/03/22/1553480412/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://maiyikai.github.io/2019/03/22/1553480412/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/SpringBoot/" class="color1">SpringBoot</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#如何启动一个SpringBoot应用？"><span class="post-toc-text">如何启动一个SpringBoot应用？</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#解析创建SpringApplication对象"><span class="post-toc-text">解析创建SpringApplication对象</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#源码1"><span class="post-toc-text">源码1</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#源码2（initialize-…-）"><span class="post-toc-text">源码2（initialize(…)）</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#源码3-getSpringFactoriesInstances（…）"><span class="post-toc-text">源码3 getSpringFactoriesInstances（…）</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#源码4-deduceMainApplicationClass"><span class="post-toc-text">源码4(deduceMainApplicationClass())</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#解析springApplication-run-args"><span class="post-toc-text">解析springApplication.run(args)</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#源码1-run-…"><span class="post-toc-text">源码1(run(…))</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#源码2-getRunListeners-…"><span class="post-toc-text">源码2(getRunListeners(…))</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#源码3-prepareEnvironment-…"><span class="post-toc-text">源码3(prepareEnvironment(…))</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#源码4-createApplicationContext"><span class="post-toc-text">源码4(createApplicationContext())</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#源码5-prepareContext-…"><span class="post-toc-text">源码5(prepareContext(…))</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+    <a href="/2019/04/04/1554363529/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          Spring Boot分表之Shardbatis插件
+        
+      </span>
+    </a>
+  
+  
+    <a href="/2019/03/08/1552012657/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">怒怼HashMap</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+        <div id="SOHUCS" sid="1553480412"></div>
+<script type="text/javascript">
+    (function(){
+        var appid = 'cyu3qrrJt';
+        var conf = '3f0da4017453d35b0c5dafb035646863';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2019 maiyikai<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "https://maiyikai.github.io",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/CenterOS/">CenterOS</a><a class="category-link" href="/categories/DataSource/">DataSource</a><a class="category-link" href="/categories/Hexo/">Hexo</a><a class="category-link" href="/categories/Java/">Java</a><a class="category-link" href="/categories/LoadRunner/">LoadRunner</a><a class="category-link" href="/categories/MyBatis/">MyBatis</a><a class="category-link" href="/categories/SpringBoot/">SpringBoot</a><a class="category-link" href="/categories/error/">error</a><a class="category-link" href="/categories/regex/">regex</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/LoadRunner/" style="font-size: 13.33px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 13.33px;">Test</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 10px;">script</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/LoadRunner/" style="font-size: 13.33px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 13.33px;">Test</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 10px;">script</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>

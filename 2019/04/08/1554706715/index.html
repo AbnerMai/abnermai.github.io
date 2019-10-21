@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>Spring Boot配备多数据源 | FlyingFish&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="maiyikai,maiyude,FlyingFish,FlyingFish's blog">
+  
+  <meta name="description" content="一般情况下，我们一个服务最多使用一个数据源，并且拥有一个连接池； 但是不能避免的特殊情况，会使用多个库（不包括分库操作），所以就要配备多个指定的数据源，分别对不同的库进行操作">
+<meta name="keywords" content="DataSource,SpringBoot,Mybatis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Boot配备多数据源">
+<meta property="og:url" content="https://maiyikai.github.io/2019/04/08/1554706715/index.html">
+<meta property="og:site_name" content="FlyingFish&#39;s Blog">
+<meta property="og:description" content="一般情况下，我们一个服务最多使用一个数据源，并且拥有一个连接池； 但是不能避免的特殊情况，会使用多个库（不包括分库操作），所以就要配备多个指定的数据源，分别对不同的库进行操作">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-10-12T12:21:09.264Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring Boot配备多数据源">
+<meta name="twitter:description" content="一般情况下，我们一个服务最多使用一个数据源，并且拥有一个连接池； 但是不能避免的特殊情况，会使用多个库（不包括分库操作），所以就要配备多个指定的数据源，分别对不同的库进行操作">
+  
+  
+    <link rel="icon" href="/pen_logo.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?a53f82c21dd876a0b4f165d79cffff9a";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">FlyingFish&#39;s Blog</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo2.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        FlyingFish&#39;s Blog
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        随笔记
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="maiyikai" target="_blank" href="//maiyikai.github.io/">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/maiyikai/">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                        <a title="Weibo" target="_blank" href="//weibo.com/maiyikai">
+                            <i class="fa fa-weibo fa-2x"></i></a>
+                    
+                        <a title="Weixin" target="_blank" href="//maiyikai.github.io/images/user_weixin.jpg">
+                            <i class="fa fa-weixin fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-1554706715" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      Spring Boot配备多数据源
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/SpringBoot/">SpringBoot</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-04-08
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <p>一般情况下，我们一个服务最多使用一个数据源，并且拥有一个连接池；</p>
+<p>但是不能避免的特殊情况，会使用多个库（不包括分库操作），所以就要配备多个指定的数据源，分别对不同的库进行操作</p>
+<a id="more"></a>
+<p>接下来就开始写代码吧！</p>
+<h4 id="数据库准备"><a href="#数据库准备" class="headerlink" title="数据库准备"></a>数据库准备</h4><p>分别建立两个不同的库(名字任意，本例子使用：dynamic1和dynamic2)，在其中建立不同的表，当然如果你懒得话，可以和我一样，复制粘贴，改个名字就行（针对库），你会发现省了很多事… O(∩_∩)O哈哈~</p>
+<p>以下为脚本（我用的是同一个表结构，但是数据要改一下，不然分不清使用结果）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">-- dynamic1 ----------------------------</span><br><span class="line">SET NAMES utf8mb4;</span><br><span class="line">SET FOREIGN_KEY_CHECKS = 0;</span><br><span class="line"></span><br><span class="line">-- ----------------------------</span><br><span class="line">-- Table structure for databaseinfo</span><br><span class="line">-- ----------------------------</span><br><span class="line">DROP TABLE IF EXISTS `databaseinfo`;</span><br><span class="line">CREATE TABLE `databaseinfo`  () ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;</span><br><span class="line"></span><br><span class="line">-- ----------------------------</span><br><span class="line">-- Records of databaseinfo</span><br><span class="line">-- ----------------------------</span><br><span class="line">INSERT INTO `databaseinfo` VALUES (&apos;1&apos;, &apos;NO.1&apos;);</span><br><span class="line"></span><br><span class="line">SET FOREIGN_KEY_CHECKS = 1;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-- dynamic2 ----------------------------</span><br><span class="line">INSERT INTO `databaseinfo` VALUES (&apos;1&apos;, &apos;NO.2&apos;);</span><br></pre></td></tr></table></figure>
+<h4 id="简易目录结构"><a href="#简易目录结构" class="headerlink" title="简易目录结构"></a>简易目录结构</h4><p>为了不浪费时间，我直接简化目录结构了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">java:</span><br><span class="line">com.maiyikai.dynamic</span><br><span class="line">|--- config</span><br><span class="line">|--- |--- DataSourceOne.java</span><br><span class="line">|--- |--- DataSourceTwo.java</span><br><span class="line">|--- controller</span><br><span class="line">|--- |--- DynamicDataSourceTestController.java</span><br><span class="line">|--- service</span><br><span class="line">|--- |--- DynamicDataSourceOneService.java</span><br><span class="line">|--- |--- DynamicDataSourceTwoService.java</span><br><span class="line">|--- |--- impl</span><br><span class="line">|--- |--- |--- DynamicDataSourceOneServiceImpl.java</span><br><span class="line">|--- |--- |--- DynamicDataSourceTwoServiceImpl.java</span><br><span class="line">|--- mapper</span><br><span class="line">|--- |--- DynamicTestOne.java</span><br><span class="line">|--- mappers</span><br><span class="line">|--- |--- DynamicTestTwo.java</span><br><span class="line">|--- entity</span><br><span class="line">|--- |--- DatabaseInfo.java</span><br><span class="line">|--- DynamicApplication.java</span><br><span class="line"></span><br><span class="line">resources</span><br><span class="line">|--- mapper</span><br><span class="line">|--- |--- dynamicOne.xml</span><br><span class="line">|--- mappers</span><br><span class="line">|--- |--- dynamicTwo.xml</span><br><span class="line">|--- application.yml</span><br></pre></td></tr></table></figure>
+<h4 id="需要引入的包-pom-xml"><a href="#需要引入的包-pom-xml" class="headerlink" title="需要引入的包 pom.xml"></a>需要引入的包 pom.xml</h4><p>引入的包就是正常连接数据库需要的包，为了使对象更高的输出在控制台，我引入了fastjson</p>
+<p>这里使用的Spring Boot2以上版本，在配置的地方会有一些不一样</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span><br><span class="line">         xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;</span><br><span class="line">    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;</span><br><span class="line">    &lt;parent&gt;</span><br><span class="line">        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;2.1.3.RELEASE&lt;/version&gt;</span><br><span class="line">        &lt;relativePath/&gt; &lt;!-- lookup parent from repository --&gt;</span><br><span class="line">    &lt;/parent&gt;</span><br><span class="line">    &lt;groupId&gt;com.maiyikai&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;dynamic&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;</span><br><span class="line">    &lt;name&gt;dynamic&lt;/name&gt;</span><br><span class="line">    &lt;description&gt;Demo project for Spring Boot&lt;/description&gt;</span><br><span class="line"></span><br><span class="line">    &lt;properties&gt;</span><br><span class="line">        &lt;java.version&gt;1.8&lt;/java.version&gt;</span><br><span class="line">    &lt;/properties&gt;</span><br><span class="line"></span><br><span class="line">    &lt;dependencies&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;spring-boot-starter-web-services&lt;/artifactId&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;spring-boot-starter-jdbc&lt;/artifactId&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;com.alibaba&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;druid-spring-boot-starter&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;1.1.10&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.mybatis.spring.boot&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;mybatis-spring-boot-starter&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;1.3.1&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;mysql&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;6.0.6&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">        &lt;!-- https://mvnrepository.com/artifact/com.alibaba/fastjson --&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;com.alibaba&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;fastjson&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;1.2.54&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;</span><br><span class="line">            &lt;scope&gt;test&lt;/scope&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">    &lt;/dependencies&gt;</span><br><span class="line"></span><br><span class="line">    &lt;build&gt;</span><br><span class="line">        &lt;plugins&gt;</span><br><span class="line">            &lt;plugin&gt;</span><br><span class="line">                &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">                &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;</span><br><span class="line">            &lt;/plugin&gt;</span><br><span class="line">        &lt;/plugins&gt;</span><br><span class="line">    &lt;/build&gt;</span><br><span class="line"></span><br><span class="line">&lt;/project&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="application-yml配置"><a href="#application-yml配置" class="headerlink" title="application.yml配置"></a>application.yml配置</h4><p>因为连接mysql的包的版本比较高，所以有一些多余的配置要加载数据库连接的URL上</p>
+<p>因为使用了Spring Boot2以上版本，所以对url和driver-class更改为： jdbc-url和driver-class-name；否则获取不到对应的连接和驱动名称</p>
+<p>因未使用了Druid，所以有一个特性是可以根据jdbc-url自动配置相关的驱动类，所以配置地方我删掉了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">server:</span><br><span class="line">  port: 8082</span><br><span class="line"></span><br><span class="line"># druid：根据jdbc-url自动配置驱动</span><br><span class="line"># 不使用serverTimezone=UTC：java.sql.SQLException: The server time zone value &apos;�й���׼ʱ��&apos; is unrecognized or represents more than one time zone. You must configure either the server or JDBC driver (via the serverTimezone configuration property) to use a more specifc time zone value if you want to utilize time zone support.</span><br><span class="line"># 不使用useSSL=true：Establishing SSL connection without server&apos;s identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn&apos;t set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to &apos;false&apos;. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.</span><br><span class="line">spring:</span><br><span class="line">  datasource:</span><br><span class="line">    druid:</span><br><span class="line">        test1:</span><br><span class="line">          jdbc-url: jdbc:mysql://localhost:3306/dynamic1?useUnicode=true&amp;characterEncoding=utf8&amp;serverTimezone=UTC&amp;useSSL=true</span><br><span class="line">          username: root</span><br><span class="line">          password: ********</span><br><span class="line">          validationQuery: SELECT 1</span><br><span class="line">          timeBetweenEvictionRunsMillis: 60000</span><br><span class="line">          minEvictableIdleTimeMillis: 28800</span><br><span class="line">          testOnBorrow: false</span><br><span class="line">          testWhileIdle: true</span><br><span class="line">          testOnReturn: false</span><br><span class="line">        test2:</span><br><span class="line">          jdbc-url: jdbc:mysql://localhost:3306/dynamic2?useUnicode=true&amp;characterEncoding=utf8&amp;serverTimezone=UTC&amp;useSSL=true</span><br><span class="line">          username: root</span><br><span class="line">          password: ********</span><br><span class="line">          validationQuery: SELECT 1</span><br><span class="line">          timeBetweenEvictionRunsMillis: 60000</span><br><span class="line">          minEvictableIdleTimeMillis: 28800</span><br><span class="line">          testOnBorrow: false</span><br><span class="line">          testWhileIdle: true</span><br><span class="line">          testOnReturn: false</span><br></pre></td></tr></table></figure>
+<h4 id="数据源配置"><a href="#数据源配置" class="headerlink" title="数据源配置"></a>数据源配置</h4><p>分别配置两个不同的数据源，并设置其中一个为主数据源，否则会报错</p>
+<p>需要对DataSource、SqlSessionFactory、SqlSessionTemplate进行配置，所以</p>
+<ol>
+<li><p>第一个数据源（DataSourceOne.java）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 必须要有一个主数据源</span><br><span class="line"> */</span><br><span class="line">@Configuration</span><br><span class="line">@AutoConfigureBefore(DataSourceAutoConfiguration.class)</span><br><span class="line">@MapperScan(value = &quot;com.maiyikai.dynamic.mapper&quot;, sqlSessionTemplateRef = &quot;sqlSessionTemplate1&quot;)</span><br><span class="line">public class DataSourceOne &#123;</span><br><span class="line"></span><br><span class="line">    @Bean(&quot;dynamic1DataSource&quot;)</span><br><span class="line">    @Primary</span><br><span class="line">    @ConfigurationProperties(prefix = &quot;spring.datasource.druid.test1&quot;)</span><br><span class="line">    public DataSource dynamic1DataSource()&#123;</span><br><span class="line">        return DataSourceBuilder.create().build();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Bean(&quot;sqlSession1Factory&quot;)</span><br><span class="line">    @Primary</span><br><span class="line">    public SqlSessionFactory sqlSession1Factory(@Qualifier(&quot;dynamic1DataSource&quot;) DataSource dataSource) throws Exception &#123;</span><br><span class="line">        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();</span><br><span class="line">        sqlSessionFactoryBean.setDataSource(dataSource);</span><br><span class="line">        sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(&quot;classpath:mapper/*.xml&quot;));</span><br><span class="line">        return sqlSessionFactoryBean.getObject();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Bean(&quot;sqlSessionTemplate1&quot;)</span><br><span class="line">    @Primary</span><br><span class="line">    public SqlSessionTemplate sqlSessionTemplate1(@Qualifier(&quot;sqlSession1Factory&quot;)SqlSessionFactory sqlSessionFactory)&#123;</span><br><span class="line">        return new SqlSessionTemplate(sqlSessionFactory);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>第二个数据源（DataSourceTwo.java）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 不能与主数据源指定同一个mapper，否则不生效</span><br><span class="line"> */</span><br><span class="line">@Configuration</span><br><span class="line">@AutoConfigureBefore(DataSourceAutoConfiguration.class)</span><br><span class="line">@MapperScan(value = &quot;com.maiyikai.dynamic.mappers&quot;, sqlSessionTemplateRef = &quot;sqlSessionTemplate2&quot;)</span><br><span class="line">public class DataSourceTwo &#123;</span><br><span class="line"></span><br><span class="line">    @Bean(&quot;dynamic1DataSource2&quot;)</span><br><span class="line">    @ConfigurationProperties(prefix = &quot;spring.datasource.druid.test2&quot;)</span><br><span class="line">    public DataSource dataSource()&#123;</span><br><span class="line">        return DataSourceBuilder.create().build();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Bean(&quot;sqlSessionFactory2&quot;)</span><br><span class="line">    public SqlSessionFactory sqlSessionFactory(@Qualifier(&quot;dynamic1DataSource2&quot;)DataSource dataSource) throws Exception &#123;</span><br><span class="line">        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();</span><br><span class="line">        sqlSessionFactoryBean.setDataSource(dataSource);</span><br><span class="line">        sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(&quot;classpath:mappers/*.xml&quot;));</span><br><span class="line">        return sqlSessionFactoryBean.getObject();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Bean(&quot;sqlSessionTemplate2&quot;)</span><br><span class="line">    public SqlSessionTemplate sqlSessionTemplate(@Qualifier(&quot;sqlSessionFactory2&quot;) SqlSessionFactory sqlSessionFactory)&#123;</span><br><span class="line">        return new SqlSessionTemplate(sqlSessionFactory);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="服务类"><a href="#服务类" class="headerlink" title="服务类"></a>服务类</h4><p>方法声明为一样的，方便（懒）…O(∩_∩)O哈哈~</p>
+<h5 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h5><p>只拿一个做演示(DynamicDataSourceOneService.java)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public interface DynamicDataSourceOneService &#123;</span><br><span class="line">    DatabaseInfo getDatabaseInfo(String id);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="实现类"><a href="#实现类" class="headerlink" title="实现类"></a>实现类</h5><ol>
+<li><p>DynamicDataSourceOneServiceImpl.java</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@Service</span><br><span class="line">public class DynamicDataSourceOneServiceImpl implements DynamicDataSourceOneService &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    private DynamicTestOne dynamicTestOne;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public DatabaseInfo getDatabaseInfo(String id) &#123;</span><br><span class="line">        return dynamicTestOne.getDatabaseInfoOne(id);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>DynamicDataSourceTwoServiceImpl.java</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@Service</span><br><span class="line">public class DynamicDataSourceTwoServiceImpl implements DynamicDataSourceTwoService &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    private DynamicTestTwo dynamicTestTwo;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public DatabaseInfo getDatabaseInfo(String id) &#123;</span><br><span class="line">        return dynamicTestTwo.getDatabaseInfoTwo(id);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="mapper及xml"><a href="#mapper及xml" class="headerlink" title="mapper及xml"></a>mapper及xml</h4><p>因为本人比较勤（hen）奋(lan),所以这里只提供一个</p>
+<ol>
+<li><p>mapper（DynamicTestOne.java）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public interface DynamicTestOne &#123;</span><br><span class="line"></span><br><span class="line">    DatabaseInfo getDatabaseInfoOne(@Param(&quot;id&quot;)String id);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>xml（dynamicOne.xml）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE mapper</span><br><span class="line">  PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;</span><br><span class="line">  &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;</span><br><span class="line">&lt;mapper namespace=&quot;com.maiyikai.dynamic.mapper.DynamicTestOne&quot;&gt;</span><br><span class="line">  &lt;select id=&quot;getDatabaseInfoOne&quot; parameterType=&quot;java.lang.String&quot; resultType=&quot;com.maiyikai.dynamic.entity.DatabaseInfo&quot;&gt;</span><br><span class="line">    select * from databaseinfo where id=#&#123;id&#125;</span><br><span class="line">  &lt;/select&gt;</span><br><span class="line">&lt;/mapper&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="定义测试接口"><a href="#定义测试接口" class="headerlink" title="定义测试接口"></a>定义测试接口</h4><p>准备好了，就要定义接口进行测试了，当然我肯定是选择最简单，最容易访问的方式写访问啦（除了这种方法还可以使用单元测试的方式）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">@Controller</span><br><span class="line">@RequestMapping(value = &quot;/DynamicDataSource&quot;)</span><br><span class="line">@ResponseBody</span><br><span class="line">public class DynamicDataSourceTestController &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    private DynamicDataSourceOneService dynamicDataSourceOneService;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    private DynamicDataSourceTwoService dynamicDataSourceTwoService;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;/getDatabaseInfo/&#123;id&#125;&quot;)</span><br><span class="line">    public String getDatabaseInfo(@PathVariable(&quot;id&quot;)String id)&#123;</span><br><span class="line">        DatabaseInfo databaseInfo1 = dynamicDataSourceOneService.getDatabaseInfo(id);</span><br><span class="line">        DatabaseInfo databaseInfo2 = dynamicDataSourceTwoService.getDatabaseInfo(id);</span><br><span class="line">        System.err.println(&quot;databaseInfo1:===&quot;+JSON.toJSONString(databaseInfo1));</span><br><span class="line">        System.err.println(&quot;databaseInfo2:===&quot;+JSON.toJSONString(databaseInfo2));</span><br><span class="line">        return &quot;true&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>启动类中没有做任何的更改，所以就不展示了</p>
+<p>访问接口为：<a href="http://localhost:8082/DynamicDataSource/getDatabaseInfo/1" target="_blank" rel="noopener">http://localhost:8082/DynamicDataSource/getDatabaseInfo/1</a>（因为数据库准备的时候只准备id为1的数据，所以…）<br>浏览器正常返回： true<br>控制台返回：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">databaseInfo1:===&#123;&quot;id&quot;:&quot;1&quot;,&quot;info&quot;:&quot;NO.1&quot;&#125;</span><br><span class="line">databaseInfo2:===&#123;&quot;id&quot;:&quot;1&quot;,&quot;info&quot;:&quot;NO.2&quot;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>由显示结果可以看出，我们多数据源已经可以正常使用啦</p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2019年10月12日 20:21</p>
+        <p>原始链接： <a class="post-url" href="/2019/04/08/1554706715/" title="Spring Boot配备多数据源">https://maiyikai.github.io/2019/04/08/1554706715/</a></p>
+        <footer>
+            <a href="https://maiyikai.github.io">
+                <img src="/images/logo2.png" alt="maiyikai">
+                maiyikai
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        ~谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://maiyikai.github.io/2019/04/08/1554706715/&title=《Spring Boot配备多数据源》 — FlyingFish's Blog&pic=https://maiyikai.github.io/img/SpringBoot/SpringBoot/20190325095667.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://maiyikai.github.io/2019/04/08/1554706715/&title=《Spring Boot配备多数据源》 — FlyingFish's Blog&source=一般情况下，我们一个服务最多使用一个数据源，并且拥有一个连接池；
+但是不能避免的特殊情况，会使用多个库（不包括分库操作），所以就要配备多个指定的数据源，分..." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://maiyikai.github.io/2019/04/08/1554706715/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Spring Boot配备多数据源》 — FlyingFish's Blog&url=https://maiyikai.github.io/2019/04/08/1554706715/&via=https://maiyikai.github.io" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://maiyikai.github.io/2019/04/08/1554706715/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://maiyikai.github.io/2019/04/08/1554706715/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/DataSource/" class="color1">DataSource</a>
+      
+    <a href="/tags/SpringBoot/" class="color1">SpringBoot</a>
+      
+    <a href="/tags/Mybatis/" class="color3">Mybatis</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#数据库准备"><span class="post-toc-text">数据库准备</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#简易目录结构"><span class="post-toc-text">简易目录结构</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#需要引入的包-pom-xml"><span class="post-toc-text">需要引入的包 pom.xml</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#application-yml配置"><span class="post-toc-text">application.yml配置</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#数据源配置"><span class="post-toc-text">数据源配置</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#服务类"><span class="post-toc-text">服务类</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#接口"><span class="post-toc-text">接口</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#实现类"><span class="post-toc-text">实现类</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#mapper及xml"><span class="post-toc-text">mapper及xml</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#定义测试接口"><span class="post-toc-text">定义测试接口</span></a></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+    <a href="/2019/05/21/1558423260/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          CenterOS服务器搭建--网络配置
+        
+      </span>
+    </a>
+  
+  
+    <a href="/2019/04/04/1554363529/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">Spring Boot分表之Shardbatis插件</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+        <div id="SOHUCS" sid="1554706715"></div>
+<script type="text/javascript">
+    (function(){
+        var appid = 'cyu3qrrJt';
+        var conf = '3f0da4017453d35b0c5dafb035646863';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2019 maiyikai<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "https://maiyikai.github.io",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/CenterOS/">CenterOS</a><a class="category-link" href="/categories/DataSource/">DataSource</a><a class="category-link" href="/categories/Hexo/">Hexo</a><a class="category-link" href="/categories/Java/">Java</a><a class="category-link" href="/categories/LoadRunner/">LoadRunner</a><a class="category-link" href="/categories/MyBatis/">MyBatis</a><a class="category-link" href="/categories/SpringBoot/">SpringBoot</a><a class="category-link" href="/categories/error/">error</a><a class="category-link" href="/categories/regex/">regex</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/LoadRunner/" style="font-size: 13.33px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 13.33px;">Test</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 10px;">script</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/LoadRunner/" style="font-size: 13.33px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 13.33px;">Test</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 10px;">script</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>技术区别汇总整理 | FlyingFish&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="maiyikai,maiyude,FlyingFish,FlyingFish's blog">
+  
+  <meta name="description" content="为了新工作面试，进行技术对比整理包含内容： Spring、Spring Boot、Mybatis、Ibatis、Hibernate、Mysql、Oracle、Redis、MongoDB、FastJson、Gson（后续会增加）">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="技术区别汇总整理">
+<meta property="og:url" content="https://maiyikai.github.io/2019/02/19/1548754788/index.html">
+<meta property="og:site_name" content="FlyingFish&#39;s Blog">
+<meta property="og:description" content="为了新工作面试，进行技术对比整理包含内容： Spring、Spring Boot、Mybatis、Ibatis、Hibernate、Mysql、Oracle、Redis、MongoDB、FastJson、Gson（后续会增加）">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-10-12T12:21:09.263Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="技术区别汇总整理">
+<meta name="twitter:description" content="为了新工作面试，进行技术对比整理包含内容： Spring、Spring Boot、Mybatis、Ibatis、Hibernate、Mysql、Oracle、Redis、MongoDB、FastJson、Gson（后续会增加）">
+  
+  
+    <link rel="icon" href="/pen_logo.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?a53f82c21dd876a0b4f165d79cffff9a";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">FlyingFish&#39;s Blog</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo2.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        FlyingFish&#39;s Blog
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        随笔记
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="maiyikai" target="_blank" href="//maiyikai.github.io/">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/maiyikai/">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                        <a title="Weibo" target="_blank" href="//weibo.com/maiyikai">
+                            <i class="fa fa-weibo fa-2x"></i></a>
+                    
+                        <a title="Weixin" target="_blank" href="//maiyikai.github.io/images/user_weixin.jpg">
+                            <i class="fa fa-weixin fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-1548754788" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      技术区别汇总整理
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/Java/">Java</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-02-19
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <p>为了新工作面试，进行技术对比整理<br>包含内容： Spring、Spring Boot、Mybatis、Ibatis、Hibernate、Mysql、Oracle、Redis、MongoDB、FastJson、Gson（后续会增加）<br><a id="more"></a></p>
+<h2 id="Spring-Boot和Spring的区别"><a href="#Spring-Boot和Spring的区别" class="headerlink" title="Spring Boot和Spring的区别"></a>Spring Boot和Spring的区别</h2><ol>
+<li>Spring Boot是Spring开源组织下的子项目，是Spring组件一站式解决方案，主要简化了Spring的难度，简省了繁重的配置，提供了各种start(启动器)。</li>
+<li>SpringBoot内置了内置了Tomcat/Jetty等容器，而且内嵌了各种servlet容器，Spring Boot只要打成一个可执行的jar包就能独立运行，而Spring只能包为war包，然后将其放置在可执行的服务器容器中执行。</li>
+<li>Spring Boot提供一系列端点可以监控服务及应用，做健康检测。</li>
+<li>Spring 最初利用“工厂模式”（ DI ）和“代理模式”（ AOP ）解耦应用组件。大家觉得挺好用，于是按照这种模式搞了一个 MVC 框架（一些用 Spring 解耦的组件），用开发 web 应用（ SpringMVC ）。然后有发现每次开发都要搞很多依赖，写很多样板代码很麻烦，于是搞了一些懒人整合包（ starter ），这套就是 Spring Boot 。</li>
+</ol>
+<h2 id="Mybatis和Ibatis区别"><a href="#Mybatis和Ibatis区别" class="headerlink" title="Mybatis和Ibatis区别"></a>Mybatis和Ibatis区别</h2><ul>
+<li>相同点：<ol>
+<li>都是dao层框架</li>
+<li>都有SqlMapConfig.xml文件和dao层编写sql语句的xml文件</li>
+<li>都需要配置数据源</li>
+<li>都使用了jdbc事务</li>
+<li>都可以为实体类起别名</li>
+<li>映射文件中都可以写sql语句，都有namespace命名空间</li>
+</ol>
+</li>
+<li>不同点：<ul>
+<li>Ibatis中<ol>
+<li>在标签<sqlmap>中编写sql语句，并且可以给实体类起别名</sqlmap></li>
+<li>接受参数方式是使用#参数#或者$参数$</li>
+<li>参数类型是用parameterClass，返回值类型是用resultClass</li>
+</ol>
+</li>
+<li>Mybatis中<ol>
+<li>在<mapper>中编写sql语句，并且不能在mapper中给实体类起别名</mapper></li>
+<li>接收参数的方式是使用#{参数}或者${参数}（ONGL表达式）</li>
+<li>参数类型用的是parameterType，返回值类型用的是resultType</li>
+<li>支持使用注解方式直接在Mapper接口上编写sql</li>
+</ol>
+</li>
+<li>dao层中<ol>
+<li>ibatis中如果定义接口需要实现接口，并且在实现类中需要读取配置文件，得到sqlMapClient对象才能使用对应的方法</li>
+<li>Mybaits中只需要定义接口，然后在命名空间中连接上接口路径就可以使用</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Mybatis和Hibernate的区别（网摘）"><a href="#Mybatis和Hibernate的区别（网摘）" class="headerlink" title="Mybatis和Hibernate的区别（网摘）"></a>Mybatis和Hibernate的区别<a href="https://www.cnblogs.com/inspurhaitian/p/4647485.html" target="_blank" rel="noopener">（网摘）</a></h2><h3 id="第一方面：开发速度的对比"><a href="#第一方面：开发速度的对比" class="headerlink" title="第一方面：开发速度的对比"></a>第一方面：开发速度的对比</h3><p>就开发速度而言，Hibernate的真正掌握要比Mybatis来得难些。Mybatis框架相对简单很容易上手，但也相对简陋些。个人觉得要用好Mybatis还是首先要先理解好Hibernate。</p>
+<p>比起两者的开发速度，不仅仅要考虑到两者的特性及性能，更要根据项目需求去考虑究竟哪一个更适合项目开发，比如：一个项目中用到的复杂查询基本没有，就是简单的增删改查，这样选择hibernate效率就很快了，因为基本的sql语句已经被封装好了，根本不需要你去写sql语句，这就节省了大量的时间，但是对于一个大型项目，复杂语句较多，这样再去选择hibernate就不是一个太好的选择，选择mybatis就会加快许多，而且语句的管理也比较方便。</p>
+<p>数据库切换：当从MySQL迁移到Oracle时，SQL也会相应的进行更改。因为Mybatis的SQL是开发人员自己编写的，所以在迁移数据库时，要对SQL进行对应的更改。而Hibernate在配置的时候指定了数据库，如果要切换数据库时，只需更改配置即可，也就是说Hibernate支持多种数据的语言，不需要对其进行大的更改。</p>
+<h3 id="第二方面：开发工作量的对比"><a href="#第二方面：开发工作量的对比" class="headerlink" title="第二方面：开发工作量的对比"></a>第二方面：开发工作量的对比</h3><p>Hibernate和MyBatis都有相应的代码生成工具。可以生成简单基本的DAO层方法。针对高级查询，Mybatis需要手动编写SQL语句，以及ResultMap。而Hibernate有良好的映射机制，开发者无需关心SQL的生成与结果映射，可以更专注于业务流程。</p>
+<h3 id="第三方面：sql优化方面"><a href="#第三方面：sql优化方面" class="headerlink" title="第三方面：sql优化方面"></a>第三方面：sql优化方面</h3><p>Hibernate的查询会将表中的所有字段查询出来，这一点会有性能消耗。Hibernate也可以自己写SQL来指定需要查询的字段，但这样就破坏了Hibernate开发的简洁性。而Mybatis的SQL是手动编写的，所以可以按需求指定查询的字段。</p>
+<p>Hibernate HQL语句的调优需要将SQL打印出来，而Hibernate的SQL被很多人嫌弃因为太丑了。MyBatis的SQL是自己手动写的所以调整方便。但Hibernate具有自己的日志统计。Mybatis本身不带日志统计，使用Log4j进行日志记录。</p>
+<h3 id="第四方面：对象管理的对比"><a href="#第四方面：对象管理的对比" class="headerlink" title="第四方面：对象管理的对比"></a>第四方面：对象管理的对比</h3><p>Hibernate 是完整的对象/关系映射解决方案，它提供了对象状态管理（state management）的功能，使开发者不再需要理会底层数据库系统的细节。也就是说，相对于常见的 JDBC/SQL 持久层方案中需要管理 SQL 语句，Hibernate采用了更自然的面向对象的视角来持久化 Java 应用中的数据。</p>
+<p>换句话说，使用 Hibernate 的开发者应该总是关注对象的状态（state），不必考虑 SQL 语句的执行。这部分细节已经由 Hibernate 掌管妥当，只有开发者在进行系统性能调优的时候才需要进行了解。而MyBatis在这一块没有文档说明，用户需要对对象自己进行详细的管理。</p>
+<h3 id="第五方面：缓存机制"><a href="#第五方面：缓存机制" class="headerlink" title="第五方面：缓存机制"></a>第五方面：缓存机制</h3><ul>
+<li><p>Hibernate缓存<br>  Hibernate一级缓存是Session缓存，利用好一级缓存就需要对Session的生命周期进行管理好。建议在一个Action操作中使用一个Session。一级缓存需要对Session进行严格管理。</p>
+<p>  Hibernate二级缓存是SessionFactory级的缓存。 SessionFactory的缓存分为内置缓存和外置缓存。内置缓存中存放的是SessionFactory对象的一些集合属性包含的数据(映射元素据及预定SQL语句等),对于应用程序来说,它是只读的。外置缓存中存放的是数据库数据的副本,其作用和一级缓存类似.二级缓存除了以内存作为存储介质外,还可以选用硬盘等外部存储设备。二级缓存称为进程级缓存或SessionFactory级缓存，它可以被所有session共享，它的生命周期伴随着SessionFactory的生命周期存在和消亡。</p>
+</li>
+<li><p>MyBatis缓存<br>  MyBatis 包含一个非常强大的查询缓存特性,它可以非常方便地配置和定制。MyBatis 3 中的缓存实现的很多改进都已经实现了,使得它更加强大而且易于配置。</p>
+<p>  默认情况下是没有开启缓存的,除了局部的 session 缓存,可以增强变现而且处理循环 依赖也是必须的。要开启二级缓存,你需要在你的 SQL 映射文件中添加一行:  <cache></cache></p>
+<p>  字面上看就是这样。这个简单语句的效果如下:</p>
+<ol>
+<li>映射语句文件中的所有 select 语句将会被缓存。</li>
+<li>映射语句文件中的所有 insert,update 和 delete 语句会刷新缓存。</li>
+<li>缓存会使用 Least Recently Used(LRU,最近最少使用的)算法来收回。</li>
+<li>根据时间表(比如 no Flush Interval,没有刷新间隔), 缓存不会以任何时间顺序 来刷新。</li>
+<li>缓存会存储列表集合或对象(无论查询方法返回什么)的 1024 个引用。</li>
+<li><p>缓存会被视为是 read/write(可读/可写)的缓存,意味着对象检索不是共享的,而 且可以安全地被调用者修改,而不干扰其他调用者或线程所做的潜在修改。</p>
+<p>所有的这些属性都可以通过缓存元素的属性来修改。</p>
+<p>比如: <cache eviction="”FIFO”" flushinterval="”60000″" size="”512″" readonly="”true”/"></cache></p>
+<p>这个更高级的配置创建了一个 FIFO 缓存,并每隔 60 秒刷新,存数结果对象或列表的 512 个引用,而且返回的对象被认为是只读的,因此在不同线程中的调用者之间修改它们会导致冲突。可用的收回策略有, 默认的是 LRU:</p>
+</li>
+</ol>
+<ul>
+<li>LRU – 最近最少使用的:移除最长时间不被使用的对象。</li>
+<li>FIFO – 先进先出:按对象进入缓存的顺序来移除它们。</li>
+<li>SOFT – 软引用:移除基于垃圾回收器状态和软引用规则的对象。</li>
+<li>WEAK – 弱引用:更积极地移除基于垃圾收集器状态和弱引用规则的对象。</li>
+<li><p>flushInterval(刷新间隔)可以被设置为任意的正整数,而且它们代表一个合理的毫秒 形式的时间段。默认情况是不设置,也就是没有刷新间隔,缓存仅仅调用语句时刷新。</p>
+<p>size(引用数目)可以被设置为任意正整数,要记住你缓存的对象数目和你运行环境的 可用内存资源数目。默认值是1024。</p>
+<p>readOnly(只读)属性可以被设置为 true 或 false。只读的缓存会给所有调用者返回缓 存对象的相同实例。因此这些对象不能被修改。这提供了很重要的性能优势。可读写的缓存 会返回缓存对象的拷贝(通过序列化) 。这会慢一些,但是安全,因此默认是 false。</p>
+</li>
+</ul>
+</li>
+<li><p>相同点：Hibernate和Mybatis的二级缓存除了采用系统默认的缓存机制外，都可以通过实现你自己的缓存或为其他第三方缓存方案，创建适配器来完全覆盖缓存行为。</p>
+</li>
+<li><p>不同点</p>
+<ul>
+<li><p>Hibernate的二级缓存配置在SessionFactory生成的配置文件中进行详细配置，然后再在具体的表-对象映射中配置是那种缓存。</p>
+</li>
+<li><p>MyBatis的二级缓存配置都是在每个具体的表-对象映射中进行详细配置，这样针对不同的表可以自定义不同的缓存机制。并且Mybatis可以在命名空间中共享相同的缓存配置和实例，通过Cache-ref来实现。</p>
+</li>
+</ul>
+</li>
+<li><p>两者比较</p>
+<ul>
+<li>Hibernate: Hibernate对查询对象有着良好的管理机制，用户无需关心SQL。所以在使用二级缓存时如果出现脏数据，系统会报出错误并提示。</li>
+<li>MyBatis: MyBatis在这一方面，使用二级缓存时需要特别小心。如果不能完全确定数据更新操作的波及范围，避免Cache的盲目使用。否则，脏数据的出现会给系统的正常运行带来很大的隐患。</li>
+</ul>
+</li>
+</ul>
+<h3 id="第六方面：总结"><a href="#第六方面：总结" class="headerlink" title="第六方面：总结"></a>第六方面：总结</h3><p>*相同点：Hibernate与MyBatis都可以是通过SessionFactoryBuider由XML配置文件生成SessionFactory，然后由SessionFactory 生成Session，最后由Session来开启执行事务和SQL语句。其中SessionFactoryBuider，SessionFactory，Session的生命周期都是差不多的。</p>
+<ul>
+<li><p>Hibernate和MyBatis都支持JDBC和JTA事务处理。</p>
+</li>
+<li><p>Mybatis优势</p>
+<p>  MyBatis可以进行更为细致的SQL优化，可以减少查询字段。</p>
+<p>  MyBatis容易掌握，而Hibernate门槛较高。</p>
+</li>
+<li><p>Hibernate优势</p>
+<p>  Hibernate的DAO层开发比MyBatis简单，Mybatis需要维护SQL和结果映射。</p>
+<p>  Hibernate对对象的维护和缓存要比MyBatis好，对增删改查的对象的维护要方便。</p>
+<p>  Hibernate数据库移植性很好，MyBatis的数据库移植性不好，不同的数据库需要写不同SQL。</p>
+<p>  Hibernate有更好的二级缓存机制，可以使用第三方缓存。MyBatis本身提供的缓存机制不佳。</p>
+</li>
+</ul>
+<h2 id="Mysql和oracle区别"><a href="#Mysql和oracle区别" class="headerlink" title="Mysql和oracle区别"></a>Mysql和oracle区别</h2><ul>
+<li>Oracle是大型数据库，MySQL是中小型数据库</li>
+<li>Oracle是收费的，MySQL是开源的</li>
+<li>Oracle支持大并发、大访问量，是OLTP最好的工具（On-Line Transaction Processing联机事务处理过程）</li>
+<li>Oracle所需空间比较大，MySQL比较小</li>
+<li>使用的时候Oracle占用特别大的内存空间和其他机器性能</li>
+<li><p>Oracle也Mysql操作上的区别</p>
+<ul>
+<li><p>主键</p>
+<p>  MYSQL有自动增长的数据类型，在创建表时只要指定表的主键为auto increment,插入记录时，不需要再指定该记录的主键值，Mysql将自动增长。ORACLE没有自动增长的数据类型，需要建立一个自动增长的序列号，插入记录时要把序列号的下一个值赋于此字段。</p>
+</li>
+<li><p>单引号的处理</p>
+<p>  MYSQL里可以用双引号包起字符串，ORACLE里只可以用单引号包起字符串。在插入和修改字符串前必须做单引号的替换：把所有出现的一个单引号替换成两个单引号。</p>
+</li>
+<li><p>翻页的SQL语句的处理</p>
+<p>  MYSQL处理翻页的SQL语句比较简单，用LIMIT 开始位置, 记录个数；ORACLE处理翻页的SQL语句就比较繁琐了。每个结果集只有一个ROWNUM字段标明它的位置, 并且只能用 ROWNUM&lt;100, 不能用ROWNUM&gt;80</p>
+</li>
+<li><p>长字符串的处理</p>
+<p>  长字符串的处理ORACLE也有它特殊的地方。INSERT和UPDATE时最大可操作的字符串长度小于等于4000个单字节, 如果要插入更长的字符串, 请考虑字段用CLOB类型，方法借用 ORACLE里自带的DBMS_LOB程序包。插入修改记录前一定要做进行非空和长度判断，不能为空的字段值和超出长度字段值都应该提出警告,返回上次操作。</p>
+</li>
+<li><p>空字符的处理</p>
+<p>  MYSQL的非空字段也有空的内容，ORACLE里定义了非空字段就不容许有空的内容。按MYSQL的NOT NULL来定义ORACLE表结构, 导数据的时候会产生错误。因此导数据时要对空字符进行判断，如果为NULL或空字符，需要把它改成一个空格的字符串。</p>
+</li>
+<li><p>字符串的模糊比较</p>
+<p>  MYSQL里用 字段名 like ‘%字符串%’,ORACLE里也可以用 字段名 like ‘%字符串%’ 但这种方法不能使用索引, 速度不快。用字符串比较函数 instr(字段名,’字符串’)&gt;0 会得到更精确的查找结果。</p>
+</li>
+<li><p>日期字段的处理</p>
+<p>  MYSQL日期字段分DATE和TIME两种，ORACLE日期字段只有DATE，包含年月日时分秒信息，用当前数据库的系统时间为SYSDATE, 精确到秒，或者用字符串转换成日期型函数TO_DATE(‘&lt;st1:chsdate isrocdate=”False” islunardate=”False” day=”1” month=”8” year=”2001”&gt;2001-08-01&lt;/st1:chsdate&gt;’,’YYYY-MM-DD’)年-月-日 24小时:分钟:秒 的格式YYYY-MM-DD HH24:MI:SS TO_DATE()还有很多种日期格式, 可以参看ORACLE DOC.日期型字段转换成字符串函数TO_CHAR(‘&lt;st1:chsdate isrocdate=”False” islunardate=”False” day=”1” month=”8” year=”2001”&gt;2001-08-01&lt;/st1:chsdate&gt;’,’YYYY-MM-DD HH24:MI:SS’)</p>
+<p>  日期字段的数学运算公式有很大的不同。MYSQL找到离当前时间7天用 DATE_FIELD_NAME &gt; SUBDATE（NOW（），INTERVAL 7 DAY）ORACLE找到离当前时间7天用 DATE_FIELD_NAME &gt;SYSDATE - 7;</p>
+</li>
+</ul>
+</li>
+<li><p>对于事务的支持</p>
+<p>  这一点也是大家经常说到的，MySQL对于事务默认是不支持的，只有某些存储引擎中如：innodb可以支持。而Oracle对于事务是完全支持，不管是OLTP还是OLAT都是支持的</p>
+</li>
+<li>MySQL是单进程多线程，Oracle是多进程（在Windows下也是单进程）</li>
+<li><p>数据库和实例以及用户之间的关系。我们知道用户操作数据库不管MySQL还是Oracle都是通过实例来的，那么实例和数据库、数据库软件以及用户之间是什么关系呢?在MySQL和Oracle的情况下我们来分别讲解下：</p>
+<p>  首先MySQL的实例是用户登录是系统分配给用户的，而用户必须是先在MySQL中创建好，然后登陆用户mysql -u user_name -p然后使用show databases; 命令查看数据库，在使用 use database_name database; 选择数据库,这样才可以对数据库进行操作。简单的关系就是：instance &gt; database 其次是Oracle，Oracle的实例是在创建数据库时就默认创建好的，而用户基于数据库实例，实例之间可以没有关系所以其中的用户也不尽相同，你登录不同的实例就相当于登录了不同的数据库，登陆的命令也能简单sqlplus user_name/password@IP:port/instance_name 其中可以把IP地址，端口号，实例名写在一个TNS文件中取一个别名，登陆的时候输入这个别名就行了。简单的关系就是：instance = database</p>
+</li>
+</ul>
+<h2 id="MySQL、Redis和MongoDB的区别"><a href="#MySQL、Redis和MongoDB的区别" class="headerlink" title="MySQL、Redis和MongoDB的区别"></a>MySQL、Redis和MongoDB的区别</h2><ul>
+<li>数据库类型<ul>
+<li>关系型数据库<ul>
+<li>MySQL</li>
+</ul>
+</li>
+<li>非关系型数据库<ul>
+<li>Redis</li>
+<li>MongoDB</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>储存位置<ul>
+<li>MySQL<ul>
+<li>数据和索引都存放在硬盘中，只有要使用的时候才会存放到内存，所以MySQL可以存放源大于内存容量的数据</li>
+</ul>
+</li>
+<li>Redis<ul>
+<li>Redis所有数据都存放在内存中，是一个不折不扣的内存数据库</li>
+</ul>
+</li>
+<li>MongoDB<ul>
+<li>内存数据库，数据都是存放在内存里面。对数据的操作大部分都在内存中，但mongodb并不是单纯的内存数据库。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>事务<ul>
+<li>MySQL<ul>
+<li>部分引擎的存储方式支持事务 如：Innodb存储引擎</li>
+</ul>
+</li>
+<li>Redis、MongoDB<ul>
+<li>不支持事务</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>持久化</p>
+<p>  持久化（Persistence），即把数据（如内存中的对象）保存到可永久保存的存储设备中（如磁盘）。持久化的主要应用是将内存中的对象存储在数据库中，或者存储在磁盘文件中、XML数据文件中等等。</p>
+<ul>
+<li><p>Redis</p>
+<p>  使用RDB方式和AOF方式</p>
+<ul>
+<li>RDB持久化也分两种：SAVE和BGSAVE<ul>
+<li>SAVE是阻塞式的RDB持久化，当执行这个命令时redis的主进程把内存里的数据库状态写入到RDB文件中，直到该文件创建完毕的这段时间内redis将不能处理任何命令请求。</li>
+<li>BGSAVE属于非阻塞式的持久化，它会创建一个子进程专门去把内存中的数据库状态写入RDB文件里，同时主进程还可以处理来自客户端的命令请求。但子进程基本是复制的父进程，这等于两个相同大小的redis进程在系统上运行，会造成内存使用率的大幅增加。</li>
+</ul>
+</li>
+<li>AOF    <ul>
+<li>与RDB的保存整个redis数据库状态不同，AOF是通过保存对redis服务端的写命令（如set、sadd、rpush）来记录数据库状态的，即保存你对redis数据库的写操作</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>MongoDB<ul>
+<li>MongoDB的所有数据实际上是存放在硬盘的，所有要操作的数据通过mmap的方式映射到内存某个区域内。然后，MongoDB就在这块区域里面进行数据修改，避免了零碎的硬盘操作。至于mmap上的内容flush到硬盘就是操作系统的事情了，所以，如果，MongoDB在内存中修改了数据后，mmap数据flush到硬盘之前，系统宕机了，数据就会丢失。</li>
+<li>MongoDB持久化原理：MongoDB在启动时，专门初始化一个线程不断循环（除非应用crash掉），用于在一定时间周期内来从defer队列中获取要持久化的数据并写入到磁盘的journal(日志)和mongofile(数据)处，当然因为它不是在用户添加记录时就写到磁盘上，所以按MongoDB开发者说，它不会造成性能上的损耗，因为看过代码发现，当进行CUD操作时，记录(Record类型)都被放入到defer队列中以供延时批量（groupcommit）提交写入，但相信其中时间周期参数是个要认真考量的参数，系统为90毫秒，如果该值更低的话，可能会造成频繁磁盘操作，过高又会造成系统宕机时数据丢失过。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>集群</p>
+<p>  全部支持</p>
+</li>
+<li><p>数据量和性能的比较</p>
+<p>  当物理内存够用的时候，Redis &gt; MongoDB &gt; MySQL</p>
+<p>  当物理内存不够用的时候，Redis 和 MongoDB 都会使用虚拟内存。</p>
+<p>  实际上如果Redis要开始虚拟内存，那很明显要么加内存条，要么你就该换个数据库了。</p>
+<p>  但是，MongoDB 不一样，只要，业务上能保证，冷热数据的读写比，使得热数据在物理内存中，mmap 的交换较少。</p>
+<p>  MongoDB 还是能够保证性能。有人使用 MongoDB 存储了上T的数据。</p>
+<p>  MySQL，MySQL根本就不需要担心数据量跟内存下的关系。不过，内存的量跟热数据的关系会极大地影响性能表现。</p>
+<p>  当物理内存和虚拟内存都不够用的时候，估计除了 MySQL 你没什么好选择了。</p>
+<p>  其实，从数据存储原理来看，我更倾向于将 MongoDB 归类为硬盘数据库，但是使用了 mmap 作为加速的手段而已。</p>
+</li>
+<li><p>简说mmap</p>
+<p>  mmap系统调用并不是完全为了用于共享内存而设计的。它本身提供了不同于一般对普通文件的访问方式，进程可以像读写内存一样对普通文件进行操作。</p>
+<p>  mmap 系统调用使得进程之间通过映射同一个普通文件实现共享内存。普通文件被映射到进程地址空间后，进程可以像访问普通内存一样对文件进行访问，不必再调用。 read()，write（）等操作。mmap并不分配空间, 只是将文件映射到调用进程的地址空间里, 然后你就可以用memcpy等操作写文件, 而不用write()了.写完后用msync()同步一下, 你所写的内容就保存到文件里了. 不过这种方式没办法增加文件的长度, 因为要映射的长度在调用mmap()的时候就决定了。</p>
+</li>
+<li><p>优缺点</p>
+<ul>
+<li>MySQL<ul>
+<li>优点<ol>
+<li>体积小、速度快、总体拥有成本低，开源，提供的接口支持多种语言连接操作。</li>
+<li>支持多种操作系统。</li>
+<li>MySQL 的核心程序采用完全的多线程编程。线程是轻量级的进程，它可以灵活地为用户提供服务，而不过多的系统资源。用多线程和C语言实现的MySQL 能很容易充分利用CPU。 </li>
+<li>MySQL 有一个非常灵活而且安全的权限和口令系统。当客户与MySQL 服务器连接时，他们之间所有的口令传送被加密，而且MySQL 支持主机认证。</li>
+<li>MySQL 能够提供很多不同的使用者界面，包括命令行客户端操作，网页浏览器，以及各式各样的程序语言界面，例如 C++，Perl，Java，PHP，以及Python。你可以使用事先包装好的客户端，或者干脆自己写一个合适的应用程序。MySQL可用于 Unix，Windows，以及OS/2等平台，因此它可以用在个人电脑或者是服务器上。</li>
+</ol>
+</li>
+<li>缺点 <ol>
+<li>不支持热备份。</li>
+<li>MySQL不支持自定义数据类型。</li>
+<li>MySQL最大的缺点是其安全系统，主要是复杂而非标准，另外只有到调用mysqladmin来重读用户权限时才发生改变。</li>
+<li>MySQL对存储过程和触发器支持不够良好。</li>
+<li>尽管 MySQL 理论上仍是开源产品，也有人抱怨它诞生之后更新缓慢。然而，应该注意到有一些基于 MySQL 并完整集成的数据库（如 MariaDB），在标准的 MySQL 基础上带来了额外价值。</li>
+<li>MySQL对XML支持不够良好。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>Redis<ul>
+<li>优点<ol>
+<li>读写性能优异。</li>
+<li>支持数据持久化，支持 AOF 和 RDB 两种持久化方式。</li>
+<li>支持主从复制，主机会自动将数据同步到从机，可以进行读写分离。</li>
+<li>数据结构丰富:数据结构丰富:支持 string、hash、set、sortedset、list 等数据结构。 </li>
+</ol>
+</li>
+<li>缺点<ol>
+<li>Redis 不具备自动容错和恢复功能，主机从机的宕机都会导致前端部分读写请求失败，需要等待机器重启或者手动切换前端的 IP 才能恢复。</li>
+<li>主机宕机，宕机前有部分数据未能及时同步到从机，切换 IP 后还会引入数据不一致的问题，降低了系统的可用性。</li>
+<li>Redis 的主从复制采用全量复制，复制过程中主机会 fork 出一个子进程对内存做一份快照， 并将子进程的内存快照保存为文件发送给从机，这一过程需要确保主机有足够多的空余内存。若快照文件较大，对集群的服务能力会产生较大的影响，而且复制过程是在从机新加入 集群或者从机和主机网络断开重连时都会进行，也就是网络波动都会造成主机和从机间的一 次全量的数据复制，这对实际的系统运营造成了不小的麻烦。</li>
+<li>Redis 较难支持在线扩容，在集群容量达到上限时在线扩容会变得很复杂。为避免这一问题，运维人员在系统上线时必须确保有足够的空间，这对资源造成了很大的浪费。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>MongoDB<ul>
+<li>优点<ol>
+<li>弱一致性(最终一致)，更能保证用户的访问速度。</li>
+<li>文档结构的存储方式，能够更便捷的获取数。</li>
+<li>内置 GridFS，高效存储二进制大对象 (比如照片和视频)。</li>
+<li>内置Sharding。提供基于Range的Auto Sharding机制：一个collection可按照记录的范围，分成若干个段，切分到不同的Shard上。</li>
+<li>第三方支持丰富。(这是与其他的NoSQL相比，MongoDB也具有的优势)。</li>
+<li>性能优越：在使用场合下，千万级别的文档对象，近10G的数据，对有索引的ID的查询不会比mysql慢，而对非索引字段的查询，则是全面胜出。 </li>
+</ol>
+</li>
+<li>缺点<ol>
+<li>mongodb不支持事务操作。所以事务要求严格的系统（如果银行系统）肯定不能用它。</li>
+<li>mongodb占用空间过大。</li>
+<li>MongoDB没有如MySQL那样成熟的维护工具，这对于开发和IT运营都是个值得注意的地方。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="MySQL和Redis对比"><a href="#MySQL和Redis对比" class="headerlink" title="MySQL和Redis对比"></a>MySQL和Redis对比</h3><p>MySQL 是持久化存储，存放在磁盘里面，检索的话，会涉及到一定的 IO，为了解决这个瓶颈，于是出现了缓存，比如现在用的最多的 memcached(简称mc)。首先，用户访问mc，如果未命中，就去访问 MySQL，之后像内存和硬盘一样，把数据复制到mc一部分。</p>
+<p>Redis 和mc都是缓存，并且都是驻留在内存中运行的，这大大提升了高数据量web访问的访问速度。然而mc只是提供了简单的数据结构，比如 string存储；Redis却提供了大量的数据结构，比如string、list、set、hashset、sorted set这些，这使得用户方便了好多，毕竟封装了一层实用的功能，同时实现了同样的效果，当然用Redis而慢慢舍弃mc。</p>
+<p>内存和硬盘的关系，硬盘放置主体数据用于持久化存储，而内存则是当前运行的那部分数据，CPU访问内存而不是磁盘，这大大提升了运行的速度，当然这是基于程序的局部化访问原理。</p>
+<p>推理到 Redis + MySQL，它是内存+磁盘关系的一个映射，MySQL 放在磁盘，Redis放在内存，这样的话，web应用每次只访问Redis，如果没有找到的数据，才去访问 MySQL。</p>
+<p>然而 Redis + MySQL 和内存+磁盘的用法最好是不同的。</p>
+<p>前者是内存数据库，数据保存在内存中，当然速度快。</p>
+<p>后者是关系型数据库，功能强大，数据访问也就慢。</p>
+<p>像memcache，MongoDB，Redis，都属于No SQL系列。</p>
+<h2 id="FastJSON、Gson和Jackson性能对比（网摘）"><a href="#FastJSON、Gson和Jackson性能对比（网摘）" class="headerlink" title="FastJSON、Gson和Jackson性能对比（网摘）"></a>FastJSON、Gson和Jackson性能对比<a href="https://www.cnblogs.com/felixzh/p/8551796.html" target="_blank" rel="noopener">（网摘）</a></h2><p>JSON序列化(Object =&gt; JSON)<br>测试样本数量为100000个，为了保证每个类库在测试中都能处理同一个样本，先把样本Java对象保存在文件中。每个类库测试3次，每次循环测试10遍，去掉最快速度和最慢速度，对剩下的8遍求平均值作为最终的速，取3次测试中最好的平均速度作为最终的测试数据。</p>
+<table>
+<thead>
+<tr>
+<th>类库</th>
+<th style="text-align:center">样本数量</th>
+<th style="text-align:right">执行次数</th>
+<th style="text-align:right">最长时间(毫秒)</th>
+<th style="text-align:right">最短时间(毫秒)</th>
+<th style="text-align:right">平均时间(毫秒)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FastJSON</td>
+<td style="text-align:center">100000</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">2291.22</td>
+<td style="text-align:right">1416.70</td>
+<td style="text-align:right">1454.93</td>
+</tr>
+<tr>
+<td>Jackson</td>
+<td style="text-align:center">100000</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">1980.92</td>
+<td style="text-align:right">841.91</td>
+<td style="text-align:right">880.82</td>
+</tr>
+<tr>
+<td>Gson</td>
+<td style="text-align:center">100000</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">2383.02</td>
+<td style="text-align:right">1469.08</td>
+<td style="text-align:right">1520.38</td>
+</tr>
+</tbody>
+</table>
+<p>从测试数据可知，FastJSON和GsonJSON序列化的速度差不多，Jackson是最快的（用时Gson少大约600毫秒）。</p>
+<p>JSON反序列化(JSON =&gt; Object)<br>测试样本数量为100000个，为了保证每个类库在测试中都能处理同一个样本，先把样本JSON对象保存在文件中。每个类库测试3次，每次循环测试10遍，去掉最快速度和最慢速度，对剩下的8遍求平均值作为最终的速，取3次测试中最好的平均速度作为最终的测试数据。</p>
+<table>
+<thead>
+<tr>
+<th>类库</th>
+<th style="text-align:center">样本数量</th>
+<th style="text-align:right">执行次数</th>
+<th style="text-align:right">最长时间(毫秒)</th>
+<th style="text-align:right">最短时间(毫秒)</th>
+<th style="text-align:right">平均时间(毫秒)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FastJSON</td>
+<td style="text-align:center">100000</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">7942.31</td>
+<td style="text-align:right">6340.55</td>
+<td style="text-align:right">6526.41</td>
+</tr>
+<tr>
+<td>Jackson</td>
+<td style="text-align:center">100000</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">7957.22</td>
+<td style="text-align:right">6623.85</td>
+<td style="text-align:right">6815.41</td>
+</tr>
+<tr>
+<td>Gson</td>
+<td style="text-align:center">100000</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">8235.15</td>
+<td style="text-align:right">7006.06</td>
+<td style="text-align:right">7364.75</td>
+</tr>
+</tbody>
+</table>
+<p>从测试数据可知，三个类库在反序列化上性能比较接近，Gson稍微差一些。</p>
+<p>总结<br>把Java对象JSON序列化，Jackson速度最快，在测试中比Gson快接近50%，FastJSON和Gson速度接近。<br>把JSON反序列化成Java对象，FastJSON、Jackson速度接近，Gson速度稍慢，不过差距很小。</p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2019年10月12日 20:21</p>
+        <p>原始链接： <a class="post-url" href="/2019/02/19/1548754788/" title="技术区别汇总整理">https://maiyikai.github.io/2019/02/19/1548754788/</a></p>
+        <footer>
+            <a href="https://maiyikai.github.io">
+                <img src="/images/logo2.png" alt="maiyikai">
+                maiyikai
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        ~谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://maiyikai.github.io/2019/02/19/1548754788/&title=《技术区别汇总整理》 — FlyingFish's Blog&pic=https://maiyikai.github.io/img/java/1550568629.jpg" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://maiyikai.github.io/2019/02/19/1548754788/&title=《技术区别汇总整理》 — FlyingFish's Blog&source=为了新工作面试，进行技术对比整理包含内容： Spring、Spring Boot、Mybatis、Ibatis、Hibernate、Mysql、Oracl..." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://maiyikai.github.io/2019/02/19/1548754788/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《技术区别汇总整理》 — FlyingFish's Blog&url=https://maiyikai.github.io/2019/02/19/1548754788/&via=https://maiyikai.github.io" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://maiyikai.github.io/2019/02/19/1548754788/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://maiyikai.github.io/2019/02/19/1548754788/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/Java/" class="color5">Java</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Spring-Boot和Spring的区别"><span class="post-toc-text">Spring Boot和Spring的区别</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Mybatis和Ibatis区别"><span class="post-toc-text">Mybatis和Ibatis区别</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Mybatis和Hibernate的区别（网摘）"><span class="post-toc-text">Mybatis和Hibernate的区别（网摘）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第一方面：开发速度的对比"><span class="post-toc-text">第一方面：开发速度的对比</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第二方面：开发工作量的对比"><span class="post-toc-text">第二方面：开发工作量的对比</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第三方面：sql优化方面"><span class="post-toc-text">第三方面：sql优化方面</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第四方面：对象管理的对比"><span class="post-toc-text">第四方面：对象管理的对比</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第五方面：缓存机制"><span class="post-toc-text">第五方面：缓存机制</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第六方面：总结"><span class="post-toc-text">第六方面：总结</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Mysql和oracle区别"><span class="post-toc-text">Mysql和oracle区别</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#MySQL、Redis和MongoDB的区别"><span class="post-toc-text">MySQL、Redis和MongoDB的区别</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#MySQL和Redis对比"><span class="post-toc-text">MySQL和Redis对比</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#FastJSON、Gson和Jackson性能对比（网摘）"><span class="post-toc-text">FastJSON、Gson和Jackson性能对比（网摘）</span></a></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+    <a href="/2019/03/08/1552012657/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          怒怼HashMap
+        
+      </span>
+    </a>
+  
+  
+    <a href="/2019/01/30/1548754787/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">SpringBoot Druid(alibaba)--未完待续</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+        <div id="SOHUCS" sid="1548754788"></div>
+<script type="text/javascript">
+    (function(){
+        var appid = 'cyu3qrrJt';
+        var conf = '3f0da4017453d35b0c5dafb035646863';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2019 maiyikai<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "https://maiyikai.github.io",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/CenterOS/">CenterOS</a><a class="category-link" href="/categories/DataSource/">DataSource</a><a class="category-link" href="/categories/Hexo/">Hexo</a><a class="category-link" href="/categories/Java/">Java</a><a class="category-link" href="/categories/LoadRunner/">LoadRunner</a><a class="category-link" href="/categories/MyBatis/">MyBatis</a><a class="category-link" href="/categories/SpringBoot/">SpringBoot</a><a class="category-link" href="/categories/error/">error</a><a class="category-link" href="/categories/regex/">regex</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/LoadRunner/" style="font-size: 13.33px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 13.33px;">Test</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 10px;">script</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/LoadRunner/" style="font-size: 13.33px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 13.33px;">Test</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 10px;">script</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>

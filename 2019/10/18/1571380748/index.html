@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>LoadRunner之脚本写作 | FlyingFish&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="maiyikai,maiyude,FlyingFish,FlyingFish's blog">
+  
+  <meta name="description" content="LoadRunner，是一种预测系统行为和性能的负载测试工具。通过模拟上千万用户实施并发负载及实时性能监测的方式来确认和查找问题，LoadRunner能够对整个企业架构进行测试。企业使用LoadRunner能最大限度地缩短测试时间，优化性能和加速应用系统的发布周期。LoadRunner可适用于各种体系架构的自动负载测试，能预测系统行为并评估系统性能。">
+<meta name="keywords" content="LoadRunner,Test,script">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LoadRunner之脚本写作">
+<meta property="og:url" content="https://maiyikai.github.io/2019/10/18/1571380748/index.html">
+<meta property="og:site_name" content="FlyingFish&#39;s Blog">
+<meta property="og:description" content="LoadRunner，是一种预测系统行为和性能的负载测试工具。通过模拟上千万用户实施并发负载及实时性能监测的方式来确认和查找问题，LoadRunner能够对整个企业架构进行测试。企业使用LoadRunner能最大限度地缩短测试时间，优化性能和加速应用系统的发布周期。LoadRunner可适用于各种体系架构的自动负载测试，能预测系统行为并评估系统性能。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://maiyikai.github.io/img/LoadRunner/1571383624.png">
+<meta property="og:image" content="http://maiyikai.github.io/img/LoadRunner/1571383625.png">
+<meta property="og:image" content="http://maiyikai.github.io/img/LoadRunner/1571383626.png">
+<meta property="og:image" content="http://maiyikai.github.io/img/LoadRunner/1571383627.png">
+<meta property="og:image" content="http://maiyikai.github.io/img/LoadRunner/1571383628.png">
+<meta property="og:image" content="http://maiyikai.github.io/img/LoadRunner/1571383629.png">
+<meta property="og:image" content="http://maiyikai.github.io/img/LoadRunner/1571383630.png">
+<meta property="og:image" content="http://maiyikai.github.io/img/LoadRunner/1571383631.png">
+<meta property="og:image" content="http://maiyikai.github.io/img/LoadRunner/1571383632.png">
+<meta property="og:image" content="http://maiyikai.github.io/img/LoadRunner/1571383633.png">
+<meta property="og:image" content="http://maiyikai.github.io/img/LoadRunner/1571383634.png">
+<meta property="og:updated_time" content="2019-10-21T11:43:47.980Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LoadRunner之脚本写作">
+<meta name="twitter:description" content="LoadRunner，是一种预测系统行为和性能的负载测试工具。通过模拟上千万用户实施并发负载及实时性能监测的方式来确认和查找问题，LoadRunner能够对整个企业架构进行测试。企业使用LoadRunner能最大限度地缩短测试时间，优化性能和加速应用系统的发布周期。LoadRunner可适用于各种体系架构的自动负载测试，能预测系统行为并评估系统性能。">
+<meta name="twitter:image" content="http://maiyikai.github.io/img/LoadRunner/1571383624.png">
+  
+  
+    <link rel="icon" href="/pen_logo.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?a53f82c21dd876a0b4f165d79cffff9a";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">FlyingFish&#39;s Blog</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo2.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        FlyingFish&#39;s Blog
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        随笔记
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="maiyikai" target="_blank" href="//maiyikai.github.io/">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/maiyikai/">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                        <a title="Weibo" target="_blank" href="//weibo.com/maiyikai">
+                            <i class="fa fa-weibo fa-2x"></i></a>
+                    
+                        <a title="Weixin" target="_blank" href="//maiyikai.github.io/images/user_weixin.jpg">
+                            <i class="fa fa-weixin fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-1571380748" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      LoadRunner之脚本写作
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/LoadRunner/">LoadRunner</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-10-18
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <p>LoadRunner，是一种预测系统行为和性能的负载测试工具。通过模拟上千万用户实施并发负载及实时性能监测的方式来确认和查找问题，LoadRunner能够对整个企业架构进行测试。企业使用LoadRunner能最大限度地缩短测试时间，优化性能和加速应用系统的发布周期。<br>LoadRunner可适用于各种体系架构的自动负载测试，能预测系统行为并评估系统性能。<br><a id="more"></a><br>LoadRunner 更多的了解可以查看<a href="https://baike.baidu.com/item/loadrunner/1926633?fr=aladdin" target="_blank" rel="noopener">百度百科</a>，我觉得上面讲的很全面了。<br>本篇文章是我近段时间使用 LoadRunner 对系统进行性能测试而写，因为时间有限，所能了解的东西也有限，所以能写的也就一点点，不多…</p>
+<h4 id="新建脚本"><a href="#新建脚本" class="headerlink" title="新建脚本"></a>新建脚本</h4><p>新建脚本，一般来说，应该都是使用的 LoadRunner 程序的脚本录制功能，这个功能是可以自动生成脚本文件的，然后我们再改改应该就可以了。<br>但是我这边有一些情况比较特殊，不能使用录制功能，所以只能是纯手写咯。<br>既然是要写脚本，打开程序的操作肯定是必要的吧：LoadRunner应用程序-&gt;创建/编辑脚本-&gt;新建/打开脚本</p>
+<ol>
+<li><p>创建/编辑脚本<br><img src="http://maiyikai.github.io/img/LoadRunner/1571383624.png" alt="创建/编辑脚本"></p>
+</li>
+<li><p>新建/打开脚本<br><img src="http://maiyikai.github.io/img/LoadRunner/1571383625.png" alt="新建/打开脚本"></p>
+</li>
+<li><p>脚本类型（如果是新建脚本）–默认就行<br><img src="http://maiyikai.github.io/img/LoadRunner/1571383626.png" alt=" 脚本类型"></p>
+</li>
+<li><p>选择取消即为不录制<br><img src="http://maiyikai.github.io/img/LoadRunner/1571383627.png" alt="选择取消即为不录制"></p>
+</li>
+</ol>
+<h4 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h4><p>接下来我们介绍一下使用了哪一些函数，函数简单，但是还是要记一下，以为要用的东西嘛，不记得就尴尬了…</p>
+<h5 id="函数列表"><a href="#函数列表" class="headerlink" title="函数列表"></a>函数列表</h5><p>这里列出我使用到的所有函数，都是 C 语言的函数哦：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">int web_add_auto_header( const char *Header, const char *Content );   </span><br><span class="line">int web_set_max_html_param_len( const char *length );</span><br><span class="line">int web_reg_save_param_ex( const char *ParamName, [const char *LB, ][const char *RB,] &lt;List of Attributes&gt;, &lt;SEARCH FILTERS&gt;,LAST ); </span><br><span class="line">int web_reg_find( const char *attribute_list, LAST ); </span><br><span class="line">int lr_start_transaction( const char *transaction_name ); </span><br><span class="line">int web_custom_request( const char *RequestName, &lt;List of Attributes&gt;, [EXTRARES, &lt;List of Resource Attributes&gt;,] LAST );  </span><br><span class="line">char *lr_eval_string( const char *instring ); </span><br><span class="line">int atoi( const char *string ); </span><br><span class="line">int lr_output_message( const char *format, exp1, exp2,...expn.); </span><br><span class="line">int lr_end_transaction( const char *transaction_name, int status ) ; </span><br><span class="line">void lr_think_time( double thinkTime); </span><br><span class="line">int lr_message( const char *format, exp1, exp2,...expn.);</span><br></pre></td></tr></table></figure></p>
+<h5 id="函数介绍"><a href="#函数介绍" class="headerlink" title="函数介绍"></a>函数介绍</h5><p>上面就是使用到的简单的函数，下边来对他们一一介绍，建议看官方文档咯，在程序里边的帮助就有相应的文档可以查.</p>
+<ol>
+<li>web_add_auto_header: Adds the specified header to all subsequent HTTP requests<br>参数：</li>
+</ol>
+<ul>
+<li>Header: 请求头的参数，eg: Accept </li>
+<li>Content: 就是请求头参数对应的值咯，eg：如果参数是 Accept，那么值我们可以设置为：application/json<br>就是设置 HTTP 的请求头，并将这个请求头应用到后续的请求中去–即设置一次，后续无忧。eg:web_add_auto_header(“Accept”, “application/json”);</li>
+</ul>
+<p>2.web_set_max_html_param_len: Sets the maximum length of any HTML string that can be retrieved and saved as a parameter<br>参数：</p>
+<ul>
+<li>length: 长度为字符形式，默认是 256 个字符<br>就是可以检索和保存为参数的任何 HTML 字符串的最大长度。一般地，如果没用使用 HTML 请求的响应值最为参数传递给下一个 HTML 请求，那么就没必要设置这个值。</li>
+</ul>
+<p>3.web_reg_save_param_ex: Registers a request to save dynamic data information to a parameter<br>参数：</p>
+<ul>
+<li>ParamName: 定义参数名称</li>
+<li>LB: 动态数据边界，左边界</li>
+<li>RB: 动态数据边界，右边界</li>
+<li>Attributes:<ul>
+<li>DFES:    在执行所需的搜索操作之前使用的数据格式扩展的逗号分隔列表。可选的。</li>
+<li>NOTFOUND:    在没有找到搜索项并生成空字符串时的处理选项。根据函数的不同，搜索项可以是边界，也可以是XPath。可选的。<br>“Notfound=error”是默认值，当没有找到搜索项时，会引发错误。<br>“Notfound=warning”不发出错误。如果没有找到搜索项，则将参数count设置为0，并继续执行脚本。如果您希望查看是否找到了字符串，但又不希望脚本失败，那么“警告”选项是最理想的。<br>注意:如果脚本启用了Continue on Error，那么即使NOTFOUND被设置为“Error”，当搜索项没有找到时，脚本也会继续执行，但是会向扩展日志文件写入一条错误消息。<br>可选的。</li>
+<li>Ordinal:    表示匹配的序号位置或实例。除了传递一个数字外，还可以指定LAST。如果您指定所有参数，则参数值将保存在数组中。可选的。默认实例是1。<br>此属性不适用于web_reg_save_param_xpath。</li>
+<li>SaveLen:找到的值的子字符串长度，从指定的偏移量保存到参数。<br>可选的。默认值是-1，表示保存到字符串的末尾。<br>此属性不适用于web_reg_save_param_xpath。</li>
+<li>SaveOffset:将找到的值的子字符串的偏移量保存到参数。偏移量必须是非负的。<br>此属性不适用于web_reg_save_param_xpath。<br>可选的。默认值是0。</li>
+<li>SelectAll:指定是否保存所有找到的匹配项。如果指定了Yes，它将把匹配的值保存在数组中。可选的。默认值是No。<br>此属性不适用于web_reg_save_param_ex。</li>
+</ul>
+</li>
+<li>SEARCH FILTERS: 指定缓冲区内搜索字符串的部分<ul>
+<li>使用:<br>  SEARCH_FILTERS,<br>  “RelFrameID=ALL”,<br>  “IgnoreRedirections=off”,<br>  “Scope=Body”,<br>  “ContentType=text/html”,<br>  “RequestUrl=<a href="http://mansfied/cgi-bin/echo.asp&quot;" target="_blank" rel="noopener">http://mansfied/cgi-bin/echo.asp&quot;</a>, </li>
+<li>说明：<ul>
+<li>ContentType:只搜索具有指定ContentType标头的响应。ContentType可以包含*通配符。</li>
+<li>HeaderNames: HTTP响应头名的逗号分隔列表。只搜索指定头的值。此参数仅适用于范围为“标头”的情况。</li>
+<li>IgnoreRedirections:如果“IgnoreRedirections=Yes”，服务器响应是重定向信息(HTTP状态码300-303,307)，响应不搜索。相反，在接收到重定向响应之后，GET请求被发送到重定向的位置，并在该位置的响应上执行搜索。默认是No。</li>
+<li>RelFrameID: HTML页面相对于请求URL的层次结构。可能的值是ALL或一个数字。单击RelFrameID属性查看详细描述。<br>注意:在GUI级脚本中不支持RelFrameID。</li>
+<li>RequestURL:只搜索对该请求的响应。URL可以包含*通配符。<br>范围:在何处搜索分隔的数据。可选的。可能的值是全部-搜索整个缓冲区、    只搜索标题、只搜索身体数据、只在Cookies中搜索；<br>如果没有指定DFES参数，则可以使用All。如果使用Scope=Headers和HeaderNames过滤器，则只搜索指定header的值。如果没有使用HeaderNames过滤器，则搜索所有标题文本。</li>
+<li>Scope=所有不应用于web_reg_save_param_xpath。默认值是All，除了web_reg_save_param_xpath，它的默认值是Body。<br>就是 2 所讲，所有请求中的响应值缓存区，按照设置，将数据保存在定义的参数中，再将这个参数作为全局参数，供后续请求使用。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ol start="4">
+<li>web_reg_find: Registers a search for a text string on an HTML page<br>参数：</li>
+</ol>
+<ul>
+<li>attribute_list：参数列表，有好多的参数，这里先讲两个<ul>
+<li>Text: 在搜索的文本中搜索指定的内容</li>
+<li>SaveCount: 当搜索匹配到 Text 指定的内容是，SaveCount 就会计数<br>就是在 HTML 页面上注册对文本字串的搜索，只对靠近它的一个请求有用（自测发现）</li>
+</ul>
+</li>
+</ul>
+<ol start="5">
+<li>lr_start_transaction: Marks the beginning of a transaction<br>参数：</li>
+</ol>
+<ul>
+<li>transaction_name: 即事务名称<br>就是注册事务开启</li>
+</ul>
+<ol start="6">
+<li>web_custom_request: Allows you to create a custom HTTP request with any method supported by HTTP<br>参数：</li>
+</ol>
+<ul>
+<li>ReuqestName: 注册请求的名称</li>
+<li>Attributes:<ul>
+<li>URL: 访问的请求</li>
+<li>Method: HTTP 请求的方法 GET、POST等</li>
+<li>EncType: 请求头中的 Content-Type </li>
+<li>Resource: 只是 URL 是否为一个资源，“1” 表示是一个资源，不会影响脚本的运行，遇到错误报“警告”；“0” 表示 URL 是关键的，不受 RTS 的影响。</li>
+<li>Referer: 引用/参照页面</li>
+<li>Snapshot: 快照文件</li>
+<li>Mode: 记录级别为 HTML 或 HTTP</li>
+<li>Body: 请求使用的参数</li>
+</ul>
+</li>
+<li>LAST: 表示列表字段的结束<br>用于发送 HTTP 请求的函数</li>
+</ul>
+<ol start="7">
+<li>lr_eval_string:Returns the string argument after evaluating embedded parameters（将 web_ref_find 计算后的参数转为一个字符串）  </li>
+<li>atoi: Converts a string to an integer value（将字符串转换为整型）</li>
+<li>lr_output_message:  Sends a message to log files, output windows, and other test report summaries(发送信息到日志文件、输出窗口和其他测试报告摘要)</li>
+<li>lr_end_transaction: 事务结束<br>参数：</li>
+</ol>
+<ul>
+<li>transactions_name: 事务名称</li>
+<li>status: LR_PASS、LR_FAIL、LR_AUTO、LR_STOP</li>
+</ul>
+<ol start="11">
+<li>lr_think_time: 记录的思考时间，为字符串形式 eg: lr_think_time(“2”);为思考时间2s</li>
+<li>lr_message: Sends a message to log files and output windows</li>
+</ol>
+<h4 id="简单脚本编写"><a href="#简单脚本编写" class="headerlink" title="简单脚本编写"></a>简单脚本编写</h4><p>此脚本是针对自己写的一个小服务 Demo 经行测试的，所以可能会有一些不合理的地方。</p>
+<h5 id="服务-Demo-JAVA"><a href="#服务-Demo-JAVA" class="headerlink" title="服务 Demo(JAVA)"></a>服务 Demo(JAVA)</h5><p>使用的是 SpringBoot 创建的一个小实例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">@SpringBootApplication</span><br><span class="line">@EnableTransactionManagement</span><br><span class="line">@RestController</span><br><span class="line">@RequestMapping(value = &quot;/Demo&quot;)</span><br><span class="line">public class DemoApplication &#123;</span><br><span class="line"></span><br><span class="line">  public static void main(String[] args) &#123;</span><br><span class="line">    SpringApplication.run(DemoApplication.class, args);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  @PostMapping(value = &quot;/userInfo&quot;,produces = &quot;application/json;charset=UTF-8&quot;, consumes = &quot;application/json;charset=UTF-8&quot;)</span><br><span class="line">  public UserInfo test(@RequestHeader(value = &quot;appName&quot;)String appName)&#123;</span><br><span class="line">    UserInfo userInfo = new UserInfo();</span><br><span class="line">    userInfo.setUserName(&quot;feigntest&quot;);</span><br><span class="line">    userInfo.setPassword(&quot;password&quot;);</span><br><span class="line">    return userInfo;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  @PostMapping(value = &quot;/getUserAge&quot;/*,produces = &quot;application/json;charset=UTF-8&quot;, consumes = &quot;application/json;charset=UTF-8&quot;*/)</span><br><span class="line">  public UserInfo getUserAge(@RequestParam (name = &quot;userName&quot;)String userName)&#123;</span><br><span class="line">    UserInfo userInfo = new UserInfo();</span><br><span class="line">    userInfo.setUserName(userName);</span><br><span class="line">    userInfo.setPassword(&quot;password&quot;);</span><br><span class="line">    userInfo.setAge(22);</span><br><span class="line">    return userInfo;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="脚本代码"><a href="#脚本代码" class="headerlink" title="脚本代码"></a>脚本代码</h5><p>此脚本包含目前在项目压测中使用的函数，每一个函数都有解释响应的理解，当然可能会有一些出入，主要是根据实际情况而定。（应该很详细了吧）<br>脚本里边包含：</p>
+<ol>
+<li>设置思考时间</li>
+<li>定义全局应用的请求头</li>
+<li>取请求返回的数据作为参数进行传递</li>
+<li>发送请求的一些设置</li>
+<li>如何判断请求是否为正确返回<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line">Action()</span><br><span class="line">&#123;</span><br><span class="line">	//Demo</span><br><span class="line">    lr_think_time(1);</span><br><span class="line">    web_add_auto_header(&quot;appName&quot;, &quot;abc&quot;);//全局应用请求头--这里的请求头数据不做要求（乱写的），但是头的参数要存在，因为服务定义了</span><br><span class="line"></span><br><span class="line">	//设置可以检索和保存为参数的任何 HTML 字符串的最大长度</span><br><span class="line">    web_set_max_html_param_len(&quot;2048&quot;);</span><br><span class="line"></span><br><span class="line">    //定义赋值参数，只能是全局的，不能定义局部，要不然编译不通过</span><br><span class="line">    web_reg_save_param_ex(</span><br><span class="line">		&quot;ParamName=userName&quot;,//定义参数名称</span><br><span class="line">		&quot;LB/IC=\&quot;userName\&quot;:\&quot;&quot;,//LB：定义左边匹配符   IC：忽略大小写</span><br><span class="line">		&quot;RB=\&quot;,&quot;,//定义右边匹配符</span><br><span class="line">		&quot;Ordinal=1&quot;,//1:匹配的第一个数据，  ALL：将所有匹配值保存为一个数组</span><br><span class="line">		&quot;SaveLen=-1&quot;,//不限定参数值的长度</span><br><span class="line">		SEARCH_FILTERS,</span><br><span class="line">		&quot;Scope=Body&quot;,//搜索范围</span><br><span class="line">		&quot;RequestURL=*/Demo/userInfo*&quot;,//搜索指定的请求的响应值,如果使用完整的url作为指定请求，值为对应的web_custom_request的url的值，如果有时间戳，记得把时间戳也算上，否则会匹配不上,也可以使用通配符&apos;*&apos;</span><br><span class="line">		LAST);</span><br><span class="line"></span><br><span class="line">    //事务开启</span><br><span class="line">    lr_start_transaction(&quot;userInfo&quot;);</span><br><span class="line">    //定义可以判断请求成功的验证</span><br><span class="line">    //函数注册一个请求，以搜索下一个操作函数(如web_url)检索到的Web页面上的文本字符串。</span><br><span class="line">    web_reg_find(&quot;Text=\&quot;userName\&quot;:\&quot;feigntest\&quot;&quot;, &quot;SaveCount=userInfo_count&quot;,LAST);//计算看这个事务返回的数据，判断时候存在&quot;userName&quot;: &quot;feigntest&quot;这个值，存在则userInfo_count计数+1</span><br><span class="line">    //请求</span><br><span class="line">    web_custom_request(&quot;userInfo&quot;,//请求名称--自定义即可</span><br><span class="line">        &quot;URL=http://10.37.1.185:8991/Demo/userInfo?time=1543200057562&quot;, //访问url</span><br><span class="line">		&quot;Method=POST&quot;, //HTTP Method</span><br><span class="line">		&quot;EncType=application/json&quot;,//即 指定处理请求的提交内容类型（Content-Type）,如果这个不一致，请求会报错 415</span><br><span class="line">		&quot;Resource=0&quot;, </span><br><span class="line">		&quot;RecContentType=application/json&quot;, //指定返回的内容类型，仅当request请求头中的(Accept)类型中包含该指定类型才返回</span><br><span class="line">		&quot;Referer=http://10.37.1.185:8991/&quot;, </span><br><span class="line">		&quot;Snapshot=t13.inf&quot;, </span><br><span class="line">		&quot;Mode=HTML&quot;, </span><br><span class="line">		&quot;Body=&quot;, //不需要参数</span><br><span class="line">		LAST);</span><br><span class="line">    //判断是否正确结束事务</span><br><span class="line">    if( atoi(lr_eval_string(&quot;&#123;userInfo_count&#125;&quot;)) &gt; 0) &#123;</span><br><span class="line">        lr_end_transaction(&quot;userInfo&quot;, LR_PASS);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        lr_end_transaction(&quot;userInfo&quot;, LR_FAIL);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //事务开启</span><br><span class="line">    lr_start_transaction(&quot;getUserAge&quot;);</span><br><span class="line">    //定义可以判断请求成功的验证</span><br><span class="line">    web_reg_find(&quot;Text=\&quot;age\&quot;:22&quot;, &quot;SaveCount=getUserAge_count&quot;,LAST);//计算看这个事务返回的数据，判断时候存在&quot;userName&quot;: &quot;feigntest&quot;这个值，存在则userInfo_count计数+1</span><br><span class="line">    //请求</span><br><span class="line">    web_custom_request(&quot;getUserAge&quot;,//请求名称--自定义即可</span><br><span class="line">        &quot;URL=http://10.37.1.185:8991/Demo/getUserAge?time=1543200057562&quot;, //访问url</span><br><span class="line">		&quot;Method=POST&quot;, //HTTP Method</span><br><span class="line">		//&quot;EncType=application/json&quot;,//这个请求不能加 RequestHeader--ContentType，不然会让接口报400错误----如果一定要使用这个参数，那么我们的请求参数就不能放在Body定义，直接拼接到url中。。实际要根据接口定义来使用</span><br><span class="line">		&quot;Resource=0&quot;, </span><br><span class="line">		&quot;RecContentType=application/json&quot;, //指定返回的内容类型，仅当request请求头中的(Accept)类型中包含该指定类型才返回</span><br><span class="line">		&quot;Referer=http://10.37.1.185:8991/&quot;, </span><br><span class="line">		&quot;Snapshot=t13.inf&quot;, </span><br><span class="line">		&quot;Mode=HTML&quot;, </span><br><span class="line">		&quot;Body=userName=&#123;userName&#125;&quot;, //使用上一个请求所得的参数值赋值使用,,也可以直接拼接到url上</span><br><span class="line">		LAST);</span><br><span class="line">    //判断是否正确结束事务</span><br><span class="line">    if( atoi(lr_eval_string(&quot;&#123;userInfo_count&#125;&quot;)) &gt; 0) &#123;</span><br><span class="line">        lr_end_transaction(&quot;getUserAge&quot;, LR_PASS);//正常返回状态为Pass</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        lr_end_transaction(&quot;getUserAge&quot;, LR_FAIL);//错误返回状态为Fail</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h5 id="测试结果的查看和日志选项"><a href="#测试结果的查看和日志选项" class="headerlink" title="测试结果的查看和日志选项"></a>测试结果的查看和日志选项</h5><p>脚本编写完毕之后，要进行编译测试，确认脚本正常执行才能用于进行性能测试工作。接下来看看日志中如何确认脚本是否正常吧…</p>
+<ol>
+<li>测试结果的查看（标准日志）</li>
+</ol>
+<p><img src="http://maiyikai.github.io/img/LoadRunner/1571383628.png" alt="标准日志-默认"></p>
+<p>根据图片上的日志情况就可以反应出当前脚本的运行情况</p>
+<ol start="2">
+<li><p>debug 调式<br>正所谓“理想很丰满，显示很骨感”。并不是所有的脚本编写完成之后都能正常的运行，而根据 1 选项的日志却看不出来脚本的实际情况，那怎么办呢？认命？不存在的…<br>可以先通过 debug 调式看看能不能找到问题…<br>那么如何 debug 呢？<br>这里要使用到两个按键 F5 和 F9，F5 就是运行啦，F9 就是 debug 断点设置和取消<br>70% 的错误都是因为粗心大意而出现的，所以可以通过这种方式查看一下，是不是参数或者是语法导致的错误…</p>
+</li>
+<li><p>日志查看<br>如果单纯的进行 debug 调式都不能解决问题，那就 只能通过高级日志的查看看看咯…<br>它的位置如下图:<br><img src="http://maiyikai.github.io/img/LoadRunner/1571383629.png" alt="高级日志"></p>
+</li>
+</ol>
+<p>日志打印出来的就比标准日志要多得多，但是在性能测试阶段，建议使用 “仅在出错时返送消息” 或者 “始终发送消息–&gt;标准日志” ，不然可能日志可能会将你的压力机磁盘写满，导致你后续无法继续工作。也建议偶尔自己去删除打印出来的日志，让压力机减负运行嘛。</p>
+<h4 id="参数设置"><a href="#参数设置" class="headerlink" title="参数设置"></a>参数设置</h4><p>上边的例子没有用到参数列表，所以现在介绍参数列表的使用（例子根据上边的例子进行改造），所以下边开始对如何设置参数进行叙述。<br>这里进行简单的例子：<br>我们将上述例子中的语句稍微修改一下： <code>web_add_auto_header(&quot;appName&quot;, &quot;abc&quot;);</code> 修改为 <code>web_add_auto_header(&quot;appName&quot;, &quot;{appNameArg}&quot;);</code> ，此处的 {appNameArg} 为我们定义的参数，中括号不能落下，否则就不是获取参数咯…<br>如果参数列表中没有定义 ‘appNameArg’ 这个参数，那么在脚本中的显示为绿色，如下图：<br><img src="http://maiyikai.github.io/img/LoadRunner/1571383630.png" alt="参数定义-1"></p>
+<p>这里要切记， 使用函数 ‘web_reg_save_param_ex’ 定义的参数，他就是绿色的哦，所以看到绿色参数时要确认是通过 ‘web_reg_save_param_ex’ 函数获取的，还是通过参数列表获取的，不要慌…</p>
+<p>接下来看看如果使用参数列表：</p>
+<ol>
+<li><p>打开参数列表定义工具<br><img src="http://maiyikai.github.io/img/LoadRunner/1571383631.png" alt="参数定义-2"></p>
+</li>
+<li><p>参数定义和选项介绍<br>新建参数：点击“新建”，输入参数名称，回车即可<br>参数类型：选择对应的参数名称设置参数类型，目前使用到的有 File、Random Number。File 即为文件，以.dat为后缀；Random Number 即为随机数。<br>接下来展示两张图作为参考：<br><img src="http://maiyikai.github.io/img/LoadRunner/1571383632.png" alt="参数定义-3"></p>
+</li>
+</ol>
+<p>参数值的设置：<br>按编号：即为按列，其实列序号为 1 ，意思时这个参数它对应的时哪个列<br>按名称：即为列名<br>列分割符：Comma(逗号)、Tab(Tab空白)、Space（空格）<br>选择下一行与更新值时间搭配：<br>    Sequential(连续的)、Random(随机的)、Unique(唯一的)：<br>        Each Iteration：迭代使用，执行一遍脚本用一个值，且当前进程内不会发生改变<br>        Each occurrence：当前当次使用，执行一遍脚本，每次获取到的参数的值都是按顺序往下取值<br>        Once：只使用一次，不重复利用</p>
+<p><img src="http://maiyikai.github.io/img/LoadRunner/1571383633.png" alt="参数定义-4"></p>
+<p>参数值的设置：<br>从 最小值-最大值 之前取值，即为从 1-100 之间随机取值</p>
+<ol start="3">
+<li>参数使用<br>定义成功之后，函数 <code>web_reg_save_param_ex</code> 参数定义部分显示为粉红色，如图：<br><img src="http://maiyikai.github.io/img/LoadRunner/1571383634.png" alt="参数定义-5"></li>
+</ol>
+<p>至此，LoadRunner 简单脚本的编写已经完成了，如遇有疑问或文章有问题，欢迎反馈…</p>
+<h4 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h4><ol>
+<li><a href="https://baike.baidu.com/item/loadrunner/1926633?fr=aladdin" target="_blank" rel="noopener">百度百科：https://baike.baidu.com/item/loadrunner/1926633?fr=aladdin</a></li>
+<li><a href="https://www.cnblogs.com/zhuzhubaoya/p/9084163.html" target="_blank" rel="noopener">LoadRunner-常用的函数：https://www.cnblogs.com/zhuzhubaoya/p/9084163.html</a></li>
+</ol>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2019年10月21日 19:43</p>
+        <p>原始链接： <a class="post-url" href="/2019/10/18/1571380748/" title="LoadRunner之脚本写作">https://maiyikai.github.io/2019/10/18/1571380748/</a></p>
+        <footer>
+            <a href="https://maiyikai.github.io">
+                <img src="/images/logo2.png" alt="maiyikai">
+                maiyikai
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        ~谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://maiyikai.github.io/2019/10/18/1571380748/&title=《LoadRunner之脚本写作》 — FlyingFish's Blog&pic=https://maiyikai.github.io/img/LoadRunner/1558666500.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://maiyikai.github.io/2019/10/18/1571380748/&title=《LoadRunner之脚本写作》 — FlyingFish's Blog&source=LoadRunner，是一种预测系统行为和性能的负载测试工具。通过模拟上千万用户实施并发负载及实时性能监测的方式来确认和查找问题，LoadRunner能够..." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://maiyikai.github.io/2019/10/18/1571380748/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《LoadRunner之脚本写作》 — FlyingFish's Blog&url=https://maiyikai.github.io/2019/10/18/1571380748/&via=https://maiyikai.github.io" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://maiyikai.github.io/2019/10/18/1571380748/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://maiyikai.github.io/2019/10/18/1571380748/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/LoadRunner/" class="color1">LoadRunner</a>
+      
+    <a href="/tags/Test/" class="color5">Test</a>
+      
+    <a href="/tags/script/" class="color2">script</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#新建脚本"><span class="post-toc-text">新建脚本</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#函数"><span class="post-toc-text">函数</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#函数列表"><span class="post-toc-text">函数列表</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#函数介绍"><span class="post-toc-text">函数介绍</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#简单脚本编写"><span class="post-toc-text">简单脚本编写</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#服务-Demo-JAVA"><span class="post-toc-text">服务 Demo(JAVA)</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#脚本代码"><span class="post-toc-text">脚本代码</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#测试结果的查看和日志选项"><span class="post-toc-text">测试结果的查看和日志选项</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#参数设置"><span class="post-toc-text">参数设置</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#参考文献"><span class="post-toc-text">参考文献</span></a></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+  
+    <a href="/2019/09/12/1568191417/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">错误记录-SpringBoot 之 POI 实现 Excel 操作</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+        <div id="SOHUCS" sid="1571380748"></div>
+<script type="text/javascript">
+    (function(){
+        var appid = 'cyu3qrrJt';
+        var conf = '3f0da4017453d35b0c5dafb035646863';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2019 maiyikai<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "https://maiyikai.github.io",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/CenterOS/">CenterOS</a><a class="category-link" href="/categories/DataSource/">DataSource</a><a class="category-link" href="/categories/Hexo/">Hexo</a><a class="category-link" href="/categories/Java/">Java</a><a class="category-link" href="/categories/LoadRunner/">LoadRunner</a><a class="category-link" href="/categories/MyBatis/">MyBatis</a><a class="category-link" href="/categories/SpringBoot/">SpringBoot</a><a class="category-link" href="/categories/error/">error</a><a class="category-link" href="/categories/regex/">regex</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/LoadRunner/" style="font-size: 13.33px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 13.33px;">Test</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 10px;">script</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/LoadRunner/" style="font-size: 13.33px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 13.33px;">Test</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 10px;">script</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>

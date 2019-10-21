@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>错误记录-SpringBoot 之 POI 实现 Excel 操作 | FlyingFish&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="maiyikai,maiyude,FlyingFish,FlyingFish's blog">
+  
+  <meta name="description" content="在项目中，对 Excel 的操作，我们一般都会使用 POI 这个工具包。而这个工具包也在不断的优化，所以会存在很多的版本，那么在 MAVEN 项目中，经常会引入不同的依赖 ，所以会在不经意间引入不同版本的依赖，导致正常运行的项目突然之间抛出很多没见过的异常。而这篇文章内容就是根据所遇而写的…">
+<meta name="keywords" content="SpringBoot,POI,Excel">
+<meta property="og:type" content="article">
+<meta property="og:title" content="错误记录-SpringBoot 之 POI 实现 Excel 操作">
+<meta property="og:url" content="https://maiyikai.github.io/2019/09/12/1568191417/index.html">
+<meta property="og:site_name" content="FlyingFish&#39;s Blog">
+<meta property="og:description" content="在项目中，对 Excel 的操作，我们一般都会使用 POI 这个工具包。而这个工具包也在不断的优化，所以会存在很多的版本，那么在 MAVEN 项目中，经常会引入不同的依赖 ，所以会在不经意间引入不同版本的依赖，导致正常运行的项目突然之间抛出很多没见过的异常。而这篇文章内容就是根据所遇而写的…">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-10-12T12:21:09.265Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="错误记录-SpringBoot 之 POI 实现 Excel 操作">
+<meta name="twitter:description" content="在项目中，对 Excel 的操作，我们一般都会使用 POI 这个工具包。而这个工具包也在不断的优化，所以会存在很多的版本，那么在 MAVEN 项目中，经常会引入不同的依赖 ，所以会在不经意间引入不同版本的依赖，导致正常运行的项目突然之间抛出很多没见过的异常。而这篇文章内容就是根据所遇而写的…">
+  
+  
+    <link rel="icon" href="/pen_logo.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?a53f82c21dd876a0b4f165d79cffff9a";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">FlyingFish&#39;s Blog</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo2.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        FlyingFish&#39;s Blog
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        随笔记
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="maiyikai" target="_blank" href="//maiyikai.github.io/">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/maiyikai/">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                        <a title="Weibo" target="_blank" href="//weibo.com/maiyikai">
+                            <i class="fa fa-weibo fa-2x"></i></a>
+                    
+                        <a title="Weixin" target="_blank" href="//maiyikai.github.io/images/user_weixin.jpg">
+                            <i class="fa fa-weixin fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-1568191417" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      错误记录-SpringBoot 之 POI 实现 Excel 操作
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/error/">error</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-09-11
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <p>在项目中，对 Excel 的操作，我们一般都会使用 POI 这个工具包。而这个工具包也在不断的优化，所以会存在很多的版本，那么在 MAVEN 项目中，经常会引入不同的依赖 ，所以会在不经意间引入不同版本的依赖，导致正常运行的项目突然之间抛出很多没见过的异常。而这篇文章内容就是根据所遇而写的…<a id="more"></a></p>
+<h4 id="POI-依赖引入"><a href="#POI-依赖引入" class="headerlink" title="POI 依赖引入"></a>POI 依赖引入</h4><p>我们经常会使用 POI 对数据表的导入导出进行操作，而这个工具包无疑是最合适的。每次的更新都能提供更好的性能。<br>所使用的的依赖如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.apache.poi&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;poi&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;3.10-FINAL&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.apache.poi&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;poi-ooxml&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;3.10-FINAL&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure></p>
+<h4 id="多版本-Excel-工具类实例化"><a href="#多版本-Excel-工具类实例化" class="headerlink" title="多版本 Excel 工具类实例化"></a>多版本 Excel 工具类实例化</h4><p>当然我使用的并不是最新的内容。<br>很早之前我们使用 POI 工具包实例化针对于不同版本的 Excel 的对象，如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//针对于03版本的Excel，实例化对象</span><br><span class="line">POIFSFileSystem pfs = new POIFSFileSystem(new FileInputStream(file));</span><br><span class="line">   HSSFWorkbook hwb = new HSSFWorkbook(pfs);</span><br><span class="line"></span><br><span class="line">//针对于07版本的Excel，实例化对象</span><br><span class="line">XSSFWorkbook xw = new XSSFWorkbook(file);</span><br><span class="line"></span><br><span class="line">//兼容多个Excel版本的实例化对象，最方便，可以完成多个后缀的读写 .xls || .xlsx</span><br><span class="line">Workbook workbook = WorkbookFactory.create(new FileInputStream(file));</span><br></pre></td></tr></table></figure></p>
+<p>项目中使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SXSSFWorkbook wb = new SXSSFWorkbook(100);</span><br></pre></td></tr></table></figure></p>
+<p>无疑，我一般使用的肯定是第三种<br>我们先看看报了什么错…</p>
+<h4 id="报错信息"><a href="#报错信息" class="headerlink" title="报错信息"></a>报错信息</h4><h5 id="测试环境："><a href="#测试环境：" class="headerlink" title="测试环境："></a>测试环境：</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Caused by: java.lang.RuntimeException: java.io.IOException: No such file or directory</span><br><span class="line">	at org.apache.poi.xssf.streaming.SXSSFWorkbook.createAndRegisterSXSSFSheet(SXSSFWorkbook.java:640)</span><br><span class="line">	at org.apache.poi.xssf.streaming.SXSSFWorkbook.createSheet(SXSSFWorkbook.java:657)</span><br><span class="line">	at org.apache.poi.xssf.streaming.SXSSFWorkbook.createSheet(SXSSFWorkbook.java:71)</span><br></pre></td></tr></table></figure>
+<p>没有这个文件或目录？不可能，这个目录是存在的…</p>
+<h5 id="开发及本地："><a href="#开发及本地：" class="headerlink" title="开发及本地："></a>开发及本地：</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Caused by: java.io.IOException: Zip bomb detected! The file would exceed the max. ratio of compressed file size to the size of the expanded data. This may indicate that the file is used to inflate memory usage and thus could pose a security risk. You can adjust this limit via ZipSecureFile.setMinInflateRatio() if you need to work with files which exceed this limit. Counter: 172032, cis.counter: 1716, ratio: 0.009974888392857142Limits: MIN_INFLATE_RATIO: 0.01</span><br><span class="line">	at org.apache.poi.openxml4j.util.ZipSecureFile$ThresholdInputStream.advance(ZipSecureFile.java:258)</span><br><span class="line">	at org.apache.poi.openxml4j.util.ZipSecureFile$ThresholdInputStream.read(ZipSecureFile.java:215)</span><br><span class="line">	at java.io.FilterInputStream.read(FilterInputStream.java:107)</span><br><span class="line">	at org.apache.poi.xssf.streaming.SXSSFWorkbook.copyStream(SXSSFWorkbook.java:386)</span><br><span class="line">	at org.apache.poi.xssf.streaming.SXSSFWorkbook.injectData(SXSSFWorkbook.java:368)</span><br><span class="line">	at org.apache.poi.xssf.streaming.SXSSFWorkbook.write(SXSSFWorkbook.java:947)</span><br></pre></td></tr></table></figure>
+<p>压缩比？没用到压缩这个玩意儿啊…</p>
+<h4 id="内心独白"><a href="#内心独白" class="headerlink" title="内心独白"></a>内心独白</h4><p>咦！！！<br>同样的代码，不同的错误信息？<br>怎么搞得？<br>难道是测试环境没给写的权限？<br>不对啊，之前都是正常的啊，这个代码大半年都没动了，难道是有人把权限给改动了？<br>会不会是我？这段时间我一直都是在弄 linux 相关的学习，会不会给误点了？先不管了，先看看本地为什么会报错吧…</p>
+<h4 id="错误排查"><a href="#错误排查" class="headerlink" title="错误排查"></a>错误排查</h4><p>经过一番的心理斗争，还是默默的去找原因，经过我代码排查，找到了是在写流的时候报的错，代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 输出流</span><br><span class="line">   FileOutputStream os = new FileOutputStream(&quot;test.xlsx&quot;);</span><br><span class="line">//excel---这个地方报错了</span><br><span class="line">workbook.write(os);</span><br></pre></td></tr></table></figure></p>
+<p>奇怪了，怀疑可能是包的问题，先查查用了哪些包吧，经过查找，发现在 pom.xml 中只引用了 3.10-FINAL 版本的 POI 包。<br>奇怪了，找到实例化的工厂对象，看看到哪个地方去了。通过实例化的方法，去查，发现是进入了 3.10-FINAL 版本的。</p>
+<p>还是采用查找类路径的方法吧，这么一查，发现还有一个 3.14 版本的 POI。好吧，我在两个版本的构造方法都打上断点，很神奇的发现，它居然跳到了 3.14 版本的类中，实例化了 3.14 版本的 SXSSFWorkbook 实例。</p>
+<p>神奇了，编程工具中的 依赖结构查询 没发现有 3.14 版本的，为啥就跑过去了？<br>查找 pom.xml 看是不是我无意中弄进去了，然而通过工程的 pom.xml 并没有发现。所以只能使用最笨的方式了，一个一个依赖的找，最终发现是我在写单元测试的时候引入一个包导致的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.dbunit&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;dbunit&lt;/artifactId&gt;</span><br><span class="line">	&lt;version&gt;2.5.4&lt;/version&gt;</span><br><span class="line">	&lt;scope&gt;test&lt;/scope&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure></p>
+<p>进入这个依赖发现这里边居然有依赖 POI 相关的包，就是 3.14 版本的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">     &lt;groupId&gt;org.apache.poi&lt;/groupId&gt;</span><br><span class="line">     &lt;artifactId&gt;poi&lt;/artifactId&gt;</span><br><span class="line">     &lt;version&gt;3.14&lt;/version&gt;</span><br><span class="line">     &lt;exclusions&gt;</span><br><span class="line">       &lt;exclusion&gt;</span><br><span class="line">         &lt;artifactId&gt;log4j&lt;/artifactId&gt;</span><br><span class="line">         &lt;groupId&gt;log4j&lt;/groupId&gt;</span><br><span class="line">       &lt;/exclusion&gt;</span><br><span class="line">       &lt;exclusion&gt;</span><br><span class="line">         &lt;artifactId&gt;commons-logging&lt;/artifactId&gt;</span><br><span class="line">         &lt;groupId&gt;commons-logging&lt;/groupId&gt;</span><br><span class="line">       &lt;/exclusion&gt;</span><br><span class="line">     &lt;/exclusions&gt;</span><br><span class="line">     &lt;optional&gt;true&lt;/optional&gt;</span><br><span class="line">   &lt;/dependency&gt;</span><br><span class="line">   &lt;dependency&gt;</span><br><span class="line">     &lt;groupId&gt;org.apache.poi&lt;/groupId&gt;</span><br><span class="line">     &lt;artifactId&gt;poi-ooxml&lt;/artifactId&gt;</span><br><span class="line">     &lt;version&gt;3.14&lt;/version&gt;</span><br><span class="line">   &lt;/dependency&gt;</span><br></pre></td></tr></table></figure></p>
+<h4 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h4><p>额好吧，它自己引入的，那我引入 dbunit 这个依赖的时候就去掉就是了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.dbunit&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;dbunit&lt;/artifactId&gt;</span><br><span class="line">	&lt;version&gt;2.5.4&lt;/version&gt;</span><br><span class="line">	&lt;exclusions&gt;</span><br><span class="line">		&lt;exclusion&gt;</span><br><span class="line">			&lt;groupId&gt;org.apache.poi&lt;/groupId&gt;</span><br><span class="line">			&lt;artifactId&gt;poi-ooxml&lt;/artifactId&gt;</span><br><span class="line">		&lt;/exclusion&gt;</span><br><span class="line">		&lt;exclusion&gt;</span><br><span class="line">			&lt;groupId&gt;org.apache.poi&lt;/groupId&gt;</span><br><span class="line">			&lt;artifactId&gt;poi&lt;/artifactId&gt;</span><br><span class="line">		&lt;/exclusion&gt;</span><br><span class="line">	&lt;/exclusions&gt;</span><br><span class="line">	&lt;scope&gt;test&lt;/scope&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure></p>
+<p>打包…<br>再测试，正常了…<br>上测试环境，居然也正常了…</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>在开发的时候，总会因为需要而引入不同的依赖，而每次引入依赖的时候，没有仔细的去检查这个依赖中时候存在和当前项目所使用的依赖有冲突的依赖版本，导致了因版本冲突而使代码抛出异常。</p>
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><p>1.<a href="https://blog.csdn.net/maiyikai/article/details/70331798" title="https://blog.csdn.net/maiyikai/article/details/70331798" target="_blank" rel="noopener">我在CSND写的DEMO：https://blog.csdn.net/maiyikai/article/details/70331798</a></p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2019年10月12日 20:21</p>
+        <p>原始链接： <a class="post-url" href="/2019/09/12/1568191417/" title="错误记录-SpringBoot 之 POI 实现 Excel 操作">https://maiyikai.github.io/2019/09/12/1568191417/</a></p>
+        <footer>
+            <a href="https://maiyikai.github.io">
+                <img src="/images/logo2.png" alt="maiyikai">
+                maiyikai
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        ~谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://maiyikai.github.io/2019/09/12/1568191417/&title=《错误记录-SpringBoot 之 POI 实现 Excel 操作》 — FlyingFish's Blog&pic=https://maiyikai.github.io/img/error/POI/1568195308.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://maiyikai.github.io/2019/09/12/1568191417/&title=《错误记录-SpringBoot 之 POI 实现 Excel 操作》 — FlyingFish's Blog&source=在项目中，对 Excel 的操作，我们一般都会使用 POI 这个工具包。而这个工具包也在不断的优化，所以会存在很多的版本，那么在 MAVEN 项目中，经常..." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://maiyikai.github.io/2019/09/12/1568191417/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《错误记录-SpringBoot 之 POI 实现 Excel 操作》 — FlyingFish's Blog&url=https://maiyikai.github.io/2019/09/12/1568191417/&via=https://maiyikai.github.io" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://maiyikai.github.io/2019/09/12/1568191417/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://maiyikai.github.io/2019/09/12/1568191417/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/SpringBoot/" class="color1">SpringBoot</a>
+      
+    <a href="/tags/POI/" class="color4">POI</a>
+      
+    <a href="/tags/Excel/" class="color1">Excel</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#POI-依赖引入"><span class="post-toc-text">POI 依赖引入</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#多版本-Excel-工具类实例化"><span class="post-toc-text">多版本 Excel 工具类实例化</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#报错信息"><span class="post-toc-text">报错信息</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#测试环境："><span class="post-toc-text">测试环境：</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#开发及本地："><span class="post-toc-text">开发及本地：</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#内心独白"><span class="post-toc-text">内心独白</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#错误排查"><span class="post-toc-text">错误排查</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#问题解决"><span class="post-toc-text">问题解决</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#总结"><span class="post-toc-text">总结</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#参考"><span class="post-toc-text">参考</span></a></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+    <a href="/2019/10/18/1571380748/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          LoadRunner之脚本写作
+        
+      </span>
+    </a>
+  
+  
+    <a href="/2019/07/26/1564117346/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">MyBatis 之 &lt;![CDATA[ ]]&gt;</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+        <div id="SOHUCS" sid="1568191417"></div>
+<script type="text/javascript">
+    (function(){
+        var appid = 'cyu3qrrJt';
+        var conf = '3f0da4017453d35b0c5dafb035646863';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2019 maiyikai<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "https://maiyikai.github.io",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/CenterOS/">CenterOS</a><a class="category-link" href="/categories/DataSource/">DataSource</a><a class="category-link" href="/categories/Hexo/">Hexo</a><a class="category-link" href="/categories/Java/">Java</a><a class="category-link" href="/categories/LoadRunner/">LoadRunner</a><a class="category-link" href="/categories/MyBatis/">MyBatis</a><a class="category-link" href="/categories/SpringBoot/">SpringBoot</a><a class="category-link" href="/categories/error/">error</a><a class="category-link" href="/categories/regex/">regex</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/LoadRunner/" style="font-size: 13.33px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 13.33px;">Test</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 10px;">script</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/LoadRunner/" style="font-size: 13.33px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 13.33px;">Test</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 10px;">script</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>Hexo添加搜索功能与百度分析 | FlyingFish&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="maiyikai,maiyude,FlyingFish,FlyingFish's blog">
+  
+  <meta name="description" content="前两篇文章讲了搭建Hexo个人博客和主题的更换:  简单搭建Hexo Hexo添加hexo-theme-miho主题">
+<meta name="keywords" content="Hexo,百度分析">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo添加搜索功能与百度分析">
+<meta property="og:url" content="https://maiyikai.github.io/2019/01/28/1548657877/index.html">
+<meta property="og:site_name" content="FlyingFish&#39;s Blog">
+<meta property="og:description" content="前两篇文章讲了搭建Hexo个人博客和主题的更换:  简单搭建Hexo Hexo添加hexo-theme-miho主题">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://maiyikai.github.io/img/hexo/20190127095665.png">
+<meta property="og:image" content="https://maiyikai.github.io/img/hexo/20190127095666.png">
+<meta property="og:updated_time" content="2019-10-12T12:21:09.262Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo添加搜索功能与百度分析">
+<meta name="twitter:description" content="前两篇文章讲了搭建Hexo个人博客和主题的更换:  简单搭建Hexo Hexo添加hexo-theme-miho主题">
+<meta name="twitter:image" content="https://maiyikai.github.io/img/hexo/20190127095665.png">
+  
+  
+    <link rel="icon" href="/pen_logo.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?a53f82c21dd876a0b4f165d79cffff9a";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">FlyingFish&#39;s Blog</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo2.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        FlyingFish&#39;s Blog
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        随笔记
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="maiyikai" target="_blank" href="//maiyikai.github.io/">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/maiyikai/">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                        <a title="Weibo" target="_blank" href="//weibo.com/maiyikai">
+                            <i class="fa fa-weibo fa-2x"></i></a>
+                    
+                        <a title="Weixin" target="_blank" href="//maiyikai.github.io/images/user_weixin.jpg">
+                            <i class="fa fa-weixin fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-1548657877" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      Hexo添加搜索功能与百度分析
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/Hexo/">Hexo</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-01-28
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <blockquote>
+<p>前两篇文章讲了搭建Hexo个人博客和主题的更换:</p>
+<ol>
+<li><a href="https://maiyikai.github.io/2019/01/27/1548499728/">简单搭建Hexo</a></li>
+<li><a href="https://maiyikai.github.io/2019/01/27/1548499757/">Hexo添加hexo-theme-miho主题</a></li>
+</ol>
+</blockquote>
+<a id="more"></a>
+<p>但是主题里边有个搜索功能，一开始使用的时候，浏览器控制台总是报错，说content.json 404</p>
+<p>懵了，主题切换的时候没注意，然后一直想怎么弄出来这个文件<br></p>
+<p>现在，开始添加搜索功能，然后在加入百度分析<br></p>
+<h2 id="搜索功能"><a href="#搜索功能" class="headerlink" title="搜索功能"></a>搜索功能</h2><h3 id="自动生成"><a href="#自动生成" class="headerlink" title="自动生成"></a>自动生成</h3><p>一个很简单的方法，那就是让它在构建的时候自己生成”content.json”文件</p>
+<ol>
+<li>打开 Git Bash Here 程序</li>
+<li>输入命令 <code>npm i -S hexo-generator-json-content</code> 安装组件</li>
+<li><p>在相对应的主题目录下的 “_config.yml” 文件下加入配置代码：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"># 自动生成content.json</span><br><span class="line"># https://github.com/alexbruno/hexo-generator-json-content</span><br><span class="line">jsonContent:</span><br><span class="line">  meta: true</span><br><span class="line">  keywords: false # language name option</span><br><span class="line">  dateFormat: undefined # format string</span><br><span class="line">  pages:</span><br><span class="line">    title: true</span><br><span class="line">    slug: true</span><br><span class="line">    date: true</span><br><span class="line">    updated: true</span><br><span class="line">    comments: true</span><br><span class="line">    path: true</span><br><span class="line">    link: true</span><br><span class="line">    permalink: true</span><br><span class="line">    excerpt: true</span><br><span class="line">    keywords: true # but only if root keywords option language was set</span><br><span class="line">    text: true</span><br><span class="line">    raw: false</span><br><span class="line">    content: false</span><br><span class="line">  posts:</span><br><span class="line">    title: true</span><br><span class="line">    slug: true</span><br><span class="line">    date: true</span><br><span class="line">    updated: true</span><br><span class="line">    comments: true</span><br><span class="line">    path: true</span><br><span class="line">    link: true</span><br><span class="line">    permalink: true</span><br><span class="line">    excerpt: true</span><br><span class="line">    keywords: true # but only if root keywords option language was set</span><br><span class="line">    text: true</span><br><span class="line">    raw: false</span><br><span class="line">    content: false</span><br><span class="line">    categories: true</span><br><span class="line">    tags: true</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>依次输入命令：</p>
+<ul>
+<li>输入命令<code>hexo clean</code>清除缓存</li>
+<li>输入命令<code>hexo g</code>构建</li>
+<li>输入命令<code>hexo d</code>部署</li>
+</ul>
+</li>
+<li>在hexo目录下会生成public文件夹，在这个文件夹下就可以看到 “content.json” 这个文件了(可以打开，建议格式化之后在区查看)</li>
+<li>部署好之后，可以在自己的hexo主页使用搜索功能了</li>
+</ol>
+<h3 id="手动添加"><a href="#手动添加" class="headerlink" title="手动添加"></a>手动添加</h3><p>手动添加呢，有点费时间，不过可以自定义条件</p>
+<ol>
+<li><p>首先来看一下有哪些配置项</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	&quot;meta&quot;:&#123;</span><br><span class="line">        &quot;title&quot;:&quot;&quot;, ## 博客标题</span><br><span class="line">        &quot;subtitle&quot;:&quot;&quot;, ## 博客子标题</span><br><span class="line">        &quot;description&quot;:&quot;&quot;,  ## 博客描述</span><br><span class="line">        &quot;author&quot;:&quot;&quot;, ## 博客作者</span><br><span class="line">        &quot;url&quot;:&quot;&quot; ## 博客首页地址</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;pages&quot;:[ ## 非博客博文的一些页面， 即不在hexo\source\_posts目录下的，但在hexo\source下的md页面</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;title&quot;:&quot;&quot;,</span><br><span class="line">            &quot;date&quot;:&quot;&quot;, ## 博客发布时间</span><br><span class="line">            &quot;updated&quot;:&quot;&quot;, ## 博客更新时间</span><br><span class="line">            &quot;comments&quot;:true,</span><br><span class="line">            &quot;path&quot;:&quot;&quot;, ## 在当前首页地址下的路径</span><br><span class="line">            &quot;permalink&quot;:&quot;&quot;, ## 页面全路径</span><br><span class="line">            &quot;excerpt&quot;:&quot;&quot;,</span><br><span class="line">            &quot;text&quot;:&quot;&quot; ## 页面内容</span><br><span class="line">        &#125;</span><br><span class="line">    ],</span><br><span class="line">	posts: [  ## 在hexo\source\_posts目录下的md文件生成的页面，即博文</span><br><span class="line">		&#123;</span><br><span class="line">            &quot;title&quot;:&quot;&quot;,  ## 博文标题</span><br><span class="line">            &quot;slug&quot;:&quot;&quot;,  ## 博文md文件的文件名</span><br><span class="line">            &quot;date&quot;:&quot;&quot;, ## 时间</span><br><span class="line">            &quot;updated&quot;:&quot;&quot;, ## 更新时时间</span><br><span class="line">            &quot;comments&quot;:true,</span><br><span class="line">            &quot;path&quot;:&quot;&quot;,  ## 在当前首页地址下的路径</span><br><span class="line">            &quot;link&quot;:&quot;&quot;,</span><br><span class="line">            &quot;permalink&quot;:&quot;&quot;, ## 页面全路径</span><br><span class="line">            &quot;excerpt&quot;:&quot;&quot;, ## 博文描述文字</span><br><span class="line">            &quot;text&quot;:&quot;&quot;, ## 博文内容</span><br><span class="line">            &quot;categories&quot;:[ ## 分类</span><br><span class="line">                &#123;</span><br><span class="line">                    &quot;name&quot;:&quot;Hexo&quot;,</span><br><span class="line">                    &quot;slug&quot;:&quot;Hexo&quot;,</span><br><span class="line">                    &quot;permalink&quot;:&quot;https://maiyikai.github.io/categories/Hexo/&quot; ## 分类文件路径</span><br><span class="line">                &#125;</span><br><span class="line">            ],</span><br><span class="line">            &quot;tags&quot;:[ ## 标签</span><br><span class="line">                &#123;</span><br><span class="line">                    &quot;name&quot;:&quot;Hexo&quot;,</span><br><span class="line">                    &quot;slug&quot;:&quot;Hexo&quot;,</span><br><span class="line">                    &quot;permalink&quot;:&quot;https://maiyikai.github.io/tags/Hexo/&quot; ## 便签文件的路径</span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;</span><br><span class="line">	]	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>其实用不了这么多，简易版的：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;meta&quot;:&#123;</span><br><span class="line">        &quot;title&quot;:&quot;&quot;,</span><br><span class="line">        &quot;subtitle&quot;:null,</span><br><span class="line">        &quot;description&quot;:&quot;&quot;,</span><br><span class="line">        &quot;author&quot;:&quot;&quot;,</span><br><span class="line">        &quot;url&quot;:&quot;&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;pages&quot;:[</span><br><span class="line"></span><br><span class="line">    ],</span><br><span class="line">    &quot;posts&quot;:[</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;title&quot;:&quot;&quot;,</span><br><span class="line">            &quot;comments&quot;:true,</span><br><span class="line">            &quot;path&quot;:&quot;&quot;,</span><br><span class="line">            &quot;text&quot;:&quot;Windows Hexo 博客 github Git GitHub&quot;  ## 匹配一般只匹配title 和text的内容</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>写好这个文件之后，把它放在hexo\source文件夹下即可</p>
+</li>
+<li>依次输入命令：<ul>
+<li>输入命令<code>hexo clean</code>清除缓存</li>
+<li>输入命令<code>hexo g</code>构建</li>
+<li>输入命令<code>hexo d</code>部署</li>
+</ul>
+</li>
+<li>部署好之后，可以在自己的hexo主页使用搜索功能了</li>
+</ol>
+<p><em>注：手动添加的方式一定要注意，添加或更新博文时，要同步更新 “content.json” 文件，否则会出问题</em></p>
+<h2 id="加入百度分析"><a href="#加入百度分析" class="headerlink" title="加入百度分析"></a>加入百度分析</h2><ol>
+<li>百度分析注册/登陆地址：<a href="https://tongji.baidu.com/web/welcome/login" target="_blank" rel="noopener">https://tongji.baidu.com/web/welcome/login</a></li>
+<li>登陆之后，点击“代码管理&gt;&gt;代码获取”，看下图:<p><img src="https://maiyikai.github.io/img/hexo/20190127095665.png" alt="获取百度分析的key"></p></li>
+<li>将这个key复制出来</li>
+<li>修改主题目录下的 “_config.yml” 文件中的 <code>baidu_analytics</code>,如下图<p><img src="https://maiyikai.github.io/img/hexo/20190127095666.png" alt="百度分析的key"></p></li>
+<li>依次输入命令：<ul>
+<li>输入命令<code>hexo clean</code>清除缓存</li>
+<li>输入命令<code>hexo g</code>构建</li>
+<li>输入命令<code>hexo d</code>部署</li>
+</ul>
+</li>
+<li>部署上去之后就可以了</li>
+</ol>
+<p><br><br><br><br><br><br>参考文章:</p>
+<ol>
+<li>来自简书：<a href="https://www.jianshu.com/p/eb9009f03178" target="_blank" rel="noopener">@minhow&gt;https://www.jianshu.com/p/eb9009f03178</a></li>
+<li>来自Github:<a href="https://github.com/alexbruno/hexo-generator-json-content" target="_blank" rel="noopener">@alexbruno&gt;https://github.com/alexbruno/hexo-generator-json-content</a></li>
+</ol>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2019年10月12日 20:21</p>
+        <p>原始链接： <a class="post-url" href="/2019/01/28/1548657877/" title="Hexo添加搜索功能与百度分析">https://maiyikai.github.io/2019/01/28/1548657877/</a></p>
+        <footer>
+            <a href="https://maiyikai.github.io">
+                <img src="/images/logo2.png" alt="maiyikai">
+                maiyikai
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        ~谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://maiyikai.github.io/2019/01/28/1548657877/&title=《Hexo添加搜索功能与百度分析》 — FlyingFish's Blog&pic=https://maiyikai.github.io/img/hexo/20190127095667.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://maiyikai.github.io/2019/01/28/1548657877/&title=《Hexo添加搜索功能与百度分析》 — FlyingFish's Blog&source=
+前两篇文章讲了搭建Hexo个人博客和主题的更换:
+
+简单搭建Hexo
+Hexo添加hexo-theme-miho主题
+
+" data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://maiyikai.github.io/2019/01/28/1548657877/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Hexo添加搜索功能与百度分析》 — FlyingFish's Blog&url=https://maiyikai.github.io/2019/01/28/1548657877/&via=https://maiyikai.github.io" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://maiyikai.github.io/2019/01/28/1548657877/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://maiyikai.github.io/2019/01/28/1548657877/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/Hexo/" class="color5">Hexo</a>
+      
+    <a href="/tags/百度分析/" class="color5">百度分析</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#搜索功能"><span class="post-toc-text">搜索功能</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#自动生成"><span class="post-toc-text">自动生成</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#手动添加"><span class="post-toc-text">手动添加</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#加入百度分析"><span class="post-toc-text">加入百度分析</span></a></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+    <a href="/2019/01/29/1548731189/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          Spring Boot DataSource配置
+        
+      </span>
+    </a>
+  
+  
+    <a href="/2019/01/27/1548499757/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">Hexo添加hexo-theme-miho主题</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+        <div id="SOHUCS" sid="1548657877"></div>
+<script type="text/javascript">
+    (function(){
+        var appid = 'cyu3qrrJt';
+        var conf = '3f0da4017453d35b0c5dafb035646863';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2019 maiyikai<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "https://maiyikai.github.io",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/CenterOS/">CenterOS</a><a class="category-link" href="/categories/DataSource/">DataSource</a><a class="category-link" href="/categories/Hexo/">Hexo</a><a class="category-link" href="/categories/Java/">Java</a><a class="category-link" href="/categories/LoadRunner/">LoadRunner</a><a class="category-link" href="/categories/MyBatis/">MyBatis</a><a class="category-link" href="/categories/SpringBoot/">SpringBoot</a><a class="category-link" href="/categories/error/">error</a><a class="category-link" href="/categories/regex/">regex</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/LoadRunner/" style="font-size: 13.33px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 13.33px;">Test</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 10px;">script</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/LoadRunner/" style="font-size: 13.33px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 13.33px;">Test</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 10px;">script</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>

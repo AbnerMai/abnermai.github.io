@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>Spring Boot分表之Shardbatis插件 | FlyingFish&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="maiyikai,maiyude,FlyingFish,FlyingFish's blog">
+  
+  <meta name="description" content="随着业务的发展，数据库占用的资源会越来越大；业务对数据库的增删改查操作对数据库来说都是一笔大的开销；另外，由于无法进行分布式式部署，而一台服务器的资源（CPU、磁盘、内存、IO等）是有限的，最终数据库所能承载的数据量、数据处理能力都将遭遇瓶颈。分库分表有两种方式：垂直切分和水平切分">
+<meta name="keywords" content="SpringBoot,Shardbatis,Mybatis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Boot分表之Shardbatis插件">
+<meta property="og:url" content="https://maiyikai.github.io/2019/04/04/1554363529/index.html">
+<meta property="og:site_name" content="FlyingFish&#39;s Blog">
+<meta property="og:description" content="随着业务的发展，数据库占用的资源会越来越大；业务对数据库的增删改查操作对数据库来说都是一笔大的开销；另外，由于无法进行分布式式部署，而一台服务器的资源（CPU、磁盘、内存、IO等）是有限的，最终数据库所能承载的数据量、数据处理能力都将遭遇瓶颈。分库分表有两种方式：垂直切分和水平切分">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-10-12T12:21:09.264Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring Boot分表之Shardbatis插件">
+<meta name="twitter:description" content="随着业务的发展，数据库占用的资源会越来越大；业务对数据库的增删改查操作对数据库来说都是一笔大的开销；另外，由于无法进行分布式式部署，而一台服务器的资源（CPU、磁盘、内存、IO等）是有限的，最终数据库所能承载的数据量、数据处理能力都将遭遇瓶颈。分库分表有两种方式：垂直切分和水平切分">
+  
+  
+    <link rel="icon" href="/pen_logo.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?a53f82c21dd876a0b4f165d79cffff9a";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">FlyingFish&#39;s Blog</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo2.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        FlyingFish&#39;s Blog
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        随笔记
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="maiyikai" target="_blank" href="//maiyikai.github.io/">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/maiyikai/">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                        <a title="Weibo" target="_blank" href="//weibo.com/maiyikai">
+                            <i class="fa fa-weibo fa-2x"></i></a>
+                    
+                        <a title="Weixin" target="_blank" href="//maiyikai.github.io/images/user_weixin.jpg">
+                            <i class="fa fa-weixin fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-1554363529" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      Spring Boot分表之Shardbatis插件
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/SpringBoot/">SpringBoot</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-04-04
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <p>随着业务的发展，数据库占用的资源会越来越大；业务对数据库的增删改查操作对数据库来说都是一笔大的开销；另外，由于无法进行分布式式部署，而一台服务器的资源（CPU、磁盘、内存、IO等）是有限的，最终数据库所能承载的数据量、数据处理能力都将遭遇瓶颈。<br>分库分表有两种方式：垂直切分和水平切分<br><a id="more"></a></p>
+<ol>
+<li>垂直切分：即将表按照功能模块、关系密切程度划分出来，部署到不同的库上</li>
+<li>水平切分：当一个表中的数据量过大时，我们可以把该表的数据按照某种规则进行划分，然后存储到多个结构相同的表，和不同的库上。</li>
+</ol>
+<p>————————–本文讲述分表—————————–</p>
+<p>用代码实现分库:<br>使用技术：Spring Boot、Mybatis、Shardbatis<br>使用工具：Idea、MySQL<br>建立在一个Spring Boot项目———-&gt;</p>
+<h4 id="创建数据库和表"><a href="#创建数据库和表" class="headerlink" title="创建数据库和表"></a>创建数据库和表</h4><p>以下为创建的数据库和表,以及添加数据的脚本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">SET FOREIGN_KEY_CHECKS=0;</span><br><span class="line"></span><br><span class="line">-- ----------------------------</span><br><span class="line">-- Table structure for shard_1</span><br><span class="line">-- ----------------------------</span><br><span class="line">DROP TABLE IF EXISTS `shard_1`;</span><br><span class="line">CREATE TABLE `shard_1` (</span><br><span class="line">  `id` varchar(11) NOT NULL,</span><br><span class="line">  `name` varchar(20) NOT NULL,</span><br><span class="line">  PRIMARY KEY (`id`)</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span><br><span class="line"></span><br><span class="line">-- ----------------------------</span><br><span class="line">-- Records of shard_1</span><br><span class="line">-- ----------------------------</span><br><span class="line">INSERT INTO `shard_1` VALUES (&apos;1-1&apos;, &apos;shard_1&apos;);</span><br><span class="line"></span><br><span class="line">-- ----------------------------</span><br><span class="line">-- Table structure for shard_2</span><br><span class="line">-- ----------------------------</span><br><span class="line">DROP TABLE IF EXISTS `shard_2`;</span><br><span class="line">CREATE TABLE `shard_2` (</span><br><span class="line">  `id` varchar(11) NOT NULL,</span><br><span class="line">  `name` varchar(20) NOT NULL,</span><br><span class="line">  PRIMARY KEY (`id`)</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span><br><span class="line"></span><br><span class="line">-- ----------------------------</span><br><span class="line">-- Records of shard_2</span><br><span class="line">-- ----------------------------</span><br><span class="line">INSERT INTO `shard_2` VALUES (&apos;2-1&apos;, &apos;shard_2&apos;);</span><br><span class="line"></span><br><span class="line">-- ----------------------------</span><br><span class="line">-- Table structure for tables</span><br><span class="line">-- ----------------------------</span><br><span class="line">DROP TABLE IF EXISTS `tables`;</span><br><span class="line">CREATE TABLE `tables` (</span><br><span class="line">  `id` varchar(11) NOT NULL,</span><br><span class="line">  `tableName` varchar(100) NOT NULL,</span><br><span class="line">  PRIMARY KEY (`id`)</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span><br><span class="line"></span><br><span class="line">-- ----------------------------</span><br><span class="line">-- Records of tables</span><br><span class="line">-- ----------------------------</span><br><span class="line">INSERT INTO `tables` VALUES (&apos;1-1&apos;, &apos;shard_1&apos;);</span><br><span class="line">INSERT INTO `tables` VALUES (&apos;2-1&apos;, &apos;shard_2&apos;);</span><br></pre></td></tr></table></figure>
+<h4 id="引入依赖"><a href="#引入依赖" class="headerlink" title="引入依赖"></a>引入依赖</h4><p>项目的开始，依赖是不可少的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot;</span><br><span class="line">  xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span><br><span class="line">  xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;</span><br><span class="line">  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;</span><br><span class="line">  &lt;parent&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;2.1.3.RELEASE&lt;/version&gt;</span><br><span class="line">    &lt;relativePath/&gt; &lt;!-- lookup parent from repository --&gt;</span><br><span class="line">  &lt;/parent&gt;</span><br><span class="line">  &lt;groupId&gt;com.maiyikai&lt;/groupId&gt;</span><br><span class="line">  &lt;artifactId&gt;shardbatis&lt;/artifactId&gt;</span><br><span class="line">  &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;</span><br><span class="line">  &lt;name&gt;shardbatis&lt;/name&gt;</span><br><span class="line">  &lt;description&gt;Demo project for Spring Boot&lt;/description&gt;</span><br><span class="line"></span><br><span class="line">  &lt;properties&gt;</span><br><span class="line">    &lt;java.version&gt;1.8&lt;/java.version&gt;</span><br><span class="line">  &lt;/properties&gt;</span><br><span class="line"></span><br><span class="line">  &lt;dependencies&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">      &lt;artifactId&gt;spring-boot-starter-web-services&lt;/artifactId&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">      &lt;artifactId&gt;spring-boot-starter-jdbc&lt;/artifactId&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">      &lt;groupId&gt;com.alibaba&lt;/groupId&gt;</span><br><span class="line">      &lt;artifactId&gt;druid-spring-boot-starter&lt;/artifactId&gt;</span><br><span class="line">      &lt;version&gt;1.1.10&lt;/version&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">      &lt;groupId&gt;org.mybatis.spring.boot&lt;/groupId&gt;</span><br><span class="line">      &lt;artifactId&gt;mybatis-spring-boot-starter&lt;/artifactId&gt;</span><br><span class="line">      &lt;version&gt;1.3.1&lt;/version&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">      &lt;artifactId&gt;spring-boot-starter-jdbc&lt;/artifactId&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">    &lt;!--在idea中不能使用devtools包，因为会导致shardbatis里使用ApplicationContext上下文获取null--&gt;</span><br><span class="line">    &lt;!--&lt;dependency&gt;--&gt;</span><br><span class="line">      &lt;!--&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;--&gt;</span><br><span class="line">      &lt;!--&lt;artifactId&gt;spring-boot-devtools&lt;/artifactId&gt;--&gt;</span><br><span class="line">      &lt;!--&lt;optional&gt;true&lt;/optional&gt;--&gt;</span><br><span class="line">    &lt;!--&lt;/dependency&gt;--&gt;</span><br><span class="line"></span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">      &lt;groupId&gt;mysql&lt;/groupId&gt;</span><br><span class="line">      &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;</span><br><span class="line">      &lt;version&gt;6.0.6&lt;/version&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">      &lt;groupId&gt;org.shardbatis&lt;/groupId&gt;</span><br><span class="line">      &lt;artifactId&gt;shardbatis&lt;/artifactId&gt;</span><br><span class="line">      &lt;version&gt;2.0.0C&lt;/version&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">      &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;</span><br><span class="line">      &lt;scope&gt;test&lt;/scope&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">  &lt;/dependencies&gt;</span><br><span class="line"></span><br><span class="line">  &lt;build&gt;</span><br><span class="line">    &lt;plugins&gt;</span><br><span class="line">      &lt;plugin&gt;</span><br><span class="line">        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;</span><br><span class="line">      &lt;/plugin&gt;</span><br><span class="line">    &lt;/plugins&gt;</span><br><span class="line">  &lt;/build&gt;</span><br><span class="line"></span><br><span class="line">&lt;/project&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="建立目录结构"><a href="#建立目录结构" class="headerlink" title="建立目录结构"></a>建立目录结构</h4><p>目录结构随意</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">Shardbatis</span><br><span class="line">|--- pom.xml</span><br><span class="line">|--- src</span><br><span class="line">|	|--- main</span><br><span class="line">|	|	|--- java</span><br><span class="line">|	|	|	|--- controller</span><br><span class="line">|	|	|	|	|--- com</span><br><span class="line">|	|	|	|	|	|--- maiyikai</span><br><span class="line">|	|	|	|	|	|	|--- shardbatis</span><br><span class="line">|	|	|	|	|	|	|	|--- controller</span><br><span class="line">|	|	|	|	|	|	|	|	|--- ShardbatisController.java</span><br><span class="line">|	|	|	|	|	|	|	|--- service</span><br><span class="line">|	|	|	|	|	|	|	|	|--- ShardService.java</span><br><span class="line">|	|	|	|	|	|	|	|	|------ TablesService.java</span><br><span class="line">|	|	|	|	|	|	|	|	|--- impl</span><br><span class="line">|	|	|	|	|	|	|	|	|		|---  ShardServiceImpl.java</span><br><span class="line">|	|	|	|	|	|	|	|	|		|---  TablesServiceImpl.java</span><br><span class="line">|	|	|	|	|	|	|	|--- mapper</span><br><span class="line">|	|	|	|	|	|	|	|	|--- ShardMapper.java</span><br><span class="line">|	|	|	|	|	|	|	|	|--- TablesMapper.java</span><br><span class="line">|	|	|	|	|	|	|	|--- config</span><br><span class="line">|	|	|	|	|	|	|	|	|--- ShardConfiguration.java</span><br><span class="line">|	|	|	|	|	|	|	|---- entity</span><br><span class="line">|	|	|	|	|	|	|	|      |------ Shard.java</span><br><span class="line">|	|	|	|	|	|	|	|      |--- Tables.java</span><br><span class="line">|	|	|	|	|	|	|	|-- strategy</span><br><span class="line">|	|	|	|	|	|	|	|	|--- MyShardStrategy.java</span><br><span class="line">|	|	|	|	|	|	|	|--- tools</span><br><span class="line">|	|	|	|	|	|	|	|      |--- SpringContextAware.java	</span><br><span class="line">|	|	|	|	|	|	|	|--- ShardbatisApplication.java	</span><br><span class="line">|	|	|--- resources</span><br><span class="line">|	|	|	|--- mapper</span><br><span class="line">|	|	|	|	|--- shard.xml</span><br><span class="line">|	|	|	|	|--- tables.xml</span><br><span class="line">|	|	|	|--- shard</span><br><span class="line">|	|	|	|	|--- shard_config.xml</span><br><span class="line">|	|	|	|--- application.yml</span><br></pre></td></tr></table></figure>
+<h4 id="编写配置文件"><a href="#编写配置文件" class="headerlink" title="编写配置文件"></a>编写配置文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">server:</span><br><span class="line">  port: 8181</span><br><span class="line">spring:</span><br><span class="line">  datasource:</span><br><span class="line">    druid:</span><br><span class="line">      url: jdbc:mysql://localhost:3306/shardbatis?useUnicode=true&amp;characterEncoding=UTF8&amp;&amp;serverTimezone=UTC&amp;useSSL=false</span><br><span class="line">      username: root</span><br><span class="line">      password: maiyikai</span><br><span class="line">      min-idle: 5</span><br><span class="line">      max-active: 150</span><br><span class="line">      max-wait: 60000</span><br><span class="line">      pool-prepared-statements: false</span><br><span class="line">      max-open-prepared-statements: 0</span><br><span class="line">      validation-query: select &apos;x&apos;</span><br><span class="line">      test-while-idle: true</span><br><span class="line">      test-on-borrow: true</span><br><span class="line">      test-on-return: false</span><br><span class="line">      time-between-eviction-runs-millis: 60000</span><br><span class="line">      min-evictable-idle-time-millis: 300000	</span><br><span class="line">mybatis:</span><br><span class="line">  mapper-locations: classpath:mapper/*.xml</span><br><span class="line">logging:</span><br><span class="line">  level:</span><br><span class="line">    com.maiyikai.shardbatis.mapper: debug # 调试打印sql</span><br></pre></td></tr></table></figure>
+<h4 id="开始写代码了"><a href="#开始写代码了" class="headerlink" title="开始写代码了"></a>开始写代码了</h4><p>直接就是代码</p>
+<h5 id="ShardbatisController-java"><a href="#ShardbatisController-java" class="headerlink" title="ShardbatisController.java"></a>ShardbatisController.java</h5><p>启动代码没什么不需要更改其他的东西</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@SpringBootApplication</span><br><span class="line">@MapperScan(value = &quot;com.maiyikai.shardbatis.mapper&quot;)//扫描mapper类</span><br><span class="line">public class ShardbatisApplication &#123;</span><br><span class="line"></span><br><span class="line">  public static void main(String[] args) &#123;</span><br><span class="line">    SpringApplication.run(ShardbatisApplication.class, args);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="配置ShardConfiguration-java"><a href="#配置ShardConfiguration-java" class="headerlink" title="配置ShardConfiguration.java"></a>配置ShardConfiguration.java</h5><p>通过 ShardPlugin.java 源码，ShardPlugin 通过读取属性值 shardingConfig 获取配置文件，所以这个值不能改</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@Configuration</span><br><span class="line">public class ShardConfiguration &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  @Bean(name = &quot;shardPlugin&quot;)</span><br><span class="line">  public ShardPlugin shardPlugin()&#123;</span><br><span class="line">    ShardPlugin shardPlugin = new ShardPlugin();</span><br><span class="line">    Properties properties = new Properties();</span><br><span class="line">    properties.put(&quot;shardingConfig&quot;, &quot;shard/shard_config.xml&quot;);//文件加载--键值必须为shardingConfig，这是类的内部要求，否则加载失败</span><br><span class="line">    shardPlugin.setProperties(properties);</span><br><span class="line">    return shardPlugin;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="ShardbatisController-java-1"><a href="#ShardbatisController-java-1" class="headerlink" title="ShardbatisController.java"></a>ShardbatisController.java</h5><p>定义接口，使用GetMapping是为了方便使用浏览器访问</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">@Controller</span><br><span class="line">@RequestMapping(value = &quot;/Shardbatis&quot;)</span><br><span class="line">public class ShardbatisController &#123;</span><br><span class="line"></span><br><span class="line">  @Autowired</span><br><span class="line">  private ShardService shardService;</span><br><span class="line"></span><br><span class="line">  @ResponseBody</span><br><span class="line">  @GetMapping (value = &quot;/startShard&quot;)</span><br><span class="line">  public String test(@RequestParam(value = &quot;id&quot;) String id)&#123;</span><br><span class="line">    return shardService.getName(id);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="ShardServiceImpl-java"><a href="#ShardServiceImpl-java" class="headerlink" title="ShardServiceImpl.java"></a>ShardServiceImpl.java</h5><p>略过服务类中的代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@Service</span><br><span class="line">public class ShardServiceImpl implements ShardService &#123;</span><br><span class="line"></span><br><span class="line">  @Autowired</span><br><span class="line">  private ShardMapper shardMapper;</span><br><span class="line"></span><br><span class="line">  @Override</span><br><span class="line">  public String getName(String id) &#123;</span><br><span class="line">    Shard shard = shardMapper.getShardResult(id);//执行到这条语句时，会被拦截进入到分表策略MyShardStrategy.java中，获取对应的表名称，并且更改sql中的表名</span><br><span class="line">    return StringUtils.isEmpty(shard.getName())?null:shard.getName();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="TablesService-java"><a href="#TablesService-java" class="headerlink" title="TablesService.java"></a>TablesService.java</h5><p>用于获取对应的表名</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">@Service(&quot;tablesService&quot;)</span><br><span class="line">public class TableServiceImpl implements TablesService &#123;</span><br><span class="line"></span><br><span class="line">  @Autowired</span><br><span class="line">  private TablesMapper tablesMapper;</span><br><span class="line"></span><br><span class="line">  /**</span><br><span class="line">   * 因为分表的表名对应的信息存放在tables表中，所以通过这个方法访问，通过对饮的id获取对饮的表名</span><br><span class="line">   * @param id</span><br><span class="line">   * @return</span><br><span class="line">   */</span><br><span class="line">  @Override</span><br><span class="line">  public String getTableName(String id) &#123;</span><br><span class="line">    Tables tables = tablesMapper.getTables(id);</span><br><span class="line">    return StringUtils.isEmpty(tables.getTableName())?null:tables.getTableName();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="SpringContextAware-java"><a href="#SpringContextAware-java" class="headerlink" title="SpringContextAware.java"></a>SpringContextAware.java</h5><p>用于普通类可获取ApplicationContext使用，可以通过该applicationContext获取对应的Spring Boot应用中的Bean</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">@Component</span><br><span class="line">public class SpringContextAware implements ApplicationContextAware &#123;</span><br><span class="line">  private static ApplicationContext applicationContexts;//使用静态，让它存储下来,通过类型即可获取</span><br><span class="line"></span><br><span class="line">  @Override</span><br><span class="line">  public void setApplicationContext(ApplicationContext applicationContext) throws BeansException &#123;</span><br><span class="line">    applicationContexts = applicationContext;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  public static ApplicationContext getApplicationContexts() &#123;</span><br><span class="line">    return applicationContexts;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  public static &lt;T&gt; T getBean(String name)&#123;</span><br><span class="line">    return (T) getApplicationContexts().getBean(name);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="MyShardStrategy-java"><a href="#MyShardStrategy-java" class="headerlink" title="MyShardStrategy.java"></a>MyShardStrategy.java</h5><p>策略类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 继承ShardStrategy类</span><br><span class="line"> */</span><br><span class="line">public class MyShardStrategy implements ShardStrategy &#123;</span><br><span class="line"></span><br><span class="line">  @Override</span><br><span class="line">  public String getTargetTableName(String baseTableName, Object params, String mapperId) &#123;</span><br><span class="line">    String id = ((Map&lt;String, String&gt;)params).get(&quot;id&quot;);//解析参数，获取需要的参数</span><br><span class="line">    TablesService tablesService = SpringContextAware.getBean(&quot;tablesService&quot;);//获取对应的Bean</span><br><span class="line">    return tablesService.getTableName(id);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="shard-xml"><a href="#shard-xml" class="headerlink" title="shard.xml"></a>shard.xml</h5><p>省略mapper类<br>表名一定要和shard_config.xml中配置的表名一致，否则将报错</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;mapper namespace=&quot;com.maiyikai.shardbatis.mapper.ShardMapper&quot;&gt;</span><br><span class="line">  &lt;select id=&quot;getShardResult&quot; parameterType=&quot;java.lang.String&quot; resultType=&quot;com.maiyikai.shardbatis.entity.Shard&quot;&gt;</span><br><span class="line">    SELECT name FROM shard WHERE id = #&#123;id&#125;</span><br><span class="line">  &lt;/select&gt;</span><br><span class="line">&lt;/mapper&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="tables-xml"><a href="#tables-xml" class="headerlink" title="tables.xml"></a>tables.xml</h5><p>省略mapper类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;mapper namespace=&quot;com.maiyikai.shardbatis.mapper.TablesMapper&quot;&gt;</span><br><span class="line">  &lt;select id=&quot;getTables&quot; parameterType=&quot;java.lang.String&quot; resultType=&quot;com.maiyikai.shardbatis.entity.Tables&quot;&gt;</span><br><span class="line">    SELECT * FROM tables WHERE id = #&#123;id&#125;</span><br><span class="line">  &lt;/select&gt;</span><br><span class="line">&lt;/mapper&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="shard-config-xml"><a href="#shard-config-xml" class="headerlink" title="shard_config.xml"></a>shard_config.xml</h5><p>分表策略配置文件<br>ignoreList：忽略集合<br>parseList：解释集合–需要操作的集合<br>strategy：指定tableName对应的strategy</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line"></span><br><span class="line">&lt;!DOCTYPE shardingConfig PUBLIC &quot;-//shardbatis.googlecode.com//DTD Shardbatis 2.0//EN&quot;</span><br><span class="line">  &quot;http://shardbatis.googlecode.com/dtd/shardbatis-config.dtd&quot;&gt;</span><br><span class="line">&lt;shardingConfig&gt;</span><br><span class="line">  &lt;!-- 忽略不进行分表策略的mapperid-即对应的方法 --&gt;</span><br><span class="line">  &lt;ignoreList&gt;</span><br><span class="line">    &lt;value&gt;&lt;/value&gt;</span><br><span class="line">  &lt;/ignoreList&gt;</span><br><span class="line"></span><br><span class="line">  &lt;!-- 进行分表策略的mapperid-即对应的方法;一定要精确到方法，否则不会被拦截 --&gt;</span><br><span class="line">  &lt;parseList&gt;</span><br><span class="line">    &lt;value&gt;com.maiyikai.shardbatis.mapper.ShardMapper.getShardResult&lt;/value&gt;</span><br><span class="line">  &lt;/parseList&gt;</span><br><span class="line"></span><br><span class="line">  &lt;!-- 指定表使用对应的策略 --&gt;</span><br><span class="line">  &lt;strategy tableName=&quot;shard&quot; strategyClass=&quot;com.maiyikai.shardbatis.strategy.MyShardStrategy&quot;/&gt;</span><br><span class="line"></span><br><span class="line">&lt;/shardingConfig&gt;</span><br></pre></td></tr></table></figure>
+<p>至此，代码编写完成，执行接口即可进行分表，分表的策略根据业务进行调整</p>
+<p>访问路劲:<a href="http://localhost:8181/Shardbatis/startShard?id=2-1" target="_blank" rel="noopener">http://localhost:8181/Shardbatis/startShard?id=2-1</a><br>当id为2-1时 : 返回结果为:shard_2（代表访问的表）<br>当id为1-1时 : 返回结果为shard_1（代表访问的表）</p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2019年10月12日 20:21</p>
+        <p>原始链接： <a class="post-url" href="/2019/04/04/1554363529/" title="Spring Boot分表之Shardbatis插件">https://maiyikai.github.io/2019/04/04/1554363529/</a></p>
+        <footer>
+            <a href="https://maiyikai.github.io">
+                <img src="/images/logo2.png" alt="maiyikai">
+                maiyikai
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        ~谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://maiyikai.github.io/2019/04/04/1554363529/&title=《Spring Boot分表之Shardbatis插件》 — FlyingFish's Blog&pic=https://maiyikai.github.io/img/SpringBoot/SpringBoot/20190325095667.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://maiyikai.github.io/2019/04/04/1554363529/&title=《Spring Boot分表之Shardbatis插件》 — FlyingFish's Blog&source=随着业务的发展，数据库占用的资源会越来越大；业务对数据库的增删改查操作对数据库来说都是一笔大的开销；另外，由于无法进行分布式式部署，而一台服务器的资源（C..." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://maiyikai.github.io/2019/04/04/1554363529/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Spring Boot分表之Shardbatis插件》 — FlyingFish's Blog&url=https://maiyikai.github.io/2019/04/04/1554363529/&via=https://maiyikai.github.io" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://maiyikai.github.io/2019/04/04/1554363529/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://maiyikai.github.io/2019/04/04/1554363529/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/SpringBoot/" class="color1">SpringBoot</a>
+      
+    <a href="/tags/Shardbatis/" class="color1">Shardbatis</a>
+      
+    <a href="/tags/Mybatis/" class="color3">Mybatis</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#创建数据库和表"><span class="post-toc-text">创建数据库和表</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#引入依赖"><span class="post-toc-text">引入依赖</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#建立目录结构"><span class="post-toc-text">建立目录结构</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#编写配置文件"><span class="post-toc-text">编写配置文件</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#开始写代码了"><span class="post-toc-text">开始写代码了</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#ShardbatisController-java"><span class="post-toc-text">ShardbatisController.java</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#配置ShardConfiguration-java"><span class="post-toc-text">配置ShardConfiguration.java</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#ShardbatisController-java-1"><span class="post-toc-text">ShardbatisController.java</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#ShardServiceImpl-java"><span class="post-toc-text">ShardServiceImpl.java</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#TablesService-java"><span class="post-toc-text">TablesService.java</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#SpringContextAware-java"><span class="post-toc-text">SpringContextAware.java</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#MyShardStrategy-java"><span class="post-toc-text">MyShardStrategy.java</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#shard-xml"><span class="post-toc-text">shard.xml</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#tables-xml"><span class="post-toc-text">tables.xml</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#shard-config-xml"><span class="post-toc-text">shard_config.xml</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+    <a href="/2019/04/08/1554706715/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          Spring Boot配备多数据源
+        
+      </span>
+    </a>
+  
+  
+    <a href="/2019/03/22/1553480412/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">Spring Boot启动原理</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+        <div id="SOHUCS" sid="1554363529"></div>
+<script type="text/javascript">
+    (function(){
+        var appid = 'cyu3qrrJt';
+        var conf = '3f0da4017453d35b0c5dafb035646863';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2019 maiyikai<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "https://maiyikai.github.io",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/CenterOS/">CenterOS</a><a class="category-link" href="/categories/DataSource/">DataSource</a><a class="category-link" href="/categories/Hexo/">Hexo</a><a class="category-link" href="/categories/Java/">Java</a><a class="category-link" href="/categories/LoadRunner/">LoadRunner</a><a class="category-link" href="/categories/MyBatis/">MyBatis</a><a class="category-link" href="/categories/SpringBoot/">SpringBoot</a><a class="category-link" href="/categories/error/">error</a><a class="category-link" href="/categories/regex/">regex</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/LoadRunner/" style="font-size: 13.33px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 13.33px;">Test</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 10px;">script</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/LoadRunner/" style="font-size: 13.33px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 13.33px;">Test</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 10px;">script</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>

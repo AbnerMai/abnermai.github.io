@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>Spring Boot DataSource配置 | FlyingFish&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="maiyikai,maiyude,FlyingFish,FlyingFish's blog">
+  
+  <meta name="description" content="数据库基础知识理解 SQL组成： DML、DDL、DCL、TCL SQL组成名词解释： DML:数据操纵语言（Data Manipulation Language, DML）是SQL语言中，负责对数据库对象运行数据访问工作的指令集，操作语句：">
+<meta name="keywords" content="DataSource,SpringBoot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Boot DataSource配置">
+<meta property="og:url" content="https://maiyikai.github.io/2019/01/29/1548731189/index.html">
+<meta property="og:site_name" content="FlyingFish&#39;s Blog">
+<meta property="og:description" content="数据库基础知识理解 SQL组成： DML、DDL、DCL、TCL SQL组成名词解释： DML:数据操纵语言（Data Manipulation Language, DML）是SQL语言中，负责对数据库对象运行数据访问工作的指令集，操作语句：">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://maiyikai.github.io/img/SpringBoot/DataSource/1548733672.png">
+<meta property="og:updated_time" content="2019-10-12T12:21:09.262Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring Boot DataSource配置">
+<meta name="twitter:description" content="数据库基础知识理解 SQL组成： DML、DDL、DCL、TCL SQL组成名词解释： DML:数据操纵语言（Data Manipulation Language, DML）是SQL语言中，负责对数据库对象运行数据访问工作的指令集，操作语句：">
+<meta name="twitter:image" content="https://maiyikai.github.io/img/SpringBoot/DataSource/1548733672.png">
+  
+  
+    <link rel="icon" href="/pen_logo.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?a53f82c21dd876a0b4f165d79cffff9a";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">FlyingFish&#39;s Blog</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo2.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        FlyingFish&#39;s Blog
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        随笔记
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="maiyikai" target="_blank" href="//maiyikai.github.io/">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/maiyikai/">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                        <a title="Weibo" target="_blank" href="//weibo.com/maiyikai">
+                            <i class="fa fa-weibo fa-2x"></i></a>
+                    
+                        <a title="Weixin" target="_blank" href="//maiyikai.github.io/images/user_weixin.jpg">
+                            <i class="fa fa-weixin fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-1548731189" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      Spring Boot DataSource配置
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/SpringBoot/">SpringBoot</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-01-29
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <h3 id="数据库基础知识理解"><a href="#数据库基础知识理解" class="headerlink" title="数据库基础知识理解"></a>数据库基础知识理解</h3><ul>
+<li>SQL组成： DML、DDL、DCL、TCL</li>
+<li>SQL组成名词解释：<ul>
+<li>DML:数据操纵语言（Data Manipulation Language, DML）是SQL语言中，负责对数据库对象运行数据访问工作的指令集，操作语句：<a id="more"></a><ul>
+<li>INSERT ：将数据插入到表或视图 </li>
+<li>DELETE ：从表或视图删除数据 </li>
+<li>SELECT ：从表或视图中获取数据 </li>
+<li>UPDATE ：更新表或视图中的数据 </li>
+<li>MERGE ： 对数据进行合并操作(插入/更新/删除)</li>
+</ul>
+</li>
+<li>DDL:数据库模式定义语言DDL(Data Definition Language)，是用于描述数据库中要存储的现实世界实体的语言。操作语句：<ul>
+<li>CREATE : 在数据库中创建新的数据对象 </li>
+<li>ALTER : 修改数据库中对象的数据结构 </li>
+<li>DROP : 删除数据库中的对象（可以删除数据表、索引、触发程序、条件约束以及数据表的权限等） </li>
+<li>DISABLE/ENABLE TRIGGER : 修改触发器的状态 </li>
+<li>UPDATE STATISTIC : 更新表/视图统计信息 </li>
+<li>TRUNCATE TABLE : 清空表中数据 </li>
+<li>COMMENT : 给数据对象添加注释 </li>
+<li>RENAME : 更改数据对象名称</li>
+</ul>
+</li>
+<li>DCL:DCL数据库控制语言不同于程序设计语言。是用来设置或更改数据库用户或角色权限的语句，操作语句：<ul>
+<li>GRANT: 赋予用户某种控制权限 </li>
+<li>DENY</li>
+<li>REVOKE：取消用户某种控制权限</li>
+<li>… …</li>
+</ul>
+</li>
+<li>TCL:事务控制语言，管理事务,操作语句<ul>
+<li>COMMIT : 保存已完成事务动作结果 </li>
+<li>SAVEPOINT : 保存事务相关数据和状态用以可能的回滚操作 </li>
+<li>ROLLBACK : 恢复事务相关数据至上一次COMMIT操作之后 </li>
+<li>SET TRANSACTION : 设置事务选项</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://maiyikai.github.io/img/SpringBoot/DataSource/1548733672.png" alt="数据库脚本名词解释"></p>
+
+<h3 id="DataSource文件配置"><a href="#DataSource文件配置" class="headerlink" title="DataSource文件配置"></a>DataSource文件配置</h3><p>根据需求自定义配置，真实情况用不了这么多的配置<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  dao:</span><br><span class="line">    exceptiontranslation:</span><br><span class="line">      enabled: # 是否开启PersistenceExceptionTranslationPostProcessor，默认为true</span><br><span class="line">  datasource:</span><br><span class="line">    abandon-when-percentage-full:   # 设定超时被废弃的连接占到多少比例时要被关闭或上报</span><br><span class="line">    allow-pool-suspension: #使用Hikari pool时，是否允许连接池暂停，默认为: false</span><br><span class="line">    alternate-username-allowed: #是否允许替代的用户名.</span><br><span class="line">    auto-commit: #指定updates是否自动提交</span><br><span class="line">    catalog: #指定默认的catalog</span><br><span class="line">    commit-on-return:  #设置当连接被归还时，是否要提交所有还未完成的事务</span><br><span class="line">    connection-init-sql:  #指定连接被创建，再被添加到连接池之前执行的sql.</span><br><span class="line">    connection-init-sqls:  #使用DBCP connection pool时，指定初始化时要执行的sql</span><br><span class="line">    connection-properties:</span><br><span class="line">      [key]:  #在使用DBCP connection pool时指定要配置的属性</span><br><span class="line">    connection-test-query:  #指定校验连接合法性执行的sql语句</span><br><span class="line">    connection-timeout:  #指定连接的超时时间，毫秒单位.</span><br><span class="line">    continue-on-error:  #在初始化数据库时，遇到错误是否继续，默认false</span><br><span class="line">    data:  #指定Data (DML)脚本</span><br><span class="line">    data-source-class-name:  #指定数据源的全限定名.</span><br><span class="line">    data-source-jndi:  #指定jndi的地址</span><br><span class="line">    data-source-properties:</span><br><span class="line">      [key]:  #使用Hikari connection pool时，指定要设置的属性</span><br><span class="line">    db-properties:  #使用Tomcat connection pool，指定要设置的属性</span><br><span class="line">    default-auto-commit:  #是否自动提交.</span><br><span class="line">    default-catalog:  #指定连接默认的catalog.</span><br><span class="line">    default-read-only:  #是否设置默认连接只读.</span><br><span class="line">    default-transaction-isolation:  #指定连接的事务的默认隔离级别.</span><br><span class="line">    driver-class-name:  #指定driver的类名，默认从jdbc url中自动探测.</span><br><span class="line">    fair-queue:  #是否采用FIFO返回连接.</span><br><span class="line">    health-check-properties:</span><br><span class="line">      [key]:  #使用Hikari connection pool时，在心跳检查时传递的属性</span><br><span class="line">    idle-timeout:  #指定连接多久没被使用时，被设置为空闲，默认为10ms</span><br><span class="line">    ignore-exception-on-pre-load:  #当初始化连接池时，是否忽略异常.</span><br><span class="line">    init-sql:  #当连接创建时，执行的sql</span><br><span class="line">    initial-size:  #指定启动连接池时，初始建立的连接数量</span><br><span class="line">    initialization-fail-fast:  #当创建连接池时，没法创建指定最小连接数量是否抛异常</span><br><span class="line">    initialize:  #指定初始化数据源，是否用data.sql来初始化，默认: true</span><br><span class="line">    isolate-internal-queries:  #指定内部查询是否要被隔离，默认为false</span><br><span class="line">    jdbc-interceptors:  #使用Tomcat connection pool时，指定jdbc拦截器，分号分隔</span><br><span class="line">    jdbc-url:  #指定JDBC URL.</span><br><span class="line">    jmx-enabled:  #是否开启JMX，默认为: false</span><br><span class="line">    jndi-name:  #指定jndi的名称.</span><br><span class="line">    leak-detection-threshold:  #使用Hikari connection pool时，多少毫秒检测一次连接泄露.</span><br><span class="line">    log-abandoned:  #使用DBCP connection pool，是否追踪废弃statement或连接，默认为: false</span><br><span class="line">    log-validation-errors:  #当使用Tomcat connection pool是否打印校验错误.</span><br><span class="line">    login-timeout:  #指定连接数据库的超时时间.</span><br><span class="line">    max-active:  #指定连接池中最大的活跃连接数.</span><br><span class="line">    max-age:  #指定连接池中连接的最大年龄</span><br><span class="line">    max-idle:  #指定连接池最大的空闲连接数量.</span><br><span class="line">    max-lifetime:  #指定连接池中连接的最大生存时间，毫秒单位.</span><br><span class="line">    max-open-prepared-statements:  #指定最大的打开的prepared statements数量.</span><br><span class="line">    max-wait:  #指定连接池等待连接返回的最大等待时间，毫秒单位.</span><br><span class="line">    maximum-pool-size:  #指定连接池最大的连接数，包括使用中的和空闲的连接.</span><br><span class="line">    min-evictable-idle-time-millis:  #指定一个空闲连接最少空闲多久后可被清除.</span><br><span class="line">    min-idle:  #指定必须保持连接的最小值(For DBCP and Tomcat connection pools)</span><br><span class="line">    minimum-idle:  #指定连接维护的最小空闲连接数，当使用HikariCP时指定.</span><br><span class="line">    name:  #指定数据源名.</span><br><span class="line">    num-tests-per-eviction-run:  #指定运行每个idle object evictor线程时的对象数量</span><br><span class="line">    password:  #指定数据库密码.</span><br><span class="line">    platform:  #指定schema要使用的Platform(schema-$&#123;platform&#125;.sql)，默认为: all</span><br><span class="line">    pool-name:  #指定连接池名字.</span><br><span class="line">    pool-prepared-statements:  #指定是否池化statements.</span><br><span class="line">    propagate-interrupt-state:  #在等待连接时，如果线程被中断，是否传播中断状态.</span><br><span class="line">    read-only:  #当使用Hikari connection pool时，是否标记数据源只读</span><br><span class="line">    register-mbeans:  #指定Hikari connection pool是否注册JMX MBeans.</span><br><span class="line">    remove-abandoned:  #指定当连接超过废弃超时时间时，是否立刻删除该连接.</span><br><span class="line">    remove-abandoned-timeout:  #指定连接应该被废弃的时间.</span><br><span class="line">    rollback-on-return:  #在归还连接时，是否回滚等待中的事务.</span><br><span class="line">    schema:  #指定Schema (DDL)脚本.</span><br><span class="line">    separator:  #指定初始化脚本的语句分隔符，默认: ;</span><br><span class="line">    sql-script-encoding:  #指定SQL scripts编码.</span><br><span class="line">    suspect-timeout:  #指定打印废弃连接前的超时时间.</span><br><span class="line">    test-on-borrow:  #当从连接池借用连接时，是否测试该连接.</span><br><span class="line">    test-on-connect:  #创建时，是否测试连接</span><br><span class="line">    test-on-return:  #在连接归还到连接池时是否测试该连接.</span><br><span class="line">    test-while-idle:  #当连接空闲时，是否执行连接测试.</span><br><span class="line">    time-between-eviction-runs-millis:  #指定空闲连接检查、废弃连接清理、空闲连接池大小调整之间的操作时间间隔</span><br><span class="line">    transaction-isolation:  #指定事务隔离级别，使用Hikari connection pool时指定</span><br><span class="line">    url:  #指定JDBC URL.</span><br><span class="line">    use-disposable-connection-facade:  #是否对连接进行包装，防止连接关闭之后被使用.</span><br><span class="line">    use-equals:  #比较方法名时是否使用String.equals()替换==.</span><br><span class="line">    use-lock:  #是否对连接操作加锁</span><br><span class="line">    username:  #指定数据库名.</span><br><span class="line">    validation-interval:  #指定多少ms执行一次连接校验.</span><br><span class="line">    validation-query:  #指定获取连接时连接校验的sql查询语句.</span><br><span class="line">    validation-query-timeout:  #指定连接校验查询的超时时间.</span><br><span class="line">    validation-timeout:  #设定连接校验的超时时间，当使用Hikari connection pool时指定</span><br><span class="line">    validator-class-name:  #用来测试查询的validator全限定名.</span><br><span class="line">    xa: </span><br><span class="line">        data-source-class-name:  #指定数据源的全限定名.</span><br><span class="line">        properties:  #指定传递给XA data source的属性</span><br></pre></td></tr></table></figure></p>
+<h3 id="JPA文件配置"><a href="#JPA文件配置" class="headerlink" title="JPA文件配置"></a>JPA文件配置</h3><p>JPA是Java Persistence API的简称，中文名Java持久层API，是JDK 5.0注解或XML描述对象－关系表的映射关系，并将运行期的实体对象持久化到数据库中。<br>Sun引入新的JPA ORM规范出于两个原因：其一，简化现有Java EE和Java SE应用开发工作；其二，Sun希望整合ORM技术，实现天下归一。<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  jpa:</span><br><span class="line">    database: #指定目标数据库.</span><br><span class="line">    database-platform: #指定目标数据库的类型.</span><br><span class="line">    generate-ddl: #是否在启动时初始化schema，默认为false</span><br><span class="line">    hibernate: </span><br><span class="line">      ddl-auto: #指定DDL mode (none, validate, update, create, create-drop). 当使用内嵌数据库时，默认是create-drop，否则为none.</span><br><span class="line">    hibernate:</span><br><span class="line">      naming-strategy: #指定命名策略.</span><br><span class="line">    open-in-view: #是否注册OpenEntityManagerInViewInterceptor，绑定JPA EntityManager到请求线程中，默认为: true</span><br><span class="line">    properties: #添加额外的属性到JPA provider.</span><br><span class="line">    show-sql: #是否开启sql的log，默认为: false</span><br></pre></td></tr></table></figure></p>
+<h3 id="JTA文件配置"><a href="#JTA文件配置" class="headerlink" title="JTA文件配置"></a>JTA文件配置</h3><p>JTA，即Java Transaction API，JTA允许应用程序执行分布式事务处理——在两个或多个网络计算机资源上访问并且更新数据。JDBC驱动程序的JTA支持极大地增强了数据访问能力。<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  jta:</span><br><span class="line">    allow-multiple-lrc: #是否允许 multiple LRC，默认为: false</span><br><span class="line">    asynchronous2-pc: #指定两阶段提交是否可以异步，默认为: false</span><br><span class="line">    background-recovery-interval: #指定多少分钟跑一次recovery process，默认为: 1</span><br><span class="line">    background-recovery-interval-seconds: #指定多久跑一次recovery process，默认: 60</span><br><span class="line">    current-node-only-recovery: #是否过滤掉其他非本JVM的recovery，默认为: true</span><br><span class="line">    debug-zero-resource-transaction: #是否追踪没有使用指定资源的事务，默认为: false</span><br><span class="line">    default-transaction-timeout: #设定默认的事务超时时间，默认为60</span><br><span class="line">    disable-jmx: #是否禁用jmx，默认为false</span><br><span class="line">    enabled: #是否开启JTA support，默认为: true</span><br><span class="line">    exception-analyzer: #设置指定的异常分析类</span><br><span class="line">    filter-log-status: #使用Bitronix Transaction Manager时，是否写mandatory logs，开启的话，可以节省磁盘空间，但是调试会复杂写，默认为false</span><br><span class="line">    force-batching-enabled: #使用Bitronix Transaction Manager时，是否批量写磁盘，默认为true.</span><br><span class="line">    forced-write-enabled: #使用Bitronix Transaction Manager时，是否强制写日志到磁盘，默认为true</span><br><span class="line">    graceful-shutdown-interval: #当使用Bitronix Transaction Manager，指定shutdown时等待事务结束的时间，超过则中断，默认为60</span><br><span class="line">    jndi-transaction-synchronization-registry-name: #当使用Bitronix Transaction Manager时，在JNDI下得事务同步registry，默认为: java:comp/TransactionSynchronizationRegistry</span><br><span class="line">    jndi-user-transaction-name: #指定在JNDI使用Bitronix Transaction Manager的名称，默认:java:comp/UserTransaction</span><br><span class="line">    journal: #当使用Bitronix Transaction Manager，指定The journal是否disk还是null还是一个类的全限定名，默认disk</span><br><span class="line">    log-dir: #ransaction logs directory.</span><br><span class="line">    log-part1-filename: #指定The journal fragment文件1的名字，默认: btm1.tlog</span><br><span class="line">    log-part2-filename: #指定The journal fragment文件2的名字，默认: btm2.tlog</span><br><span class="line">    max-log-size-in-mb: #指定journal fragments大小的最大值. 默认: 2M</span><br><span class="line">    resource-configuration-filename: #指定Bitronix Transaction Manager配置文件名.</span><br><span class="line">    server-id: #指定Bitronix Transaction Manager实例的id.</span><br><span class="line">    skip-corrupted-logs: #是否忽略corrupted log files文件，默认为false.</span><br><span class="line">    transaction-manager-id: #指定Transaction manager的唯一标识.</span><br><span class="line">    warn-about-zero-resource-transaction: #当使用Bitronix Transaction Manager时，是否对没有使用指定资源的事务进行警告，默认为: true</span><br></pre></td></tr></table></figure></p>
+<p><br><br><br><br><br></p>
+<p>参考文章:</p>
+<blockquote>
+<p>来自思否：<a href="https://segmentfault.com/a/1190000004316491" target="_blank" rel="noopener">@codecraft&gt;SpringBoot配置属性之DataSource</a></p>
+</blockquote>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2019年10月12日 20:21</p>
+        <p>原始链接： <a class="post-url" href="/2019/01/29/1548731189/" title="Spring Boot DataSource配置">https://maiyikai.github.io/2019/01/29/1548731189/</a></p>
+        <footer>
+            <a href="https://maiyikai.github.io">
+                <img src="/images/logo2.png" alt="maiyikai">
+                maiyikai
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        ~谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://maiyikai.github.io/2019/01/29/1548731189/&title=《Spring Boot DataSource配置》 — FlyingFish's Blog&pic=https://maiyikai.github.io/img/SpringBoot/DataSource/1548733672.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://maiyikai.github.io/2019/01/29/1548731189/&title=《Spring Boot DataSource配置》 — FlyingFish's Blog&source=数据库基础知识理解
+SQL组成： DML、DDL、DCL、TCL
+SQL组成名词解释：
+DML:数据操纵语言（Data Manipulation Lang..." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://maiyikai.github.io/2019/01/29/1548731189/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Spring Boot DataSource配置》 — FlyingFish's Blog&url=https://maiyikai.github.io/2019/01/29/1548731189/&via=https://maiyikai.github.io" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://maiyikai.github.io/2019/01/29/1548731189/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://maiyikai.github.io/2019/01/29/1548731189/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/DataSource/" class="color1">DataSource</a>
+      
+    <a href="/tags/SpringBoot/" class="color1">SpringBoot</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#数据库基础知识理解"><span class="post-toc-text">数据库基础知识理解</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#DataSource文件配置"><span class="post-toc-text">DataSource文件配置</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#JPA文件配置"><span class="post-toc-text">JPA文件配置</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#JTA文件配置"><span class="post-toc-text">JTA文件配置</span></a></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+    <a href="/2019/01/30/1548754787/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          SpringBoot Druid(alibaba)--未完待续
+        
+      </span>
+    </a>
+  
+  
+    <a href="/2019/01/28/1548657877/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">Hexo添加搜索功能与百度分析</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+        <div id="SOHUCS" sid="1548731189"></div>
+<script type="text/javascript">
+    (function(){
+        var appid = 'cyu3qrrJt';
+        var conf = '3f0da4017453d35b0c5dafb035646863';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2019 maiyikai<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "https://maiyikai.github.io",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/CenterOS/">CenterOS</a><a class="category-link" href="/categories/DataSource/">DataSource</a><a class="category-link" href="/categories/Hexo/">Hexo</a><a class="category-link" href="/categories/Java/">Java</a><a class="category-link" href="/categories/LoadRunner/">LoadRunner</a><a class="category-link" href="/categories/MyBatis/">MyBatis</a><a class="category-link" href="/categories/SpringBoot/">SpringBoot</a><a class="category-link" href="/categories/error/">error</a><a class="category-link" href="/categories/regex/">regex</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/LoadRunner/" style="font-size: 13.33px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 13.33px;">Test</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 10px;">script</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/LoadRunner/" style="font-size: 13.33px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 13.33px;">Test</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 10px;">script</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>

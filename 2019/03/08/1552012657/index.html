@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>怒怼HashMap | FlyingFish&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="maiyikai,maiyude,FlyingFish,FlyingFish's blog">
+  
+  <meta name="description" content="本文呈现HashMap工作原理，和关于HashTable、ConcurrentHashMap的区别一起来揭晓吧… …">
+<meta name="keywords" content="Java,HashMap">
+<meta property="og:type" content="article">
+<meta property="og:title" content="怒怼HashMap">
+<meta property="og:url" content="https://maiyikai.github.io/2019/03/08/1552012657/index.html">
+<meta property="og:site_name" content="FlyingFish&#39;s Blog">
+<meta property="og:description" content="本文呈现HashMap工作原理，和关于HashTable、ConcurrentHashMap的区别一起来揭晓吧… …">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-10-12T12:21:09.263Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="怒怼HashMap">
+<meta name="twitter:description" content="本文呈现HashMap工作原理，和关于HashTable、ConcurrentHashMap的区别一起来揭晓吧… …">
+  
+  
+    <link rel="icon" href="/pen_logo.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?a53f82c21dd876a0b4f165d79cffff9a";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">FlyingFish&#39;s Blog</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo2.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        FlyingFish&#39;s Blog
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        随笔记
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="maiyikai" target="_blank" href="//maiyikai.github.io/">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/maiyikai/">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                        <a title="Weibo" target="_blank" href="//weibo.com/maiyikai">
+                            <i class="fa fa-weibo fa-2x"></i></a>
+                    
+                        <a title="Weixin" target="_blank" href="//maiyikai.github.io/images/user_weixin.jpg">
+                            <i class="fa fa-weixin fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-1552012657" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      怒怼HashMap
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/Java/">Java</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-03-08
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <p>本文呈现HashMap工作原理，和关于HashTable、ConcurrentHashMap的区别<br><br>一起来揭晓吧… …<br><a id="more"></a></p>
+<h3 id="什么是HashMap"><a href="#什么是HashMap" class="headerlink" title="什么是HashMap?"></a>什么是HashMap?</h3><ul>
+<li>HashMap采用了“数组+链表+红黑树”的数据结构，能在查询和修改的时候继承了数组的线性查找和链表的寻址修改。</li>
+<li>存储方式是以键值对的方式进行存储(即:key-value)，HashMap可以存储为Null的键于值，而HashTable不支持（通过查看源码可知，HashTable获取的键值对分别是两个对象，判断对象为Null就抛异常；而HashMap则是通过处理，所以支持）</li>
+<li>HashMap是非线程安全的，HashTable是线程安全的，所以HashMap效率比较快</li>
+</ul>
+<h3 id="HashMap的工作原理？"><a href="#HashMap的工作原理？" class="headerlink" title="HashMap的工作原理？"></a>HashMap的工作原理？</h3><ul>
+<li>HashMap基于hashing的原理，我们使用put(key, value)存储对象到HashMap，使用get(key)从HashMap对象中获取对象。当我们调用put()方法时，会先对key调用hashCode()，计算并返回hashCode用于在Map中找到对应的bucket位置存储Node对象。</li>
+<li>HashMap的初始长度为16</li>
+<li>HashMap负载因子为0.75</li>
+<li>当HashMap的容量达到16*0.75=12时，就需要HashMap扩容，即扩容为原来的2倍,来重新调整map的大小，并将原来的对象放入新的bucket数组中。这个过程叫作rehashing，因为它调用hash方法找到新的bucket位置。</li>
+<li>如果链表长度超过阀值( TREEIFY THRESHOLD==8)，就把链表转成红黑树，链表长度低于6，就把红黑树转回链表</li>
+</ul>
+<h3 id="如果两个对象的hashCode一致，会有什么后果？"><a href="#如果两个对象的hashCode一致，会有什么后果？" class="headerlink" title="如果两个对象的hashCode一致，会有什么后果？"></a>如果两个对象的hashCode一致，会有什么后果？</h3><p>因为HashMap的存储器的对象是通过key的hashCode来确认应该存放在哪一个bucket的位置，由于hashCode一致，所以会找到同一个bucket的位置，并将对象以链表的形势存放在这个bucket位置下</p>
+<h3 id="如果发生了碰撞，应该如何通过key取到值对象？"><a href="#如果发生了碰撞，应该如何通过key取到值对象？" class="headerlink" title="如果发生了碰撞，应该如何通过key取到值对象？"></a>如果发生了碰撞，应该如何通过key取到值对象？</h3><p>当我们调用get(key)方法时，会通过key计算其hahshCode，找到对应的bucket位置，再通过调用key.equals()方法在链表中找到正确的节点，最终找到值对象。</p>
+<h3 id="减少碰撞的方法？"><a href="#减少碰撞的方法？" class="headerlink" title="减少碰撞的方法？"></a>减少碰撞的方法？</h3><ul>
+<li><p>扰动函数可以减少碰撞，原理是如果两个不相等的对象返回不同的hashcode的话，那么碰撞的几率就会小些，这就意味着存链表结构减小，这样取值的话就不会频繁调用equal方法，这样就能提高HashMap的性能。（扰动即Hash方法内部的算法实现，目的是让不同对象返回不同hashcode。）</p>
+</li>
+<li><p>使用不可变的、声明作final的对象，并且采用合适的equals()和hashCode()方法的话，将会减少碰撞的发生。不可变性使得能够缓存不同键的hashcode，这将提高整个获取对象的速度，使用String，Interger这样的wrapper类作为键是非常好的选择。为什么String, Interger这样的wrapper类适合作为键？因为String是final的，而且已经重写了equals()和hashCode()方法了。不可变性是必要的，因为为了要计算hashCode()，就要防止键值改变，如果键值在放入时和获取时返回不同的hashcode的话，那么就不能从HashMap中找到你想要的对象。</p>
+</li>
+</ul>
+<h3 id="HashMap中hash函数怎么实现？"><a href="#HashMap中hash函数怎么实现？" class="headerlink" title="HashMap中hash函数怎么实现？"></a>HashMap中hash函数怎么实现？</h3><table>
+<thead>
+<tr>
+<th>key</th>
+<th style="text-align:center">hash</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>null</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td>not null</td>
+<td style="text-align:center">h = key.hashCode(); hash = h ^ (h &gt;&gt;&gt; 16);</td>
+</tr>
+</tbody>
+</table>
+<p>因为HashMap支持键为null，所以有两组算法</p>
+<h3 id="如何计算HashMap的下标？"><a href="#如何计算HashMap的下标？" class="headerlink" title="如何计算HashMap的下标？"></a>如何计算HashMap的下标？</h3><ul>
+<li>假设HashMap的数组长度为len</li>
+<li>假设键的hashCode为 hash = key.hashCode()</li>
+<li>下标: (len - 1) &amp; (hash ^ (hash &gt;&gt;&gt; 16))</li>
+</ul>
+<h3 id="重新调整HashMap大小存在什么问题吗？"><a href="#重新调整HashMap大小存在什么问题吗？" class="headerlink" title="重新调整HashMap大小存在什么问题吗？"></a>重新调整HashMap大小存在什么问题吗？</h3><p>当多线程的情况下，可能产生条件竞争。当重新调整HashMap大小的时候，确实存在条件竞争，如果两个线程都发现HashMap需要重新调整大小了，它们会同时试着调整大小。在调整大小的过程中，存储在链表中的元素的次序会反过来，因为移动到新的数组位置的时候，HashMap并不会将元素放在LinkedList的尾部，而是放在头部，这是为了避免尾部遍历(tail traversing)。如果条件竞争发生了，那么就死循环了</p>
+<h3 id="为什么选用红黑树，而不选用二叉查找树？"><a href="#为什么选用红黑树，而不选用二叉查找树？" class="headerlink" title="为什么选用红黑树，而不选用二叉查找树？"></a>为什么选用红黑树，而不选用二叉查找树？</h3><p>之所以选择红黑树是为了解决二叉查找树的缺陷，二叉查找树在特殊情况下会变成一条线性结构（这就跟原来使用链表结构一样了，造成很深的问题），遍历查找会非常慢。而红黑树在插入新数据后可能需要通过左旋，右旋、变色这些操作来保持平衡，引入红黑树就是为了查找数据快，解决链表查询深度的问题，我们知道红黑树属于平衡二叉树，但是为了保持“平衡”是需要付出代价的，但是该代价所损耗的资源要比遍历线性链表要少，所以当长度大于8的时候，会使用红黑树，如果链表长度很短的话，根本不需要引入红黑树，引入反而会慢。</p>
+<h3 id="红黑树的特性（摘抄维基百科）"><a href="#红黑树的特性（摘抄维基百科）" class="headerlink" title="红黑树的特性（摘抄维基百科）"></a>红黑树的特性（<a href="https://zh.wikipedia.org/wiki/%E7%BA%A2%E9%BB%91%E6%A0%91" target="_blank" rel="noopener">摘抄维基百科</a>）</h3><ol>
+<li>节点是红色或黑色。</li>
+<li>根是黑色。</li>
+<li>所有叶子都是黑色（叶子是NIL节点）。</li>
+<li>每个红色节点必须有两个黑色的子节点。（从每个叶子到根的所有路径上不能有两个连续的红色节点。）</li>
+<li>从任一节点到其每个叶子的所有简单路径都包含相同数目的黑色节点。</li>
+</ol>
+<h3 id="HashMap和HashTable的区别？"><a href="#HashMap和HashTable的区别？" class="headerlink" title="HashMap和HashTable的区别？"></a>HashMap和HashTable的区别？</h3><ol>
+<li>hash值得计算不一样<ol>
+<li>HashMap： (h = key.hashCode()) ^ (h &gt;&gt;&gt; 16)</li>
+<li>HashTable: h = key.hashCode()</li>
+</ol>
+</li>
+<li>下标计算不一样<ol>
+<li>HashMap: (tableLength -1) &amp; (h = key.hashCode()) ^ (h &gt;&gt;&gt; 16)</li>
+<li>HashTable: ((h = key.hashCode()) &amp; 0x7FFFFFFF) % tableLength</li>
+</ol>
+</li>
+<li>HashMap是非线程安全，HashTable是线程安全的。 单线程使用情况下，HashMap的效率会更快</li>
+<li>负载因子是相同的：0.75</li>
+<li>默认大小和扩容方案不一样：<ol>
+<li>HashMap: 默认大小为16， 扩容：tableLength * 2</li>
+<li>HashTable: 默认大小为11， 扩容： tableLength * 2 + 1</li>
+</ol>
+</li>
+<li>HashTable对每个方法都添加了synchronized关键字</li>
+</ol>
+<h3 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h3><ul>
+<li>hash计算: h = key.hashCode(); (h ^ (h &gt;&gt;&gt; 16) &amp; 0x7fffffff)</li>
+<li>下标计算: i = (tableLength - 1) &amp; hash</li>
+<li>初始值16</li>
+<li>负载因子：0.75</li>
+<li>当ConcurrentHashMap的容量达到16*0.75=12时，就需要ConcurrentHashMap扩容</li>
+<li>ConcurrentHashMap采用了分段锁技术，线程安全</li>
+</ul>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2019年10月12日 20:21</p>
+        <p>原始链接： <a class="post-url" href="/2019/03/08/1552012657/" title="怒怼HashMap">https://maiyikai.github.io/2019/03/08/1552012657/</a></p>
+        <footer>
+            <a href="https://maiyikai.github.io">
+                <img src="/images/logo2.png" alt="maiyikai">
+                maiyikai
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        ~谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://maiyikai.github.io/2019/03/08/1552012657/&title=《怒怼HashMap》 — FlyingFish's Blog&pic=https://maiyikai.github.io/img/java/1550568629.jpg" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://maiyikai.github.io/2019/03/08/1552012657/&title=《怒怼HashMap》 — FlyingFish's Blog&source=本文呈现HashMap工作原理，和关于HashTable、ConcurrentHashMap的区别一起来揭晓吧… …" data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://maiyikai.github.io/2019/03/08/1552012657/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《怒怼HashMap》 — FlyingFish's Blog&url=https://maiyikai.github.io/2019/03/08/1552012657/&via=https://maiyikai.github.io" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://maiyikai.github.io/2019/03/08/1552012657/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://maiyikai.github.io/2019/03/08/1552012657/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/Java/" class="color5">Java</a>
+      
+    <a href="/tags/HashMap/" class="color3">HashMap</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#什么是HashMap"><span class="post-toc-text">什么是HashMap?</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#HashMap的工作原理？"><span class="post-toc-text">HashMap的工作原理？</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#如果两个对象的hashCode一致，会有什么后果？"><span class="post-toc-text">如果两个对象的hashCode一致，会有什么后果？</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#如果发生了碰撞，应该如何通过key取到值对象？"><span class="post-toc-text">如果发生了碰撞，应该如何通过key取到值对象？</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#减少碰撞的方法？"><span class="post-toc-text">减少碰撞的方法？</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#HashMap中hash函数怎么实现？"><span class="post-toc-text">HashMap中hash函数怎么实现？</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#如何计算HashMap的下标？"><span class="post-toc-text">如何计算HashMap的下标？</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#重新调整HashMap大小存在什么问题吗？"><span class="post-toc-text">重新调整HashMap大小存在什么问题吗？</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#为什么选用红黑树，而不选用二叉查找树？"><span class="post-toc-text">为什么选用红黑树，而不选用二叉查找树？</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#红黑树的特性（摘抄维基百科）"><span class="post-toc-text">红黑树的特性（摘抄维基百科）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#HashMap和HashTable的区别？"><span class="post-toc-text">HashMap和HashTable的区别？</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#ConcurrentHashMap"><span class="post-toc-text">ConcurrentHashMap</span></a></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+    <a href="/2019/03/22/1553480412/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          Spring Boot启动原理
+        
+      </span>
+    </a>
+  
+  
+    <a href="/2019/02/19/1548754788/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">技术区别汇总整理</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+        <div id="SOHUCS" sid="1552012657"></div>
+<script type="text/javascript">
+    (function(){
+        var appid = 'cyu3qrrJt';
+        var conf = '3f0da4017453d35b0c5dafb035646863';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2019 maiyikai<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "https://maiyikai.github.io",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/CenterOS/">CenterOS</a><a class="category-link" href="/categories/DataSource/">DataSource</a><a class="category-link" href="/categories/Hexo/">Hexo</a><a class="category-link" href="/categories/Java/">Java</a><a class="category-link" href="/categories/LoadRunner/">LoadRunner</a><a class="category-link" href="/categories/MyBatis/">MyBatis</a><a class="category-link" href="/categories/SpringBoot/">SpringBoot</a><a class="category-link" href="/categories/error/">error</a><a class="category-link" href="/categories/regex/">regex</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/LoadRunner/" style="font-size: 13.33px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 13.33px;">Test</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 10px;">script</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/LoadRunner/" style="font-size: 13.33px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 13.33px;">Test</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 10px;">script</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>
