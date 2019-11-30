@@ -27,7 +27,7 @@
 <meta property="og:image" content="http://maiyikai.github.io/img/LoadRunner/1571383632.png">
 <meta property="og:image" content="http://maiyikai.github.io/img/LoadRunner/1571383633.png">
 <meta property="og:image" content="http://maiyikai.github.io/img/LoadRunner/1571383634.png">
-<meta property="og:updated_time" content="2019-10-21T11:43:47.980Z">
+<meta property="og:updated_time" content="2019-11-25T14:16:35.243Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LoadRunner之脚本写作">
 <meta name="twitter:description" content="LoadRunner，是一种预测系统行为和性能的负载测试工具。通过模拟上千万用户实施并发负载及实时性能监测的方式来确认和查找问题，LoadRunner能够对整个企业架构进行测试。企业使用LoadRunner能最大限度地缩短测试时间，优化性能和加速应用系统的发布周期。LoadRunner可适用于各种体系架构的自动负载测试，能预测系统行为并评估系统性能。">
@@ -293,8 +293,8 @@
 <li><p>日志查看<br>如果单纯的进行 debug 调式都不能解决问题，那就 只能通过高级日志的查看看看咯…<br>它的位置如下图:<br><img src="http://maiyikai.github.io/img/LoadRunner/1571383629.png" alt="高级日志"></p>
 </li>
 </ol>
-<p>日志打印出来的就比标准日志要多得多，但是在性能测试阶段，建议使用 “仅在出错时返送消息” 或者 “始终发送消息–&gt;标准日志” ，不然可能日志可能会将你的压力机磁盘写满，导致你后续无法继续工作。也建议偶尔自己去删除打印出来的日志，让压力机减负运行嘛。</p>
-<h4 id="参数设置"><a href="#参数设置" class="headerlink" title="参数设置"></a>参数设置</h4><p>上边的例子没有用到参数列表，所以现在介绍参数列表的使用（例子根据上边的例子进行改造），所以下边开始对如何设置参数进行叙述。<br>这里进行简单的例子：<br>我们将上述例子中的语句稍微修改一下： <code>web_add_auto_header(&quot;appName&quot;, &quot;abc&quot;);</code> 修改为 <code>web_add_auto_header(&quot;appName&quot;, &quot;{appNameArg}&quot;);</code> ，此处的 {appNameArg} 为我们定义的参数，中括号不能落下，否则就不是获取参数咯…<br>如果参数列表中没有定义 ‘appNameArg’ 这个参数，那么在脚本中的显示为绿色，如下图：<br><img src="http://maiyikai.github.io/img/LoadRunner/1571383630.png" alt="参数定义-1"></p>
+<p>日志打印出来的就比标准日志要多得多，但是在性能测试阶段，建议使用 “仅在出错时返送消息” 或者 “始终发送消息–&gt;标准日志” ，不然日志可能会将你的压力机磁盘写满，导致你后续无法继续工作。也建议偶尔自己去删除打印出来的日志，让压力机减负运行嘛。</p>
+<h4 id="参数设置"><a href="#参数设置" class="headerlink" title="参数设置"></a>参数设置</h4><p>上边的例子没有用到参数列表，所以现在介绍参数列表的使用（例子根据上边的例子进行改造），所以下边开始对如何设置参数进行叙述。<br>这里进行简单的例子：<br>我们将上述例子中的语句稍微修改一下： <code>web_add_auto_header(&quot;appName&quot;, &quot;abc&quot;);</code> 修改为 <code>web_add_auto_header(&quot;appName&quot;, &quot;{appNameArg}&quot;);</code> ，此处的 ‘{appNameArg}’ 为我们定义的参数，中括号不能落下，否则就不是获取参数咯…<br>如果参数列表中没有定义 ‘appNameArg’ 这个参数，那么在脚本中的显示为绿色，如下图：<br><img src="http://maiyikai.github.io/img/LoadRunner/1571383630.png" alt="参数定义-1"></p>
 <p>这里要切记， 使用函数 ‘web_reg_save_param_ex’ 定义的参数，他就是绿色的哦，所以看到绿色参数时要确认是通过 ‘web_reg_save_param_ex’ 函数获取的，还是通过参数列表获取的，不要慌…</p>
 <p>接下来看看如果使用参数列表：</p>
 <ol>
@@ -303,7 +303,7 @@
 <li><p>参数定义和选项介绍<br>新建参数：点击“新建”，输入参数名称，回车即可<br>参数类型：选择对应的参数名称设置参数类型，目前使用到的有 File、Random Number。File 即为文件，以.dat为后缀；Random Number 即为随机数。<br>接下来展示两张图作为参考：<br><img src="http://maiyikai.github.io/img/LoadRunner/1571383632.png" alt="参数定义-3"></p>
 </li>
 </ol>
-<p>参数值的设置：<br>按编号：即为按列，其实列序号为 1 ，意思时这个参数它对应的时哪个列<br>按名称：即为列名<br>列分割符：Comma(逗号)、Tab(Tab空白)、Space（空格）<br>选择下一行与更新值时间搭配：<br>    Sequential(连续的)、Random(随机的)、Unique(唯一的)：<br>        Each Iteration：迭代使用，执行一遍脚本用一个值，且当前进程内不会发生改变<br>        Each occurrence：当前当次使用，执行一遍脚本，每次获取到的参数的值都是按顺序往下取值<br>        Once：只使用一次，不重复利用</p>
+<p>参数值的设置：<br>按编号：即为按列，其实列序号为 1 ，意思时这个参数它对应的时哪个列<br>按名称：即为列名<br>列分割符：Comma(逗号)、Tab(Tab空白)、Space（空格）<br>选择下一行与更新值时间搭配：<br>    Sequential(连续的)、Random(随机的)、Unique(唯一的)：<br>        Each Iteration：迭代使用，执行一遍脚本用一个值，且当前进程内不会发生改变<br>        Each occurrence：当前当次使用，执行一遍脚本，每次获取到的参数的值都是按顺序往下取值<br>        Once：只使用一次，不重复利用<br>选择下一行（脚本关联–用于 File 参数）：当创建了多个参数时，会发现在选择下一行这个下拉框内会出现一些数据为 <code>Same line as &#39;arg&#39;</code> ，意思就是这个脚本中的同一个参数文件内的参数，行取值由 ‘arg’ 决定为哪一行（即为同一行的意思）。  </p>
 <p><img src="http://maiyikai.github.io/img/LoadRunner/1571383633.png" alt="参数定义-4"></p>
 <p>参数值的设置：<br>从 最小值-最大值 之前取值，即为从 1-100 之间随机取值</p>
 <ol start="3">
@@ -317,7 +317,7 @@
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2019年10月21日 19:43</p>
+        <p>最后更新： 2019年11月25日 22:16</p>
         <p>原始链接： <a class="post-url" href="/2019/10/18/1571380748/" title="LoadRunner之脚本写作">https://maiyikai.github.io/2019/10/18/1571380748/</a></p>
         <footer>
             <a href="https://maiyikai.github.io">
@@ -446,6 +446,16 @@
 
 <nav id="article-nav">
   
+    <a href="/2019/10/22/1571380749/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          LoadRunner之脚本运行
+        
+      </span>
+    </a>
+  
   
     <a href="/2019/09/12/1568191417/" id="article-nav-older" class="article-nav-link-wrap">
       <span class="article-nav-title">错误记录-SpringBoot 之 POI 实现 Excel 操作</span>
@@ -519,10 +529,10 @@
 <div class="sidebar-menu-box" id="sidebar-menu-box">
     <div class="sidebar-menu-box-container">
         <div id="sidebar-menu-box-categories">
-            <a class="category-link" href="/categories/CenterOS/">CenterOS</a><a class="category-link" href="/categories/DataSource/">DataSource</a><a class="category-link" href="/categories/Hexo/">Hexo</a><a class="category-link" href="/categories/Java/">Java</a><a class="category-link" href="/categories/LoadRunner/">LoadRunner</a><a class="category-link" href="/categories/MyBatis/">MyBatis</a><a class="category-link" href="/categories/SpringBoot/">SpringBoot</a><a class="category-link" href="/categories/error/">error</a><a class="category-link" href="/categories/regex/">regex</a>
+            <a class="category-link" href="/categories/CenterOS/">CenterOS</a><a class="category-link" href="/categories/DataSource/">DataSource</a><a class="category-link" href="/categories/Hexo/">Hexo</a><a class="category-link" href="/categories/Java/">Java</a><a class="category-link" href="/categories/LoadRunner/">LoadRunner</a><a class="category-link" href="/categories/MyBatis/">MyBatis</a><a class="category-link" href="/categories/MySQL/">MySQL</a><a class="category-link" href="/categories/SpringBoot/">SpringBoot</a><a class="category-link" href="/categories/error/">error</a><a class="category-link" href="/categories/regex/">regex</a>
         </div>
         <div id="sidebar-menu-box-tags">
-            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/LoadRunner/" style="font-size: 13.33px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 13.33px;">Test</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 10px;">script</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
+            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Database/" style="font-size: 10px;">Database</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/LoadRunner/" style="font-size: 16.67px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/MySQL/" style="font-size: 13.33px;">MySQL</a> <a href="/tags/MySQL-DataType/" style="font-size: 10px;">MySQL DataType</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 16.67px;">Test</a> <a href="/tags/optimize/" style="font-size: 10px;">optimize</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 13.33px;">script</a> <a href="/tags/数据库/" style="font-size: 10px;">数据库</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
         </div>
     </div>
     <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
@@ -555,7 +565,7 @@
     <div class="mobile-header-tag-container">
         <span class="title">Tags</span>
         <div id="mobile-header-container-tags">
-            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/LoadRunner/" style="font-size: 13.33px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 13.33px;">Test</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 10px;">script</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
+            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Database/" style="font-size: 10px;">Database</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/LoadRunner/" style="font-size: 16.67px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/MySQL/" style="font-size: 13.33px;">MySQL</a> <a href="/tags/MySQL-DataType/" style="font-size: 10px;">MySQL DataType</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 16.67px;">Test</a> <a href="/tags/optimize/" style="font-size: 10px;">optimize</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 13.33px;">script</a> <a href="/tags/数据库/" style="font-size: 10px;">数据库</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
         </div>
     </div>
 </div>

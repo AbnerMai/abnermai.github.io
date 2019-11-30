@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>Schema 与数据类型优化-选择优化的数据类型 | FlyingFish&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="maiyikai,maiyude,FlyingFish,FlyingFish's blog">
+  
+  <meta name="description" content="数据库的设计，决定后期对数据库的操作，和性能的优化难度；数据库结构设计不合理，那后期开发对数据库的操作和优化难度更高。但也不是说，数据库结构设计好了之后，后期就不再进行优化了；正如 MySQL 的版本一般，每次的更新都会带有一些新的变化，也会对某些过去版本出现的问题进行优化。">
+<meta name="keywords" content="MySQL,Database,MySQL DataType,optimize">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Schema 与数据类型优化-选择优化的数据类型">
+<meta property="og:url" content="https://maiyikai.github.io/2019/11/19/1574147663/index.html">
+<meta property="og:site_name" content="FlyingFish&#39;s Blog">
+<meta property="og:description" content="数据库的设计，决定后期对数据库的操作，和性能的优化难度；数据库结构设计不合理，那后期开发对数据库的操作和优化难度更高。但也不是说，数据库结构设计好了之后，后期就不再进行优化了；正如 MySQL 的版本一般，每次的更新都会带有一些新的变化，也会对某些过去版本出现的问题进行优化。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-30T15:56:05.951Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Schema 与数据类型优化-选择优化的数据类型">
+<meta name="twitter:description" content="数据库的设计，决定后期对数据库的操作，和性能的优化难度；数据库结构设计不合理，那后期开发对数据库的操作和优化难度更高。但也不是说，数据库结构设计好了之后，后期就不再进行优化了；正如 MySQL 的版本一般，每次的更新都会带有一些新的变化，也会对某些过去版本出现的问题进行优化。">
+  
+  
+    <link rel="icon" href="/pen_logo.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?a53f82c21dd876a0b4f165d79cffff9a";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">FlyingFish&#39;s Blog</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo2.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        FlyingFish&#39;s Blog
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        随笔记
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="maiyikai" target="_blank" href="//maiyikai.github.io/">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/maiyikai/">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                        <a title="Weibo" target="_blank" href="//weibo.com/maiyikai">
+                            <i class="fa fa-weibo fa-2x"></i></a>
+                    
+                        <a title="Weixin" target="_blank" href="//maiyikai.github.io/images/user_weixin.jpg">
+                            <i class="fa fa-weixin fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-1574147663" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      Schema 与数据类型优化-选择优化的数据类型
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/MySQL/">MySQL</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-11-19
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <p>数据库的设计，决定后期对数据库的操作，和性能的优化难度；<br>数据库结构设计不合理，那后期开发对数据库的操作和优化难度更高。<br>但也不是说，数据库结构设计好了之后，后期就不再进行优化了；正如 MySQL 的版本一般，每次的更新都会带有一些新的变化，也会对某些过去版本出现的问题进行优化。<br><a id="more"></a><br>这篇文章最主要讲述的是对 MySQL 数据库数据结构中的数据类型的选择。<br>主要参考来源为 <u><em>《高性能 MySQL》</em></u> 这本书 <u><em>第 4 章</em></u></p>
+<h4 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a><em>数据类型</em></h4><p>MySQL 是一个<u>关系型数据库管理系统</u>，定义的每一个列都需要一个数据类型，可以理解为类似 Java 定义变量一般，都需要指定类型。<br>我们一起来看看 MySQL 都有哪些数据类型(表格数据来自网络)：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">大小</th>
+<th style="text-align:center">范围（有符号）</th>
+<th style="text-align:center">范围（无符号）</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">TINYINT</td>
+<td style="text-align:center">1 字节</td>
+<td style="text-align:center">(-128，127)</td>
+<td style="text-align:center">(0，255)</td>
+<td>小整数值</td>
+</tr>
+<tr>
+<td style="text-align:center">SMALLINT</td>
+<td style="text-align:center">2 字节</td>
+<td style="text-align:center">(-32 768，32 767)</td>
+<td style="text-align:center">(0，65 535)</td>
+<td>大整数值</td>
+</tr>
+<tr>
+<td style="text-align:center">MEDIUMINT</td>
+<td style="text-align:center">3 字节</td>
+<td style="text-align:center">(-8 388 608，8 388 607)</td>
+<td style="text-align:center">(0，16 777 215)</td>
+<td>大整数值</td>
+</tr>
+<tr>
+<td style="text-align:center">INT或INTEGER</td>
+<td style="text-align:center">4 字节</td>
+<td style="text-align:center">(-2 147 483 648，2 147 483 647)</td>
+<td style="text-align:center">(0，4 294 967 295)</td>
+<td>大整数值</td>
+</tr>
+<tr>
+<td style="text-align:center">BIGINT</td>
+<td style="text-align:center">8 字节</td>
+<td style="text-align:center">(-9,223,372,036,854,775,808，9 223 372 036 854 775 807)</td>
+<td style="text-align:center">(0，18 446 744 073 709 551 615)</td>
+<td>极大整数值</td>
+</tr>
+<tr>
+<td style="text-align:center">FLOAT</td>
+<td style="text-align:center">4 字节</td>
+<td style="text-align:center">(-3.402 823 466 E+38，-1.175 494 351 E-38)，0，(1.175 494 351 E-38，3.402 823 466 351 E+38)</td>
+<td style="text-align:center">0，(1.175 494 351 E-38，3.402 823 466 E+38)</td>
+<td>单精度浮点数值</td>
+</tr>
+<tr>
+<td style="text-align:center">DOUBLE</td>
+<td style="text-align:center">8 字节</td>
+<td style="text-align:center">(-1.797 693 134 862 315 7 E+308，-2.225 073 858 507 201 4 E-308)，0，(2.225 073 858 507 201 4 E-308，1.797 693 134 862 315 7 E+308)</td>
+<td style="text-align:center">0，(2.225 073 858 507 201 4 E-308，1.797 693 134 862 315 7 E+308)</td>
+<td>双精度浮点数值</td>
+</tr>
+<tr>
+<td style="text-align:center">DECIMAL</td>
+<td style="text-align:center">对DECIMAL(M,D) ，如果M&gt;D，为M+2否则为D+2</td>
+<td style="text-align:center">依赖于M和D的值</td>
+<td style="text-align:center">依赖于M和D的值</td>
+<td>小数值</td>
+</tr>
+<tr>
+<td style="text-align:center">DATE</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">1000-01-01/9999-12-31</td>
+<td style="text-align:center">YYYY-MM-DD</td>
+<td>日期值</td>
+</tr>
+<tr>
+<td style="text-align:center">TIME</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">‘-838&#58;59&#58;59’/‘838&#58;59&#58;59’</td>
+<td style="text-align:center">HH&#58;MM&#58;SS</td>
+<td>时间值或持续时间</td>
+</tr>
+<tr>
+<td style="text-align:center">YEAR</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1901/2155</td>
+<td style="text-align:center">YYYY</td>
+<td>年份值</td>
+</tr>
+<tr>
+<td style="text-align:center">DATETIME</td>
+<td style="text-align:center">8</td>
+<td style="text-align:center">1000-01-01 00&#58;00&#58;00/9999-12-31 23&#58;59&#58;59</td>
+<td style="text-align:center">YYYY-MM-DD HH&#58;MM&#58;SS</td>
+<td>混合日期和时间值</td>
+</tr>
+<tr>
+<td style="text-align:center">TIMESTAMP</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">1970-01-01 00&#58;00&#58;00/2038<br> 结束时间是第 2147483647 秒，北京时间 2038-1-19 11&#58;14&#58;07，格林尼治时间 2038年1月19日 凌晨 03&#58;14&#58;07</td>
+<td style="text-align:center">YYYYMMDD HHMMSS</td>
+<td>混合日期和时间值，时间戳</td>
+</tr>
+<tr>
+<td style="text-align:center">CHAR</td>
+<td style="text-align:center">0-255字节</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td>定长字符串</td>
+</tr>
+<tr>
+<td style="text-align:center">VARCHAR</td>
+<td style="text-align:center">0-65535 字节</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td>变长字符串</td>
+</tr>
+<tr>
+<td style="text-align:center">TINYBLOB</td>
+<td style="text-align:center">0-255字节</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td>不超过 255 个字符的二进制字符串</td>
+</tr>
+<tr>
+<td style="text-align:center">TINYTEXT</td>
+<td style="text-align:center">0-255字节</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td>短文本字符串</td>
+</tr>
+<tr>
+<td style="text-align:center">BLOB</td>
+<td style="text-align:center">0-65 535字节</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td>二进制形式的长文本数据</td>
+</tr>
+<tr>
+<td style="text-align:center">TEXT</td>
+<td style="text-align:center">0-65 535字节</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td>长文本数据</td>
+</tr>
+<tr>
+<td style="text-align:center">MEDIUMBLOB</td>
+<td style="text-align:center">0-16 777 215字节</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td>二进制形式的中等长度文本数据</td>
+</tr>
+<tr>
+<td style="text-align:center">MEDIUMTEXT</td>
+<td style="text-align:center">0-16 777 215字节</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td>中等长度文本数据</td>
+</tr>
+<tr>
+<td style="text-align:center">LONGBLOB</td>
+<td style="text-align:center">0-4 294 967 295字节</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td>二进制形式的极大文本数据</td>
+</tr>
+<tr>
+<td style="text-align:center">LONGTEXT</td>
+<td style="text-align:center">0-4 294 967 295字节</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+<td>极大文本数据</td>
+</tr>
+</tbody>
+</table>
+<h4 id="数据类型的选择"><a href="#数据类型的选择" class="headerlink" title="数据类型的选择"></a><em>数据类型的选择</em></h4><p>MySQL 支持的数据类型有非常多，选择正确的数据类型对于获得高性能至关重要。<br>那么应该如何选择数据类型呢？<br>以下是列举几个比较简单的选择原则：</p>
+<blockquote>
+<ol>
+<li><em>更小的通常更好</em><blockquote>
+<ol>
+<li>一般情况下尽量使用可以正确存储数据的最小数据类型。</li>
+<li>更小的数据类型占用更少的磁盘、内存和 CPU 缓存，并且处理时需要的 CPU 周期更小</li>
+</ol>
+</blockquote>
+</li>
+<li><em>简单就好</em><blockquote>
+<ol>
+<li>简单的数据类型的操作通常需要更少的 CPU 周期</li>
+</ol>
+</blockquote>
+</li>
+<li><em>尽量避免 NULL</em><blockquote>
+<ol>
+<li>如果查询中包含可为 NULL 的列，会使得索引、索引统计和值变得更复杂</li>
+<li>可为 NULL 的列会使用更多的存储空间，在 MySQL 里也要特殊处理</li>
+<li>可为 NULL 的列被索引时，每个索引记录需要一个额外的字节，在 MyISAM(存储引擎) 里甚至还可能导致固定大小的索引变成可变大小的索引</li>
+</ol>
+</blockquote>
+</li>
+</ol>
+</blockquote>
+<p>很多 MySQL 的数据类型可以存储相同的类型的数据，只是存储的长度和范围不一样、允许的精度不同，或者需要的物理空间（磁盘和内存空间）不同。相同大类型的不同子类型数据有时也有一些特殊的行为和属性。</p>
+<h4 id="整数类型"><a href="#整数类型" class="headerlink" title="整数类型"></a><em>整数类型</em></h4><p>根据上表，整数类型为：TINYINT,SMALLINT,MEDIUMINT,INT,BIGINT；分别使用 1 、 2 、 3 、 4、 8 个字节，分别使用 8 , 16 , 24 , 32 , 64 为存储空间。</p>
+<p>它们的存储的值的范围从 -2<sup>( N - 1 )</sup> 到 2<sup>( N - 1 )</sup> - 1 ,其中 N 为存储空间的位数。</p>
+<p>整型数值的定义可以使用 UNSIGNED 无符号整型属性，这大致可以使正数的上限提高一倍。</p>
+<p>有符号和无符号类型使用相同的存储空间，并具有相同的性能，因此可以根据实际情况选择合适的类型。</p>
+<p>MySQL 可以为整型类型指定宽度，如 INT(1) ,对大多数应用这是没有意义的：它不会限制值的合法范围，只是规定了 MYSQL 的一些交互工具用来显示字符的个数。对于存储和计算来说，INT(1) 和 INT(10) 是相同的。</p>
+<h4 id="实数类型"><a href="#实数类型" class="headerlink" title="实数类型"></a><em>实数类型</em></h4><blockquote>
+<p>实数是带有小数部分的数字，类型为 FLOAT , DOUBLE , DECIMAL ;</p>
+</blockquote>
+<p>它们不只是为了存储小数部分；也可以使用 DECIMAL 存储比 BIGINT 还大的整数。</p>
+<p>MySQL 既支持精确类型，也支持不精确类型。</p>
+<p>有多种方法可以指定浮点列所需要的精度，这会使得 MySQL 选择不同的数据类型，或者在存储时进行取舍。这些精度定义是非标准的，所以建议只指定数据类型，而不制定精度。</p>
+<p>DECIMAL 类型最多允许 65 个数字；因为 DECIMAL 只是一种存储格式，在计算中 DECIMAL 会转换为 DOUBLE 类型。</p>
+<blockquote>
+<p>MySQL 使用 DOUBLE 为内部浮点计算类型。</p>
+</blockquote>
+<h4 id="字符串类型"><a href="#字符串类型" class="headerlink" title="字符串类型"></a><em>字符串类型</em></h4><p>MySQL 支持多种字符串类型，每种类型还有很多的变种。每个字符串列可以定义自己的字符集和排序规则，或者说是校对规则。这些东西会很大程度上影响性能。</p>
+<h5 id="VARCHAR-和-CHAR-类型"><a href="#VARCHAR-和-CHAR-类型" class="headerlink" title="VARCHAR 和 CHAR 类型"></a><em>VARCHAR 和 CHAR 类型</em></h5><ol>
+<li><p><strong><em>VARCHAR</em></strong></p>
+<ol>
+<li>VARCHAR 类型用于存储可变长字符串，是最常见的字符串数据类型。它比定长类型更节省空间，因为它仅使用必要的空间。</li>
+<li>VARCHAR 需要使用 1 或者 2 个额外字节记录字符串的长度。</li>
+<li>VARCHAR 节省了存储空间，对性能提升有所帮助。但由于行是变长的，在 UPDATE 时可能使行变得比原来的长，这就导致需要做额外的工作。（如果一个行占用的空间增长，并且页内没有更多的空间可以存储的情况下，不同的引擎处理方式是不一样的——需参考存储引擎的工作原理）</li>
+</ol>
+</li>
+<li><p><strong><em>CHAR</em></strong></p>
+<ol>
+<li>CAHR 类型是定长的，MySQL 根据定义的长度分配足够的空间</li>
+<li>存储值时，MySQL 会将末尾的所有空格删除</li>
+</ol>
+</li>
+</ol>
+<blockquote>
+<p><span style="color:red"><em>注：更长的列列会消耗更多的内存，因为 MySQL 通常会分配固定大小的内存块来保存内部值。</em></span></p>
+</blockquote>
+<h5 id="BLOB-和-TEXT-类型"><a href="#BLOB-和-TEXT-类型" class="headerlink" title="BLOB 和 TEXT 类型"></a><em>BLOB 和 TEXT 类型</em></h5><p>大型数据存储类型：BLOB 和 TEXT ，分别采用二进制和字符方式存储。</p>
+<p>MySQL 把每个 BLOB 和 TEXT 值当作一个独立的对象处理，存储引擎在存储时通常会做特殊的处理。当 BLOB 和 TEXT 值太大时， InnoDB 会使用专门的“外部”存储区域进行存储，此时每个值在行内需要 1~4 个字节的指针，外部存储区域存储的值。</p>
+<p>BLOB 和 TEXT 不同的是：</p>
+<blockquote>
+<ol>
+<li>BLOB 类型存储的值时二进制数据，没有排序规则或字符集</li>
+<li>TEXT 类型有排序规则和字符集</li>
+</ol>
+</blockquote>
+<p>MySQL 对 BLOB 和 TEXT 列进行排序与其他的类型不同，MySQL 只对最前 max_sort_length 字节而不是整个字符串进行排序，可通过 <code>ORDER BY SUSSTRING(column, length)</code></p>
+<blockquote>
+<p><span style="color:red"><em>注：MySQL 不能将 BLOB 和 TEXT 列全部长度的字符串进行索引，也不能使用这些索引消除排序。</em></span></p>
+</blockquote>
+<h4 id="使用枚举代替字符串类型"><a href="#使用枚举代替字符串类型" class="headerlink" title="使用枚举代替字符串类型"></a><em>使用枚举代替字符串类型</em></h4><p>枚举列看可以将一些不重复的字符串存储成一个预定义的集合。</p>
+<p>MySQL 在存储枚举时非常的紧凑，会根据列表值的数量压缩到一个或者两个字节中。</p>
+<p>MySQL 在内部会将每个值在列表中的位置保存为整数，并且在表的 <em>.frm</em> 文件中保存“数字-字符串”映射关系的“查找表”。</p>
+<p>使用枚举列会使得数据库表大小减小。</p>
+<blockquote>
+<p><span style="color:red"><em>注：<br>枚举字符串列表是固定的，故添加或删除字符串必须使用 ALTER TABLE。所以对于经常变换的字符串列表，不该使用枚举类型。<br>枚举列与字符串 CHAR/VARCHAR 列关联会比使用两个枚举列关联速度要慢</em></span></p>
+</blockquote>
+<h4 id="日期和时间类型"><a href="#日期和时间类型" class="headerlink" title="日期和时间类型"></a><em>日期和时间类型</em></h4><p>MySQL 能够存储的最小时间粒度为秒（MariaDB支持微秒级别的事件类型）。</p>
+<p>MySQL 提供两种时间类型：</p>
+<ol>
+<li>DATETIME<ul>
+<li>保存大范围的值，从 1001 年到 9999 年，精度为秒。</li>
+<li>时间日期封装格式为 YYYYMMDDHHMMSS 的整数</li>
+<li>与时区无关</li>
+<li>存储空间为 8 个字节</li>
+</ul>
+</li>
+<li>TIMESTAMP<ul>
+<li>保存从 1970 年 1 月 1 日午夜（格林尼治标准时间）以来的秒数，它和 UNIX 时间戳相同。</li>
+<li>存储空间为 4 个字节</li>
+<li>保存范围为 1970 年到 2038 年</li>
+<li>与时区有关</li>
+<li>比 DATETIME 空间效率更高</li>
+</ul>
+</li>
+</ol>
+<h4 id="位数据类型"><a href="#位数据类型" class="headerlink" title="位数据类型"></a><em>位数据类型</em></h4><p>MySQL 提供两种位数据类型：</p>
+<ol>
+<li>BIT<ol>
+<li>可以使用 BIT 列在一列中存储一个或者多个 true | false 值</li>
+<li>最大长度为 64 个位</li>
+<li>MySQL 将 BIT 当成是字符串类型，而不是数字类型</li>
+<li>存储的值为二进制字串</li>
+</ol>
+</li>
+<li>SET<ol>
+<li>在 MySQL 内部是以一系列打包的位的集合来表示</li>
+<li>缺点<ol>
+<li>改变列的代价较高，需要 ALTER TABLE；</li>
+<li>无法在 SET 列上使用索引</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h5 id="选择标识符"><a href="#选择标识符" class="headerlink" title="选择标识符"></a><em>选择标识符</em></h5><p>标识列可能在另外的表中作为外键使用，所以为标识列选择数据类型是，应该选择跟关联表中的对应列一样的类型。</p>
+<p>选择标识列的类型时，要考虑存储类型，还要考虑 MySQL 对这种类型怎么执行计算和比较。</p>
+<p>在可以满足值的范围的需求，并且预留未来增长空间的前提下，应该选择最小的数据类型。</p>
+<blockquote>
+<p>注：一旦选定了一种类型，要确保在所有关联表中都使用同样的类型。类型之间需要精确的匹配，包括像 UNSIGNED 这样的属性。混用不同的数据类型可能导致性能问题，即使没有性能问题，在比较操作时隐式类型转换可能导致很难发现的错误。</p>
+</blockquote>
+<ol>
+<li>整型类型<ol>
+<li>整数通常是标识列的最好的选择，因为它们很快并且可以使用 AUTO_INCREMENT</li>
+</ol>
+</li>
+<li>ENUM 和 SET 类型<ol>
+<li>因为 ENUM 和 SET 类型定义值是比较固定的，并且修改的花销很大，所以对于标识列来说，这是一个不推荐的选择</li>
+</ol>
+</li>
+<li>字符串类型<ol>
+<li>字符串类型占用空间，并且比数字类型要慢得多</li>
+<li>对于完全“随机”的字符串，如 MD5()、SHA1() 或者 UUID() 产生的字符串，这些函数生成的新值会任意分布在很大的空间内，这回导致 INSERT 以及 SELECT 语句变得很慢<ol>
+<li>因为插入值会随机地写索引在不同的位置，所以使得 INSERT 语句更慢。这回导致页分裂、磁盘随机访问，以及对于聚簇存储引擎产生聚簇索引碎片</li>
+<li>SELECT 语句变得更慢，因为逻辑上相邻的行会分布在磁盘和内存的不同地方</li>
+<li>随机值导致混村对所有类型的查询语句效果都很差，因为会使得缓存赖以工作的范文局部性原理失效。如果整个数据集都一样的“热”，那么缓存任何一部分特地给数据到内存都没有好处；如果工作集比内存大，缓存将会有很多刷新和不命中。</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a><em>总结</em></h4><p>数据库表的设计需要根据需求选择合适的数据类型，避免不同的数据类型间相互影响，导致影响数据库的性能。</p>
+<blockquote>
+<ol>
+<li>尽量避免使用在对列进行数据变更时对整张表的修改的数据类型</li>
+<li>尽量使用占用空间较小且适合的数据类型</li>
+<li>尽量避免数据可为 NULL</li>
+<li>在进行表关联时，尽量使关联的列使用同一种数据类型，避免不必要的转换开销</li>
+</ol>
+</blockquote>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2019年11月30日 23:56</p>
+        <p>原始链接： <a class="post-url" href="/2019/11/19/1574147663/" title="Schema 与数据类型优化-选择优化的数据类型">https://maiyikai.github.io/2019/11/19/1574147663/</a></p>
+        <footer>
+            <a href="https://maiyikai.github.io">
+                <img src="/images/logo2.png" alt="maiyikai">
+                maiyikai
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        ~谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://maiyikai.github.io/2019/11/19/1574147663/&title=《Schema 与数据类型优化-选择优化的数据类型》 — FlyingFish's Blog&pic=https://maiyikai.github.io/img/MySQL/1573377521.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://maiyikai.github.io/2019/11/19/1574147663/&title=《Schema 与数据类型优化-选择优化的数据类型》 — FlyingFish's Blog&source=数据库的设计，决定后期对数据库的操作，和性能的优化难度；数据库结构设计不合理，那后期开发对数据库的操作和优化难度更高。但也不是说，数据库结构设计好了之后，..." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://maiyikai.github.io/2019/11/19/1574147663/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Schema 与数据类型优化-选择优化的数据类型》 — FlyingFish's Blog&url=https://maiyikai.github.io/2019/11/19/1574147663/&via=https://maiyikai.github.io" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://maiyikai.github.io/2019/11/19/1574147663/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://maiyikai.github.io/2019/11/19/1574147663/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/MySQL/" class="color1">MySQL</a>
+      
+    <a href="/tags/Database/" class="color4">Database</a>
+      
+    <a href="/tags/MySQLDataType/" class="color5">MySQL DataType</a>
+      
+    <a href="/tags/optimize/" class="color4">optimize</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#数据类型"><span class="post-toc-text">数据类型</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#数据类型的选择"><span class="post-toc-text">数据类型的选择</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#整数类型"><span class="post-toc-text">整数类型</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#实数类型"><span class="post-toc-text">实数类型</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#字符串类型"><span class="post-toc-text">字符串类型</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#VARCHAR-和-CHAR-类型"><span class="post-toc-text">VARCHAR 和 CHAR 类型</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#BLOB-和-TEXT-类型"><span class="post-toc-text">BLOB 和 TEXT 类型</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#使用枚举代替字符串类型"><span class="post-toc-text">使用枚举代替字符串类型</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#日期和时间类型"><span class="post-toc-text">日期和时间类型</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#位数据类型"><span class="post-toc-text">位数据类型</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#选择标识符"><span class="post-toc-text">选择标识符</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#总结"><span class="post-toc-text">总结</span></a></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+  
+    <a href="/2019/11/11/1573376841/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">MySQL 系列之 MySQL 架构和历史</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+        <div id="SOHUCS" sid="1574147663"></div>
+<script type="text/javascript">
+    (function(){
+        var appid = 'cyu3qrrJt';
+        var conf = '3f0da4017453d35b0c5dafb035646863';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2019 maiyikai<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "https://maiyikai.github.io",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/CenterOS/">CenterOS</a><a class="category-link" href="/categories/DataSource/">DataSource</a><a class="category-link" href="/categories/Hexo/">Hexo</a><a class="category-link" href="/categories/Java/">Java</a><a class="category-link" href="/categories/LoadRunner/">LoadRunner</a><a class="category-link" href="/categories/MyBatis/">MyBatis</a><a class="category-link" href="/categories/MySQL/">MySQL</a><a class="category-link" href="/categories/SpringBoot/">SpringBoot</a><a class="category-link" href="/categories/error/">error</a><a class="category-link" href="/categories/regex/">regex</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Database/" style="font-size: 10px;">Database</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/LoadRunner/" style="font-size: 16.67px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/MySQL/" style="font-size: 13.33px;">MySQL</a> <a href="/tags/MySQL-DataType/" style="font-size: 10px;">MySQL DataType</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 16.67px;">Test</a> <a href="/tags/optimize/" style="font-size: 10px;">optimize</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 13.33px;">script</a> <a href="/tags/数据库/" style="font-size: 10px;">数据库</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Database/" style="font-size: 10px;">Database</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/LoadRunner/" style="font-size: 16.67px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/MySQL/" style="font-size: 13.33px;">MySQL</a> <a href="/tags/MySQL-DataType/" style="font-size: 10px;">MySQL DataType</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 16.67px;">Test</a> <a href="/tags/optimize/" style="font-size: 10px;">optimize</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 13.33px;">script</a> <a href="/tags/数据库/" style="font-size: 10px;">数据库</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>
