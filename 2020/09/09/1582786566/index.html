@@ -3,22 +3,23 @@
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <title>Tag: Docker | FlyingFish&#39;s Blog</title>
+  <title>Dockerfile基础学习 | FlyingFish&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
     <meta name="keywords" content="maiyikai,maiyude,FlyingFish,FlyingFish's blog">
   
-  <meta name="description" content="随笔记">
-<meta name="keywords" content="FlyingFish,maiyikai,卖鱼的接口,卖鱼的">
-<meta property="og:type" content="website">
-<meta property="og:title" content="FlyingFish&#39;s Blog">
-<meta property="og:url" content="https://maiyikai.github.io/tags/Docker/index.html">
+  <meta name="description" content="通过Dockerfile文件构建镜像">
+<meta name="keywords" content="Docker,Linux,Dockerfile">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dockerfile基础学习">
+<meta property="og:url" content="https://maiyikai.github.io/2020/09/09/1582786566/index.html">
 <meta property="og:site_name" content="FlyingFish&#39;s Blog">
-<meta property="og:description" content="随笔记">
+<meta property="og:description" content="通过Dockerfile文件构建镜像">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-09-08T14:42:15.796Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="FlyingFish&#39;s Blog">
-<meta name="twitter:description" content="随笔记">
+<meta name="twitter:title" content="Dockerfile基础学习">
+<meta name="twitter:description" content="通过Dockerfile文件构建镜像">
   
   
     <link rel="icon" href="/pen_logo.ico">
@@ -119,35 +120,154 @@
     </div>
 </header>
       <div class="outer">
-        <section id="main" class="body-wrap">
-  
-  
+        <section id="main" class="body-wrap"><article id="post-1582786566" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2020/09/09/1582786566/" class="archive-article-date">
-  <time datetime="2020-09-08T21:57:00.000Z" itemprop="datePublished">09-08</time>
-</a>
-      
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/09/09/1582786566/">Dockerfile基础学习</a>
+    <h1 class="post-title" itemprop="name">
+      Dockerfile基础学习
     </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/Dockerfile/">Dockerfile</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2020-09-08
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
   
 
-    </header>
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
       
-        <div class="archive-post-footer">
+            
+            <p>通过Dockerfile文件构建镜像<br><a id="more"></a></p>
+<h3 id="Dockerfile是什么？"><a href="#Dockerfile是什么？" class="headerlink" title="Dockerfile是什么？"></a>Dockerfile是什么？</h3><p>Dockerfile是用来构建镜像的文本文件，通过Dockerfile的格式，按顺序编写脚本，编译之后，通过脚本的顺序执行对应的指令，构建一个镜像。</p>
+<h3 id="Dockerfile关键字"><a href="#Dockerfile关键字" class="headerlink" title="Dockerfile关键字"></a>Dockerfile关键字</h3><p>Dockerfile书写需要注意，对于Dockerfile保留的关键字需要全部大写，且后边必须有至少一个字符，否则将报错。<br>以下是Dockerfile的保留关键字和解释<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">FROM：基础镜像，当前镜像是基于FROM指定的对象构建的</span><br><span class="line">MAINTAINER：镜像维护者的姓名和邮箱地址</span><br><span class="line">RUN：容器构建时需要执行的指令</span><br><span class="line">EXPOSE：当前容器对外暴露的端口</span><br><span class="line">WORKDIR：指定在创建容器后，终端默认登录进来的工作目录</span><br><span class="line">ENV：用来在构建镜像过程中设置环境变量</span><br><span class="line">ADD：将宿主机目录下的文件拷贝到镜像中，且ADD命令会自动处理URL和解压tar压缩包</span><br><span class="line">COPY：类似ADD，拷贝文件或目录到镜像中。将从构建上下文目录中&lt;源路径&gt;的文件/目录复制到新的一层的镜像内的&lt;目标路径&gt;位置</span><br><span class="line">VOLUME：容器数据卷，用于数据保存和持久化工作（指定目录中的文件数据，将会与默认的宿主机文件目录象关联，默认路径可通过`docker inspect Name|ID` 查看）</span><br><span class="line">CMD：指定容器启动时要运行的命令；dockerfile中可以有多个CMD指令，但只有最后一个生效，CMD会被docker run之后的参数替换</span><br><span class="line">ENTRYPOINT：指定容器启动时要执行的命令；ENTRYPOINT的目的和CMD一样，但是CMD会被docker run之后的参数替换，而ENTRYPOINT会将docker run之后的参数进行拼接到命令中</span><br><span class="line">ONBUILD：当构建一个被继承的dockerfile时运行命令，父镜像被子镜像继承后，父镜像的onbuild被触发</span><br></pre></td></tr></table></figure></p>
+<h3 id="Dockerfile构建镜像"><a href="#Dockerfile构建镜像" class="headerlink" title="Dockerfile构建镜像"></a>Dockerfile构建镜像</h3><p>当编写好Dockerfile文件之后，通过指令对Dockerfile进行构建，创建一个新的镜像</p>
+<blockquote>
+<p>镜像：<code>docker build -f /dockerfilePath/dockerfile -t imageName[:TAG] .</code></p>
+</blockquote>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>dockerfile构建镜像，可以按照自己的意愿构建镜像，如Java程序镜像，或者其他的镜像内容。</p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2020年09月08日 22:42</p>
+        <p>原始链接： <a class="post-url" href="/2020/09/09/1582786566/" title="Dockerfile基础学习">https://maiyikai.github.io/2020/09/09/1582786566/</a></p>
+        <footer>
+            <a href="https://maiyikai.github.io">
+                <img src="/images/logo2.png" alt="maiyikai">
+                maiyikai
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        ~谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://maiyikai.github.io/2020/09/09/1582786566/&title=《Dockerfile基础学习》 — FlyingFish's Blog&pic=https://maiyikai.github.io/img/docker/image1.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://maiyikai.github.io/2020/09/09/1582786566/&title=《Dockerfile基础学习》 — FlyingFish's Blog&source=通过Dockerfile文件构建镜像" data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://maiyikai.github.io/2020/09/09/1582786566/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Dockerfile基础学习》 — FlyingFish's Blog&url=https://maiyikai.github.io/2020/09/09/1582786566/&via=https://maiyikai.github.io" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://maiyikai.github.io/2020/09/09/1582786566/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://maiyikai.github.io/2020/09/09/1582786566/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
             
   <li class="article-footer-tags">
     <i class="fa fa-tags"></i>
@@ -160,50 +280,42 @@
       
   </li>
 
-        </div>
-      
+        </ul>
+        
+    </footer>
   </div>
 </article>
 
-  
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Dockerfile是什么？"><span class="post-toc-text">Dockerfile是什么？</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Dockerfile关键字"><span class="post-toc-text">Dockerfile关键字</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Dockerfile构建镜像"><span class="post-toc-text">Dockerfile构建镜像</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#总结"><span class="post-toc-text">总结</span></a></li></ol>
+        </nav>
+    </aside>
     
+
+<nav id="article-nav">
+  
+  
+    <a href="/2020/09/09/1582786565/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">Docker基础学习</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
     
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2020/09/09/1582786565/" class="archive-article-date">
-  <time datetime="2020-09-08T18:57:00.000Z" itemprop="datePublished">09-08</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/09/09/1582786565/">Docker基础学习</a>
-    </h1>
-  
-
-    </header>
-      
-        <div class="archive-post-footer">
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/Docker/" class="color2">Docker</a>
-      
-    <a href="/tags/Linux/" class="color1">Linux</a>
-      
-  </li>
-
-        </div>
-      
-  </div>
-</article>
-
-  
-  
-    </div></section>
-  
-
+        <div id="SOHUCS" sid="1582786566"></div>
+<script type="text/javascript">
+    (function(){
+        var appid = 'cyu3qrrJt';
+        var conf = '3f0da4017453d35b0c5dafb035646863';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
 </section>
         
       </div>
