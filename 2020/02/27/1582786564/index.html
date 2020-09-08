@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>SpringBoot 之更改 Tomcat 的 URL 校验规则 | FlyingFish&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="maiyikai,maiyude,FlyingFish,FlyingFish's blog">
+  
+  <meta name="description" content="Spring Boot 项目中都会嵌入 Tomcat， 在不同版本的 Spring Boot 下，也会嵌入不同版本的 Tomcat 。Tomcat 作用和用途这里就不用再赘述了……">
+<meta name="keywords" content="SpringBoot,Spring,Tomcat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot 之更改 Tomcat 的 URL 校验规则">
+<meta property="og:url" content="https://maiyikai.github.io/2020/02/27/1582786564/index.html">
+<meta property="og:site_name" content="FlyingFish&#39;s Blog">
+<meta property="og:description" content="Spring Boot 项目中都会嵌入 Tomcat， 在不同版本的 Spring Boot 下，也会嵌入不同版本的 Tomcat 。Tomcat 作用和用途这里就不用再赘述了……">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-04-07T14:29:23.272Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringBoot 之更改 Tomcat 的 URL 校验规则">
+<meta name="twitter:description" content="Spring Boot 项目中都会嵌入 Tomcat， 在不同版本的 Spring Boot 下，也会嵌入不同版本的 Tomcat 。Tomcat 作用和用途这里就不用再赘述了……">
+  
+  
+    <link rel="icon" href="/pen_logo.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?a53f82c21dd876a0b4f165d79cffff9a";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">FlyingFish&#39;s Blog</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo2.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        FlyingFish&#39;s Blog
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        随笔记
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="maiyikai" target="_blank" href="//maiyikai.github.io/">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/maiyikai/">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                        <a title="Weibo" target="_blank" href="//weibo.com/maiyikai">
+                            <i class="fa fa-weibo fa-2x"></i></a>
+                    
+                        <a title="Weixin" target="_blank" href="//maiyikai.github.io/images/user_weixin.jpg">
+                            <i class="fa fa-weixin fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-1582786564" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      SpringBoot 之更改 Tomcat 的 URL 校验规则
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/SpringBoot/">SpringBoot</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2020-02-27
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <p>Spring Boot 项目中都会嵌入 Tomcat， 在不同版本的 Spring Boot 下，也会嵌入不同版本的 Tomcat 。Tomcat 作用和用途这里就不用再赘述了……<br><a id="more"></a><br>在项目的迁移过程中，由原先的 Servlet 项目 改造成了 Sprong Boot 项目，导致了一系列的问题，目前让我觉得可以记录的就是当前的这个 Tomcat 的问题了。因为在正常情况下不会涉及到这种问题，但是进行服务版本改造的时候应该会出现类似的问题。</p>
+<h4 id="抛转引玉"><a href="#抛转引玉" class="headerlink" title="抛转引玉"></a>抛转引玉</h4><p>访问地址：<a href="http://addression/ServerName/Web.jsp?json={&quot;balibali&quot;...}" target="_blank" rel="noopener">http://addression/ServerName/Web.jsp?json={&quot;balibali&quot;...}</a><br>访问后端时报错： Invalid character found in the request target. The valid characters are defined in RFC 7230 and RFC 3986<br>浏览器返回的结果是：400<br>一开始，还不知道是什么原因，因为我用 PostMan 访问是正常的，但是用浏览器就出问题。Servlet 服务中是可以正常访问的，但是在 SpringBoot 项目中就不行了。<br>于是乎开始针对这个这个问题排查，奇怪的是这个异常信息在多次访问的之后，只打印一次，一开始还不重视它，但是整个日志就没有其他的异常信息</p>
+<h4 id="网络搜寻"><a href="#网络搜寻" class="headerlink" title="网络搜寻"></a>网络搜寻</h4><p>一直找不到原因，于是就尝试使用这个异常去查，结果知道了原因：说是因为 Tomcat 对 URL 字符作了限制，而我地址中就存在了这些被限制的字符，于是乎对访问地址进行多次测试：</p>
+<blockquote>
+<ol>
+<li><a href="http://addression/ServerName/Web.jsp" target="_blank" rel="noopener">http://addression/ServerName/Web.jsp</a> –&gt; 没有报错</li>
+<li><a href="http://addression/ServerName/Web.jsp?json=balabala...---&gt;" target="_blank" rel="noopener">http://addression/ServerName/Web.jsp?json=balabala...---&gt;</a> 没有报错</li>
+<li><a href="http://addression/ServerName/Web.jsp?json={}--&gt;" target="_blank" rel="noopener">http://addression/ServerName/Web.jsp?json={}--&gt;</a> 400</li>
+<li><a href="http://addression/ServerName/Web.jsp?json=%7B" target="_blank" rel="noopener">http://addression/ServerName/Web.jsp?json=%7B</a> %7D–&gt; 正常(%7B %7D分别对应的是字符 { } )</li>
+</ol>
+</blockquote>
+<p>综上可知，是参数 json 赋值为一个对象时报错误，但是步骤 3 和 步骤 4 在某种意义上是一样的，因为在浏览器地址栏输入步骤 4 ，回车之后你看到的就是步骤 3 的地址…<br>但是步骤 4 是正常的，步骤 3 是错的…</p>
+<h4 id="百度与谷歌"><a href="#百度与谷歌" class="headerlink" title="百度与谷歌"></a>百度与谷歌</h4><p>知道了是 Tomcat 对 URL 的字符限制，就想先试试更改一下 Tomcat 的配置，网上找了一堆的教程</p>
+<h5 id="Tomcat-系列"><a href="#Tomcat-系列" class="headerlink" title="Tomcat 系列"></a>Tomcat 系列</h5><ol>
+<li>更改 Tomcat 版本</li>
+<li>配置tomcat支持|{}等字符的方法是:在 catalina.properties中添加 tomcat.util.http.parser.HttpParser.requestTargetAllow=|{} 但是只支持7.0.76, 8.0.42, 8.5.12 之后的版本</li>
+</ol>
+<p>看到了这个答案，感觉有戏，结果才想起来， SpringBoot 项目中的 Tomcat 是内嵌的啊，难不成要重新引入一个？未免太过麻烦，而且后期还不好维护…等等一堆问题，怎么办呢？应该还有 Spring Boot 解决方案，再找找…</p>
+<h5 id="SpringBoot-系列"><a href="#SpringBoot-系列" class="headerlink" title="SpringBoot 系列"></a>SpringBoot 系列</h5><p>因为是公司项目，所以选用的 SpringBoot 版本一般不会改变，这里使用是 1.5.6 版本的。</p>
+<ol>
+<li><p>SpringBoot 2.* 版本解决方案-工厂配置（未验证）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//引入这个配置</span><br><span class="line">@Bean</span><br><span class="line">   public ConfigurableServletWebServerFactory webServerFactory() &#123;</span><br><span class="line">       TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory();</span><br><span class="line">       factory.addConnectorCustomizers((TomcatConnectorCustomizer) connector -&gt; connector.setProperty(&quot;relaxedQueryChars&quot;, &quot;|&#123;&#125;[]\\&quot;));</span><br><span class="line">       return factory;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>SpringBoot 1.* 版本解决方案-工厂配置（未生效）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">    * 解决异常信息：</span><br><span class="line">    *  java.lang.IllegalArgumentException:</span><br><span class="line">    *      Invalid character found in the request target. The valid characters are defined in RFC 7230 and RFC 3986</span><br><span class="line">    * @return</span><br><span class="line">    */</span><br><span class="line">   @Bean</span><br><span class="line">   public EmbeddedServletContainerCustomizer webServerFactory() &#123;</span><br><span class="line">       TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory();</span><br><span class="line">       factory.addConnectorCustomizers(new TomcatConnectorCustomizer() &#123;</span><br><span class="line">           @Override</span><br><span class="line">           public void customize(Connector connector) &#123;</span><br><span class="line">               connector.setProperty(&quot;relaxedQueryChars&quot;, &quot;|&#123;&#125;[]&quot;);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;);</span><br><span class="line">       return factory;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>SpringBoot 1.* 版本解决方案-工厂配置（已有的配置–未生效)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">@Component</span><br><span class="line">public class PortalTomcatWebServerCustomizer implements EmbeddedServletContainerCustomizer &#123;</span><br><span class="line"></span><br><span class="line">@Override</span><br><span class="line">public void customize(ConfigurableEmbeddedServletContainer container) &#123;</span><br><span class="line">    if(container instanceof TomcatEmbeddedServletContainerFactory) &#123;</span><br><span class="line">      TomcatEmbeddedServletContainerFactory containerFactory = (TomcatEmbeddedServletContainerFactory) container;</span><br><span class="line">      containerFactory.addConnectorCustomizers(new TomcatConnectorCustomizer() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void customize(Connector connector) &#123;</span><br><span class="line">          connector.setAttribute(&quot;relaxedQueryChars&quot;, &quot;[]|&#123;&#125;:,^&amp;#x5c;&amp;#x60;&amp;quot;&amp;lt;&amp;gt;&quot;);</span><br><span class="line">          connector.setAttribute(&quot;relaxedPathChars&quot;, &quot;[]|:,&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>SpringBoot 1.* 版本解决方案-属性配置（生效）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@Configuration</span><br><span class="line">public class RfcConfig &#123;</span><br><span class="line">    @Bean</span><br><span class="line">    public Integer setRfc()</span><br><span class="line">    &#123;</span><br><span class="line">        // 指定jre系统属性，允许特殊符号， 如&#123;&#125; 做入参，其他符号按需添加。见 tomcat的HttpParser源码。</span><br><span class="line">        System.setProperty(&quot;tomcat.util.http.parser.HttpParser.requestTargetAllow&quot;, &quot;|&#123;&#125;&quot;);</span><br><span class="line">        return 0;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>根据查询结果尝试，在当前项目中只有第 4 个方案是有用的…</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>根据网络查询的结果不一定是可行的，需要多次查找，多次尝试，才能知道哪些是可行的。<br>针对于技术型问题，谷歌查询的比较精准</p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2020年04月07日 22:29</p>
+        <p>原始链接： <a class="post-url" href="/2020/02/27/1582786564/" title="SpringBoot 之更改 Tomcat 的 URL 校验规则">https://maiyikai.github.io/2020/02/27/1582786564/</a></p>
+        <footer>
+            <a href="https://maiyikai.github.io">
+                <img src="/images/logo2.png" alt="maiyikai">
+                maiyikai
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        ~谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://maiyikai.github.io/2020/02/27/1582786564/&title=《SpringBoot 之更改 Tomcat 的 URL 校验规则》 — FlyingFish's Blog&pic=https://maiyikai.github.io/img/SpringBoot/SpringBoot/20190325095667.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://maiyikai.github.io/2020/02/27/1582786564/&title=《SpringBoot 之更改 Tomcat 的 URL 校验规则》 — FlyingFish's Blog&source=Spring Boot 项目中都会嵌入 Tomcat， 在不同版本的 Spring Boot 下，也会嵌入不同版本的 Tomcat 。Tomcat 作用和..." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://maiyikai.github.io/2020/02/27/1582786564/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《SpringBoot 之更改 Tomcat 的 URL 校验规则》 — FlyingFish's Blog&url=https://maiyikai.github.io/2020/02/27/1582786564/&via=https://maiyikai.github.io" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://maiyikai.github.io/2020/02/27/1582786564/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://maiyikai.github.io/2020/02/27/1582786564/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/SpringBoot/" class="color1">SpringBoot</a>
+      
+    <a href="/tags/Spring/" class="color2">Spring</a>
+      
+    <a href="/tags/Tomcat/" class="color2">Tomcat</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#抛转引玉"><span class="post-toc-text">抛转引玉</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#网络搜寻"><span class="post-toc-text">网络搜寻</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#百度与谷歌"><span class="post-toc-text">百度与谷歌</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#Tomcat-系列"><span class="post-toc-text">Tomcat 系列</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#SpringBoot-系列"><span class="post-toc-text">SpringBoot 系列</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#总结"><span class="post-toc-text">总结</span></a></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+    <a href="/2020/09/09/1582786565/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          Docker基础学习
+        
+      </span>
+    </a>
+  
+  
+    <a href="/2019/12/27/1577427502/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">SpringBoot 之 @Scheduled 定时器规则</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+        <div id="SOHUCS" sid="1582786564"></div>
+<script type="text/javascript">
+    (function(){
+        var appid = 'cyu3qrrJt';
+        var conf = '3f0da4017453d35b0c5dafb035646863';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2020 maiyikai<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "https://maiyikai.github.io",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/CenterOS/">CenterOS</a><a class="category-link" href="/categories/DataSource/">DataSource</a><a class="category-link" href="/categories/Docker/">Docker</a><a class="category-link" href="/categories/Hexo/">Hexo</a><a class="category-link" href="/categories/Java/">Java</a><a class="category-link" href="/categories/LoadRunner/">LoadRunner</a><a class="category-link" href="/categories/MyBatis/">MyBatis</a><a class="category-link" href="/categories/MySQL/">MySQL</a><a class="category-link" href="/categories/SpringBoot/">SpringBoot</a><a class="category-link" href="/categories/error/">error</a><a class="category-link" href="/categories/regex/">regex</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Database/" style="font-size: 10px;">Database</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/LoadRunner/" style="font-size: 16.67px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/MySQL/" style="font-size: 13.33px;">MySQL</a> <a href="/tags/MySQL-DataType/" style="font-size: 10px;">MySQL DataType</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Scheduled/" style="font-size: 10px;">Scheduled</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/Spring/" style="font-size: 13.33px;">Spring</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 16.67px;">Test</a> <a href="/tags/Tomcat/" style="font-size: 10px;">Tomcat</a> <a href="/tags/optimize/" style="font-size: 10px;">optimize</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 13.33px;">script</a> <a href="/tags/数据库/" style="font-size: 10px;">数据库</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Database/" style="font-size: 10px;">Database</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/LoadRunner/" style="font-size: 16.67px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/MySQL/" style="font-size: 13.33px;">MySQL</a> <a href="/tags/MySQL-DataType/" style="font-size: 10px;">MySQL DataType</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Scheduled/" style="font-size: 10px;">Scheduled</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/Spring/" style="font-size: 13.33px;">Spring</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 16.67px;">Test</a> <a href="/tags/Tomcat/" style="font-size: 10px;">Tomcat</a> <a href="/tags/optimize/" style="font-size: 10px;">optimize</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 13.33px;">script</a> <a href="/tags/数据库/" style="font-size: 10px;">数据库</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>

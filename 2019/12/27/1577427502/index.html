@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>SpringBoot 之 @Scheduled 定时器规则 | FlyingFish&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="maiyikai,maiyude,FlyingFish,FlyingFish's blog">
+  
+  <meta name="description" content="项目中，或多或少都会使用到定时器，定时执行某些特殊得功能。而在 SpringBoot 项目中，使用得定时器功能就是使用 @Scheduled 注解。">
+<meta name="keywords" content="SpringBoot,Spring,Scheduled">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot 之 @Scheduled 定时器规则">
+<meta property="og:url" content="https://maiyikai.github.io/2019/12/27/1577427502/index.html">
+<meta property="og:site_name" content="FlyingFish&#39;s Blog">
+<meta property="og:description" content="项目中，或多或少都会使用到定时器，定时执行某些特殊得功能。而在 SpringBoot 项目中，使用得定时器功能就是使用 @Scheduled 注解。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-04-07T14:29:23.271Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringBoot 之 @Scheduled 定时器规则">
+<meta name="twitter:description" content="项目中，或多或少都会使用到定时器，定时执行某些特殊得功能。而在 SpringBoot 项目中，使用得定时器功能就是使用 @Scheduled 注解。">
+  
+  
+    <link rel="icon" href="/pen_logo.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?a53f82c21dd876a0b4f165d79cffff9a";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">FlyingFish&#39;s Blog</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo2.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        FlyingFish&#39;s Blog
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        随笔记
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="maiyikai" target="_blank" href="//maiyikai.github.io/">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/maiyikai/">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                        <a title="Weibo" target="_blank" href="//weibo.com/maiyikai">
+                            <i class="fa fa-weibo fa-2x"></i></a>
+                    
+                        <a title="Weixin" target="_blank" href="//maiyikai.github.io/images/user_weixin.jpg">
+                            <i class="fa fa-weixin fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-1577427502" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      SpringBoot 之 @Scheduled 定时器规则
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/SpringBoot/">SpringBoot</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-12-27
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <p>项目中，或多或少都会使用到定时器，定时执行某些特殊得功能。而在 <em>SpringBoot</em> 项目中，使用得定时器功能就是使用 <code>@Scheduled</code> 注解。<br><a id="more"></a><br>当然，定时器功能打开了，但是没有定时，这是不可行的。所以，在定时器使用中，使用 <em>Cron 表达式</em>作为定时器规则，在 <code>@Scheduled</code> 注解源码中可以看到，除了 <code>cron</code> 属性之外还有多个功能不一的属性。</p>
+<h4 id="Cron-表达式解释入口"><a href="#Cron-表达式解释入口" class="headerlink" title="Cron 表达式解释入口"></a>Cron 表达式解释入口</h4><p>这里主要简述的是 Cron 表达式，在版本 1.5.6 版本的 SpringBoot 工程中，解析 <em>Cron 表达式</em>的源码如下（源码地址：org.springframework.scheduling.support.CronTrigger）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">private void parse(String expression) throws IllegalArgumentException &#123;</span><br><span class="line">	String[] fields = StringUtils.tokenizeToStringArray(expression, &quot; &quot;);</span><br><span class="line">	if (fields.length != 6) &#123;</span><br><span class="line">		throw new IllegalArgumentException(String.format(</span><br><span class="line">				&quot;Cron expression must consist of 6 fields (found %d in \&quot;%s\&quot;)&quot;, fields.length, expression));</span><br><span class="line">	&#125;</span><br><span class="line">	setNumberHits(this.seconds, fields[0], 0, 60);</span><br><span class="line">	setNumberHits(this.minutes, fields[1], 0, 60);</span><br><span class="line">	setNumberHits(this.hours, fields[2], 0, 24);</span><br><span class="line">	setDaysOfMonth(this.daysOfMonth, fields[3]);</span><br><span class="line">	setMonths(this.months, fields[4]);</span><br><span class="line">	setDays(this.daysOfWeek, replaceOrdinals(fields[5], &quot;SUN,MON,TUE,WED,THU,FRI,SAT&quot;), 8);</span><br><span class="line">	if (this.daysOfWeek.get(7)) &#123;</span><br><span class="line">		// Sunday can be represented as 0 or 7</span><br><span class="line">		this.daysOfWeek.set(0);</span><br><span class="line">		this.daysOfWeek.clear(7);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>从以上源码看出，当前版本的 SpringBoot 中，针对于 <code>@Scheduled</code> 的 <em>Cron 表达式</em>，只支持 6 位规则，而在网上有资料表示可以存在 7 位。</p>
+<p>但是源码中，限制了只能有 6 位，否则抛出异常。</p>
+<p>Cron 表达是对应的内容为： <code>seconds minutes hours daysOfMonth months daysOfWeek</code> 。</p>
+<h4 id="域的解释及源码"><a href="#域的解释及源码" class="headerlink" title="域的解释及源码"></a>域的解释及源码</h4><p>针对不同属性解释：</p>
+<ul>
+<li>seconds：秒数；最小值为 0 ; 最大值为 60。</li>
+<li>minutes：分钟；最小值为 0 ; 最大值为 60。</li>
+<li>hours：小时；最小值为 0 ; 最大值为 23。</li>
+<li>daysOfMonth：月中的某一天。</li>
+<li>months：月份，这里使用的值为：FOO,JAN,FEB,MAR,APR,MAY,JUN,JUL,AUG,SEP,OCT,NOV,DEC 其中一个，且必须全部大写。</li>
+<li>daysOfWeek：一周中的某一天，这里使用的值为：SUN,MON,TUE,WED,THU,FRI,SAT 其中一个，且必须全部大写。</li>
+</ul>
+<p>在解释这个规则时，都是用了相同的两个方法，源码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">private void setNumberHits(BitSet bits, String value, int min, int max) &#123;</span><br><span class="line">	String[] fields = StringUtils.delimitedListToStringArray(value, &quot;,&quot;);</span><br><span class="line">	for (String field : fields) &#123;</span><br><span class="line">		if (!field.contains(&quot;/&quot;)) &#123;</span><br><span class="line">			// Not an incrementer so it must be a range (possibly empty)</span><br><span class="line">			int[] range = getRange(field, min, max);</span><br><span class="line">			bits.set(range[0], range[1] + 1);</span><br><span class="line">		&#125;</span><br><span class="line">		else &#123;</span><br><span class="line">			String[] split = StringUtils.delimitedListToStringArray(field, &quot;/&quot;);</span><br><span class="line">			if (split.length &gt; 2) &#123;</span><br><span class="line">				throw new IllegalArgumentException(&quot;Incrementer has more than two fields: &apos;&quot; +</span><br><span class="line">						field + &quot;&apos; in expression \&quot;&quot; + this.expression + &quot;\&quot;&quot;);</span><br><span class="line">			&#125;</span><br><span class="line">			int[] range = getRange(split[0], min, max);</span><br><span class="line">			if (!split[0].contains(&quot;-&quot;)) &#123;</span><br><span class="line">				range[1] = max - 1;</span><br><span class="line">			&#125;</span><br><span class="line">			int delta = Integer.valueOf(split[1]);</span><br><span class="line">			if (delta &lt;= 0) &#123;</span><br><span class="line">				throw new IllegalArgumentException(&quot;Incrementer delta must be 1 or higher: &apos;&quot; +</span><br><span class="line">						field + &quot;&apos; in expression \&quot;&quot; + this.expression + &quot;\&quot;&quot;);</span><br><span class="line">			&#125;</span><br><span class="line">			for (int i = range[0]; i &lt;= range[1]; i += delta) &#123;</span><br><span class="line">				bits.set(i);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private int[] getRange(String field, int min, int max) &#123;</span><br><span class="line">	int[] result = new int[2];</span><br><span class="line">	if (field.contains(&quot;*&quot;)) &#123;</span><br><span class="line">		result[0] = min;</span><br><span class="line">		result[1] = max - 1;</span><br><span class="line">		return result;</span><br><span class="line">	&#125;</span><br><span class="line">	if (!field.contains(&quot;-&quot;)) &#123;</span><br><span class="line">		result[0] = result[1] = Integer.valueOf(field);</span><br><span class="line">	&#125;</span><br><span class="line">	else &#123;</span><br><span class="line">		String[] split = StringUtils.delimitedListToStringArray(field, &quot;-&quot;);</span><br><span class="line">		if (split.length &gt; 2) &#123;</span><br><span class="line">			throw new IllegalArgumentException(&quot;Range has more than two fields: &apos;&quot; +</span><br><span class="line">					field + &quot;&apos; in expression \&quot;&quot; + this.expression + &quot;\&quot;&quot;);</span><br><span class="line">		&#125;</span><br><span class="line">		result[0] = Integer.valueOf(split[0]);</span><br><span class="line">		result[1] = Integer.valueOf(split[1]);</span><br><span class="line">	&#125;</span><br><span class="line">	if (result[0] &gt;= max || result[1] &gt;= max) &#123;</span><br><span class="line">		throw new IllegalArgumentException(&quot;Range exceeds maximum (&quot; + max + &quot;): &apos;&quot; +</span><br><span class="line">				field + &quot;&apos; in expression \&quot;&quot; + this.expression + &quot;\&quot;&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">	if (result[0] &lt; min || result[1] &lt; min) &#123;</span><br><span class="line">		throw new IllegalArgumentException(&quot;Range less than minimum (&quot; + min + &quot;): &apos;&quot; +</span><br><span class="line">				field + &quot;&apos; in expression \&quot;&quot; + this.expression + &quot;\&quot;&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">	return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="特殊字符解释及例子"><a href="#特殊字符解释及例子" class="headerlink" title="特殊字符解释及例子"></a>特殊字符解释及例子</h4><p>每个域都使用数字，或者使用连接符连接，含义：</p>
+<ul>
+<li>, ：连接符，表示列出枚举值。如在 minutes 域使用 2,15 ，表示 2 分和 15 分执行一次。</li>
+<li>- ：连接符，表示范围。如在 minutes 域使用 2-15 ，表示从 2 分到 15 分，每分钟执行一次。</li>
+<li>/ ：连接符，表示值增加的幅度，如 n/m ，表示从第 n 秒开始，每隔 m 秒执执行一次，5/15 –&gt;&gt; 5, 20, 35, 50</li>
+<li>* ：表示匹配该域的任意值，如在 minutes 域使用，表示每分钟都会触发一次</li>
+<li>? ：表示匹配该域的任意值，但只有 daysOfMonth 和 daysOfWeek 域才能使用，因为 daysOfMonth 和 daysOfWeek 域会相互影响，所以两个域不能同时使用 ? 。</li>
+</ul>
+<p><span style="color:red">注：在源码中未使用到的特殊符号有 L (表最后)、 W (表有效工作日)、 LW (表最后某月最后一个工作日)、 # (表用于确定每个月第几个星期几)</span></p>
+<p>一些常用的例子，这里用表格展示：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">规则</th>
+<th style="text-align:center">解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0 0 10,14,16 * * ?</td>
+<td style="text-align:center">每天上午10点，下午2点，4点</td>
+</tr>
+<tr>
+<td style="text-align:center">0 0/30 9-17 * * ?</td>
+<td style="text-align:center">朝九晚五工作时间内每半小时</td>
+</tr>
+<tr>
+<td style="text-align:center">0 0 12 ? * WED</td>
+<td style="text-align:center">表示每个星期三中午12点</td>
+</tr>
+<tr>
+<td style="text-align:center">0 0 12 * * ?</td>
+<td style="text-align:center">每天中午12点触发</td>
+</tr>
+<tr>
+<td style="text-align:center">0 15 10 ? * *</td>
+<td style="text-align:center">每天上午10:15触发</td>
+</tr>
+<tr>
+<td style="text-align:center">0 15 10 * * ?</td>
+<td style="text-align:center">每天上午10:15触发</td>
+</tr>
+<tr>
+<td style="text-align:center">0 * 14 * * ?</td>
+<td style="text-align:center">在每天下午2点到下午2:59期间的每1分钟触发</td>
+</tr>
+<tr>
+<td style="text-align:center">0 0/5 14 * * ?</td>
+<td style="text-align:center">在每天下午2点到下午2:55期间的每5分钟触发</td>
+</tr>
+<tr>
+<td style="text-align:center">0 0/5 14,18 * * ?</td>
+<td style="text-align:center">在每天下午2点到2:55期间和下午6点到6:55期间的每5分钟触发</td>
+</tr>
+<tr>
+<td style="text-align:center">0 0-5 14 * * ?</td>
+<td style="text-align:center">在每天下午2点到下午2:05期间的每1分钟触发</td>
+</tr>
+<tr>
+<td style="text-align:center">0 10,44 14 ? 3 WED</td>
+<td style="text-align:center">每年三月的星期三的下午2:10和2:44触发</td>
+</tr>
+<tr>
+<td style="text-align:center">0 15 10 ? * MON-FRI</td>
+<td style="text-align:center">周一至周五的上午10:15触发</td>
+</tr>
+<tr>
+<td style="text-align:center">0 15 10 15 * ?</td>
+<td style="text-align:center">每月15日上午10:15触发</td>
+</tr>
+</tbody>
+</table>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>文章所述与网上资料有所不同，需要根据源码判断，是否正确使用。<br>根据目前 SpringBoot 版本 1.5.6 来看，对于 Cron 表达式的使用相对简单。</p>
+<h4 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h4><ol>
+<li><a href="https://www.cnblogs.com/mingyue1818/p/5764050.html" title="spring cron表达式(定时器)" target="_blank" rel="noopener">spring cron表达式(定时器)</a></li>
+<li><a href="https://www.xuebuyuan.com/1979300.html" title="Spring 定时器的时间设置规则" target="_blank" rel="noopener">Spring 定时器的时间设置规则</a></li>
+</ol>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2020年04月07日 22:29</p>
+        <p>原始链接： <a class="post-url" href="/2019/12/27/1577427502/" title="SpringBoot 之 @Scheduled 定时器规则">https://maiyikai.github.io/2019/12/27/1577427502/</a></p>
+        <footer>
+            <a href="https://maiyikai.github.io">
+                <img src="/images/logo2.png" alt="maiyikai">
+                maiyikai
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        ~谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://maiyikai.github.io/2019/12/27/1577427502/&title=《SpringBoot 之 @Scheduled 定时器规则》 — FlyingFish's Blog&pic=https://maiyikai.github.io/img/SpringBoot/SpringBoot/20190325095667.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://maiyikai.github.io/2019/12/27/1577427502/&title=《SpringBoot 之 @Scheduled 定时器规则》 — FlyingFish's Blog&source=项目中，或多或少都会使用到定时器，定时执行某些特殊得功能。而在 SpringBoot 项目中，使用得定时器功能就是使用 @Scheduled 注解。" data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://maiyikai.github.io/2019/12/27/1577427502/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《SpringBoot 之 @Scheduled 定时器规则》 — FlyingFish's Blog&url=https://maiyikai.github.io/2019/12/27/1577427502/&via=https://maiyikai.github.io" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://maiyikai.github.io/2019/12/27/1577427502/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://maiyikai.github.io/2019/12/27/1577427502/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/SpringBoot/" class="color1">SpringBoot</a>
+      
+    <a href="/tags/Spring/" class="color2">Spring</a>
+      
+    <a href="/tags/Scheduled/" class="color5">Scheduled</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Cron-表达式解释入口"><span class="post-toc-text">Cron 表达式解释入口</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#域的解释及源码"><span class="post-toc-text">域的解释及源码</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#特殊字符解释及例子"><span class="post-toc-text">特殊字符解释及例子</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#总结"><span class="post-toc-text">总结</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#参考资料"><span class="post-toc-text">参考资料</span></a></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+    <a href="/2020/02/27/1582786564/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          SpringBoot 之更改 Tomcat 的 URL 校验规则
+        
+      </span>
+    </a>
+  
+  
+    <a href="/2019/11/19/1574147663/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">Schema 与数据类型优化-选择优化的数据类型</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+        <div id="SOHUCS" sid="1577427502"></div>
+<script type="text/javascript">
+    (function(){
+        var appid = 'cyu3qrrJt';
+        var conf = '3f0da4017453d35b0c5dafb035646863';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2020 maiyikai<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "https://maiyikai.github.io",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/CenterOS/">CenterOS</a><a class="category-link" href="/categories/DataSource/">DataSource</a><a class="category-link" href="/categories/Docker/">Docker</a><a class="category-link" href="/categories/Hexo/">Hexo</a><a class="category-link" href="/categories/Java/">Java</a><a class="category-link" href="/categories/LoadRunner/">LoadRunner</a><a class="category-link" href="/categories/MyBatis/">MyBatis</a><a class="category-link" href="/categories/MySQL/">MySQL</a><a class="category-link" href="/categories/SpringBoot/">SpringBoot</a><a class="category-link" href="/categories/error/">error</a><a class="category-link" href="/categories/regex/">regex</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Database/" style="font-size: 10px;">Database</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/LoadRunner/" style="font-size: 16.67px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/MySQL/" style="font-size: 13.33px;">MySQL</a> <a href="/tags/MySQL-DataType/" style="font-size: 10px;">MySQL DataType</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Scheduled/" style="font-size: 10px;">Scheduled</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/Spring/" style="font-size: 13.33px;">Spring</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 16.67px;">Test</a> <a href="/tags/Tomcat/" style="font-size: 10px;">Tomcat</a> <a href="/tags/optimize/" style="font-size: 10px;">optimize</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 13.33px;">script</a> <a href="/tags/数据库/" style="font-size: 10px;">数据库</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Database/" style="font-size: 10px;">Database</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/LoadRunner/" style="font-size: 16.67px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/MySQL/" style="font-size: 13.33px;">MySQL</a> <a href="/tags/MySQL-DataType/" style="font-size: 10px;">MySQL DataType</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Scheduled/" style="font-size: 10px;">Scheduled</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/Spring/" style="font-size: 13.33px;">Spring</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 16.67px;">Test</a> <a href="/tags/Tomcat/" style="font-size: 10px;">Tomcat</a> <a href="/tags/optimize/" style="font-size: 10px;">optimize</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 13.33px;">script</a> <a href="/tags/数据库/" style="font-size: 10px;">数据库</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>

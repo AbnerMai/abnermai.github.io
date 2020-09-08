@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>Docker基础学习 | FlyingFish&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="maiyikai,maiyude,FlyingFish,FlyingFish's blog">
+  
+  <meta name="description" content="Docker是一开源的应用容器引擎，基于GO语言并遵循Apache2.0协议开源。">
+<meta name="keywords" content="Docker,Linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker基础学习">
+<meta property="og:url" content="https://maiyikai.github.io/2020/09/09/1582786565/index.html">
+<meta property="og:site_name" content="FlyingFish&#39;s Blog">
+<meta property="og:description" content="Docker是一开源的应用容器引擎，基于GO语言并遵循Apache2.0协议开源。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-09-08T13:41:56.855Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker基础学习">
+<meta name="twitter:description" content="Docker是一开源的应用容器引擎，基于GO语言并遵循Apache2.0协议开源。">
+  
+  
+    <link rel="icon" href="/pen_logo.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?a53f82c21dd876a0b4f165d79cffff9a";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">FlyingFish&#39;s Blog</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo2.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        FlyingFish&#39;s Blog
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        随笔记
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="maiyikai" target="_blank" href="//maiyikai.github.io/">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/maiyikai/">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                        <a title="Weibo" target="_blank" href="//weibo.com/maiyikai">
+                            <i class="fa fa-weibo fa-2x"></i></a>
+                    
+                        <a title="Weixin" target="_blank" href="//maiyikai.github.io/images/user_weixin.jpg">
+                            <i class="fa fa-weixin fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-1582786565" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      Docker基础学习
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/Docker/">Docker</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2020-09-08
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <p>Docker是一开源的应用容器引擎，基于<scan style="color:red">GO</scan>语言并遵循Apache2.0协议开源。<br><a id="more"></a></p>
+<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>Docker 是一个开源项目，诞生于 2013 年初，最初是 dotCloud 公司内部的一个业余项目。它基于 Google 公司推出的 Go 语言实现。 项目后来加入了 Linux 基金会，遵从了 Apache 2.0 协议，项目代码在 GitHub 上进行维护。</p>
+<p>Docker 自开源后受到广泛的关注和讨论，以至于 dotCloud 公司后来都改名为 Docker Inc。Redhat 已经在其 RHEL6.5 中集中支持 Docker；Google 也在其 PaaS 产品中广泛应用。</p>
+<p>Docker 项目的目标是实现轻量级的操作系统虚拟化解决方案。 Docker 的基础是 Linux 容器（LXC）等技术。</p>
+<p>在 LXC 的基础上 Docker 进行了进一步的封装，让用户不需要去关心容器的管理，使得操作更为简便。用户操作 Docker 的容器就像操作一个快速轻量级的虚拟机一样简单。</p>
+<h4 id="限制"><a href="#限制" class="headerlink" title="限制"></a>限制</h4><p>Docker只能安装在CentOS6.5以及更高的版本，系统内核版本为2.6.32-431或者更高的本版。<br>可以通过命令查看系统信息和内核版本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo uname -a</span><br></pre></td></tr></table></figure></p>
+<p>或者<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo uname -r</span><br></pre></td></tr></table></figure></p>
+<p>结果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Linux maiyikai.docker1 3.10.0-957.el7.x86_64 #1 SMP Thu Nov 8 23:39:32 UTC 2018 x86_64 x86_64 x86_64 GNU/Linux</span><br></pre></td></tr></table></figure></p>
+<h4 id="安装Docker"><a href="#安装Docker" class="headerlink" title="安装Docker"></a>安装Docker</h4><p>参考Docker官网或者<a href="https://www.runoob.com/docker/centos-docker-install.html" title="菜鸟" target="_blank" rel="noopener">菜鸟教程</a></p>
+<h3 id="Docker三要素"><a href="#Docker三要素" class="headerlink" title="Docker三要素"></a>Docker三要素</h3><blockquote>
+<ul>
+<li>仓库：集中存放镜像的场所</li>
+<li>镜像：可以看作是一个只读模板，镜像可以用来创建Docker容器，一个镜像可以创建多个容器</li>
+<li>容器：是用镜像创建的运行实例</li>
+</ul>
+</blockquote>
+<h3 id="Docker指令"><a href="#Docker指令" class="headerlink" title="Docker指令"></a>Docker指令</h3><h4 id="查看Docker帮助文档"><a href="#查看Docker帮助文档" class="headerlink" title="查看Docker帮助文档"></a>查看Docker帮助文档</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#查看Docker版本</span><br><span class="line">docker version</span><br><span class="line"></span><br><span class="line">#查看Docker容器的描述</span><br><span class="line">docker info</span><br><span class="line"></span><br><span class="line">#查看Docker帮助文档</span><br><span class="line">docker --help</span><br></pre></td></tr></table></figure>
+<p>####Docker指令<br>通过指令查看Docker支持的所有命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line">[root@maiyikai ~]# docker --help</span><br><span class="line"></span><br><span class="line">Usage:	docker [OPTIONS] COMMAND</span><br><span class="line"></span><br><span class="line">A self-sufficient runtime for containers</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line">      --config string      Location of client config files (default &quot;/root/.docker&quot;)</span><br><span class="line">  -c, --context string     Name of the context to use to connect to the daemon (overrides DOCKER_HOST env var and default context set with &quot;docker context use&quot;)</span><br><span class="line">  -D, --debug              Enable debug mode</span><br><span class="line">  -H, --host list          Daemon socket(s) to connect to</span><br><span class="line">  -l, --log-level string   Set the logging level (&quot;debug&quot;|&quot;info&quot;|&quot;warn&quot;|&quot;error&quot;|&quot;fatal&quot;) (default &quot;info&quot;)</span><br><span class="line">      --tls                Use TLS; implied by --tlsverify</span><br><span class="line">      --tlscacert string   Trust certs signed only by this CA (default &quot;/root/.docker/ca.pem&quot;)</span><br><span class="line">      --tlscert string     Path to TLS certificate file (default &quot;/root/.docker/cert.pem&quot;)</span><br><span class="line">      --tlskey string      Path to TLS key file (default &quot;/root/.docker/key.pem&quot;)</span><br><span class="line">      --tlsverify          Use TLS and verify the remote</span><br><span class="line">  -v, --version            Print version information and quit</span><br><span class="line"></span><br><span class="line">Management Commands:</span><br><span class="line">  builder     Manage builds</span><br><span class="line">  config      Manage Docker configs</span><br><span class="line">  container   Manage containers</span><br><span class="line">  context     Manage contexts</span><br><span class="line">  engine      Manage the docker engine</span><br><span class="line">  image       Manage images</span><br><span class="line">  network     Manage networks</span><br><span class="line">  node        Manage Swarm nodes</span><br><span class="line">  plugin      Manage plugins</span><br><span class="line">  secret      Manage Docker secrets</span><br><span class="line">  service     Manage services</span><br><span class="line">  stack       Manage Docker stacks</span><br><span class="line">  swarm       Manage Swarm</span><br><span class="line">  system      Manage Docker</span><br><span class="line">  trust       Manage trust on Docker images</span><br><span class="line">  volume      Manage volumes</span><br><span class="line"></span><br><span class="line">Commands:</span><br><span class="line">  attach      Attach local standard input, output, and error streams to a running container</span><br><span class="line">  build       Build an image from a Dockerfile</span><br><span class="line">  commit      Create a new image from a container&apos;s changes</span><br><span class="line">  cp          Copy files/folders between a container and the local filesystem</span><br><span class="line">  create      Create a new container</span><br><span class="line">  diff        Inspect changes to files or directories on a container&apos;s filesystem</span><br><span class="line">  events      Get real time events from the server</span><br><span class="line">  exec        Run a command in a running container</span><br><span class="line">  export      Export a container&apos;s filesystem as a tar archive</span><br><span class="line">  history     Show the history of an image</span><br><span class="line">  images      List images</span><br><span class="line">  import      Import the contents from a tarball to create a filesystem image</span><br><span class="line">  info        Display system-wide information</span><br><span class="line">  inspect     Return low-level information on Docker objects</span><br><span class="line">  kill        Kill one or more running containers</span><br><span class="line">  load        Load an image from a tar archive or STDIN</span><br><span class="line">  login       Log in to a Docker registry</span><br><span class="line">  logout      Log out from a Docker registry</span><br><span class="line">  logs        Fetch the logs of a container</span><br><span class="line">  pause       Pause all processes within one or more containers</span><br><span class="line">  port        List port mappings or a specific mapping for the container</span><br><span class="line">  ps          List containers</span><br><span class="line">  pull        Pull an image or a repository from a registry</span><br><span class="line">  push        Push an image or a repository to a registry</span><br><span class="line">  rename      Rename a container</span><br><span class="line">  restart     Restart one or more containers</span><br><span class="line">  rm          Remove one or more containers</span><br><span class="line">  rmi         Remove one or more images</span><br><span class="line">  run         Run a command in a new container</span><br><span class="line">  save        Save one or more images to a tar archive (streamed to STDOUT by default)</span><br><span class="line">  search      Search the Docker Hub for images</span><br><span class="line">  start       Start one or more stopped containers</span><br><span class="line">  stats       Display a live stream of container(s) resource usage statistics</span><br><span class="line">  stop        Stop one or more running containers</span><br><span class="line">  tag         Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE</span><br><span class="line">  top         Display the running processes of a container</span><br><span class="line">  unpause     Unpause all processes within one or more containers</span><br><span class="line">  update      Update configuration of one or more containers</span><br><span class="line">  version     Show the Docker version information</span><br><span class="line">  wait        Block until one or more containers stop, then print their exit codes</span><br></pre></td></tr></table></figure></p>
+<h3 id="指令解析-镜像部分"><a href="#指令解析-镜像部分" class="headerlink" title="指令解析-镜像部分"></a>指令解析-镜像部分</h3><h4 id="镜像操作"><a href="#镜像操作" class="headerlink" title="镜像操作"></a>镜像操作</h4><blockquote>
+<p>指令：<code>docker images [OPTIONS] [REPOSITORY[:TAG]]</code><br>OPTIONNS<br>   -a：查看所有镜像（默认包含中间层的image）<br>   –digests：查看摘要<br>   -f：显示满足条件的image<br>   –format：按指定的模板返回<br>   -h：查看帮助文档<br>   –no-trunc：显示完整的image信息<br>   -q：仅显示image的ID列表</p>
+</blockquote>
+<h5 id="指令实现"><a href="#指令实现" class="headerlink" title="指令实现"></a>指令实现</h5><blockquote>
+<p>指令：<code>docker images -a</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@maiyikai ~]# docker images -a</span><br><span class="line">REPOSITORY             TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">wurstmeister/kafka     latest              f1905dce9659        4 months ago        431MB</span><br><span class="line">redis                  6.0.0               96812ab2b931        4 months ago        104MB</span><br><span class="line">rabbitmq               latest              c1a845de8052        4 months ago        151MB</span><br><span class="line">mysql                  8.0.20              a7a67c95e831        4 months ago        541MB</span><br><span class="line">alpine                 latest              f70734b6a266        4 months ago        5.61MB</span><br><span class="line">openjdk                8u252-jdk           6cedfea72886        4 months ago        510MB</span><br><span class="line">centos                 centos8             470671670cac        7 months ago        237MB</span><br><span class="line">nginx                  1.16.0              ae893c58d83f        13 months ago       109MB</span><br><span class="line">webcenter/activemq     latest              3af156432993        3 years ago         422MB</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>指令：<code>docker images -q</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">f1905dce9659</span><br><span class="line">96812ab2b931</span><br><span class="line">c1a845de8052</span><br><span class="line">a7a67c95e831</span><br><span class="line">f70734b6a266</span><br><span class="line">6cedfea72886</span><br><span class="line">470671670cac</span><br><span class="line">ae893c58d83f</span><br><span class="line">3af156432993</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>指令：<code>docker images --digests</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">REPOSITORY             TAG                 DIGEST                                                                    IMAGE ID            CREATED             SIZE</span><br><span class="line">wurstmeister/kafka     latest              sha256:a9980b591efe62a68de0acf5f5ce2f6fa7112ab07ec1099c976cdadc740c7ea4   f1905dce9659        4 months ago        431MB</span><br><span class="line">redis                  6.0.0               sha256:9c2d321d367c582fc103ad36b7326a0edd5b558e0c987d0bea3b58bac008b20f   96812ab2b931        4 months ago        104MB</span><br><span class="line">rabbitmq               latest              sha256:ed12b6ac5b5bd92dca3a313db094c1687ad169f8e8d32ce0fa9cfdcc8d8948bc   c1a845de8052        4 months ago        151MB</span><br><span class="line">mysql                  8.0.20              sha256:61a2a33f4b8b4bc93b7b6b9e65e64044aaec594809f818aeffbff69a893d1944   a7a67c95e831        4 months ago        541MB</span><br><span class="line">alpine                 latest              sha256:9a839e63dad54c3a6d1834e29692c8492d93f90c59c978c1ed79109ea4fb9a54   f70734b6a266        4 months ago        5.61MB</span><br><span class="line">openjdk                8u252-jdk           sha256:bedfb494645a0f9c48d333544986d5301df950e31f71e8861b5ba1601aedc587   6cedfea72886        4 months ago        510MB</span><br><span class="line">centos                 centos8             sha256:fe8d824220415eed5477b63addf40fb06c3b049404242b31982106ac204f6700   470671670cac        7 months ago        237MB</span><br><span class="line">nginx                  1.16.0              sha256:3e373fd5b8d41baeddc24be311c5c6929425c04cabf893b874ac09b72a798010   ae893c58d83f        13 months ago       109MB</span><br><span class="line">webcenter/activemq     latest              sha256:35015988c4047a2ab1888466f5aae30420f7addde4c467e5db9ae64eea6b47b0   3af156432993        3 years ago         422MB</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>指令：<code>docker images --no-trunc</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">REPOSITORY             TAG                 IMAGE ID                                                                  CREATED             SIZE</span><br><span class="line">wurstmeister/kafka     latest              sha256:f1905dce96591909cf3fcc7c329fb2a3e02bb1bf9258f75fe5c9cd58d0d629ab   4 months ago        431MB</span><br><span class="line">redis                  6.0.0               sha256:96812ab2b9314569112fa58e7bef6641ff0a2b3cf7dace9ff8604a094f08228d   4 months ago        104MB</span><br><span class="line">rabbitmq               latest              sha256:c1a845de80526fcab136f9fab5f839e91b98c475d1a2f72165a3d04f03edf4c7   4 months ago        151MB</span><br><span class="line">mysql                  8.0.20              sha256:a7a67c95e83189d60dd24cfeb13d9f235a95a7afd7749a7d09845f303fab239c   4 months ago        541MB</span><br><span class="line">alpine                 latest              sha256:f70734b6a266dcb5f44c383274821207885b549b75c8e119404917a61335981a   4 months ago        5.61MB</span><br><span class="line">openjdk                8u252-jdk           sha256:6cedfea7288615050ac395405eb42cc2ad9a1cc02c7fd53324993f27e4447f94   4 months ago        510MB</span><br><span class="line">centos                 centos8             sha256:470671670cac686c7cf0081e0b37da2e9f4f768ddc5f6a26102ccd1c6954c1ee   7 months ago        237MB</span><br><span class="line">nginx                  1.16.0              sha256:ae893c58d83fe2bd391fbec97f5576c9a34fea55b4ee9daf15feb9620b14b226   13 months ago       109MB</span><br><span class="line">webcenter/activemq     latest              sha256:3af15643299345851f234d4e66a41b1d64b751b6ace09a9a4b05d658fe5cd7c1   3 years ago         422MB</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>指令：<code>docker images --format &quot;&amp;#123;&amp;#123;.ID&amp;#125;&amp;#125;:&amp;#123;&amp;#123;.Repository&amp;#125;&amp;#125;&quot;</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">f1905dce9659:wurstmeister/kafka</span><br><span class="line">96812ab2b931:redis</span><br><span class="line">c1a845de8052:rabbitmq</span><br><span class="line">a7a67c95e831:mysql</span><br><span class="line">f70734b6a266:alpine</span><br><span class="line">6cedfea72886:openjdk</span><br><span class="line">470671670cac:centos</span><br><span class="line">ae893c58d83f:nginx</span><br><span class="line">3af156432993:webcenter/activemq</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>指令：<code>docker images --format &quot;table &amp;#123;&amp;#123;.ID&amp;#125;&amp;#125;\t&amp;#123;&amp;#123;.Repository&amp;#125;&amp;#125;\t&amp;#123;&amp;#123;.Tag&amp;#125;&amp;#125;&quot;</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">IMAGE ID            REPOSITORY             TAG</span><br><span class="line">f1905dce9659        wurstmeister/kafka     latest</span><br><span class="line">96812ab2b931        redis                  6.0.0</span><br><span class="line">c1a845de8052        rabbitmq               latest</span><br><span class="line">a7a67c95e831        mysql                  8.0.20</span><br><span class="line">f70734b6a266        alpine                 latest</span><br><span class="line">6cedfea72886        openjdk                8u252-jdk</span><br><span class="line">470671670cac        centos                 centos8</span><br><span class="line">ae893c58d83f        nginx                  1.16.0</span><br><span class="line">3af156432993        webcenter/activemq     latest</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h4 id="查看镜像"><a href="#查看镜像" class="headerlink" title="查看镜像"></a>查看镜像</h4><blockquote>
+<p>指令：<code>docker search [OPTIONS] TERM</code>：从hub.docker仓库搜索指定的镜像<br>OPTIONS<br>   –no-trunc：显示完整镜像信息<br>   -s：查询STARS大于指定数量的镜像<br>   –limit：显示指定数量的镜像信息<br>   –automated：显示automated类型的镜像</p>
+</blockquote>
+<h5 id="指令实现-1"><a href="#指令实现-1" class="headerlink" title="指令实现"></a>指令实现</h5><blockquote>
+<p>指令：<code>docker search mysql --no-trunc</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">NAME                              DESCRIPTION                                                                                           STARS               OFFICIAL            AUTOMATED</span><br><span class="line">mysql                             MySQL is a widely used, open-source relational database management system (RDBMS).                    9942                [OK]                </span><br><span class="line">mariadb                           MariaDB is a community-developed fork of MySQL intended to remain free under the GNU GPL.             3636                [OK]                </span><br><span class="line">mysql/mysql-server                Optimized MySQL Server Docker images. Created, maintained and supported by the MySQL team at Oracle   724                                     [OK]</span><br><span class="line">percona                           Percona Server is a fork of the MySQL relational database management system created by Percona.       508                 [OK]                </span><br><span class="line">centos/mysql-57-centos7           MySQL 5.7 SQL database server                                                                         83                                      </span><br><span class="line">mysql/mysql-cluster               Experimental MySQL Cluster Docker images. Created by the MySQL team at Oracle                         75</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>指令：<code>docker search mysql -s 9000</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">NAME                DESCRIPTION                                     STARS               OFFICIAL            AUTOMATED</span><br><span class="line">mysql               MySQL is a widely used, open-source relation…   9942                [OK]</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>指令：<code>docker search mysql --limit 2</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">NAME                 DESCRIPTION                                     STARS               OFFICIAL            AUTOMATED</span><br><span class="line">mysql                MySQL is a widely used, open-source relation…   9942                [OK]                </span><br><span class="line">mysql/mysql-server   Optimized MySQL Server Docker images. Create…   724                                     [OK]</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>指令：<code>docker search mysql --automated</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">NAME                              DESCRIPTION                                     STARS               OFFICIAL            AUTOMATED</span><br><span class="line">mysql/mysql-server                Optimized MySQL Server Docker images. Create…   724                                     [OK]</span><br><span class="line">centurylink/mysql                 Image containing mysql. Optimized to be link…   61                                      [OK]</span><br><span class="line">bitnami/mysql                     Bitnami MySQL Docker Image                      44                                      [OK]</span><br><span class="line">deitch/mysql-backup               REPLACED! Please use http://hub.docker.com/r…   41                                      [OK]</span><br><span class="line">prom/mysqld-exporter                                                              31                                      [OK]</span><br><span class="line">schickling/mysql-backup-s3        Backup MySQL to S3 (supports periodic backup…   30                                      [OK]</span><br><span class="line">arey/mysql-client                 Run a MySQL client from a docker container      14                                      [OK]</span><br><span class="line">fradelg/mysql-cron-backup         MySQL/MariaDB database backup using cron tas…   8                                       [OK]</span><br><span class="line">ansibleplaybookbundle/mysql-apb   An APB which deploys RHSCL MySQL                2                                       [OK]</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h4 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h4><blockquote>
+<p>指令：<code>docker pull NAME[:TAG]</code>:如果没有<i>TAG</i>则拉取<i>latest</i>版本的镜像</p>
+</blockquote>
+<h4 id="镜像删除"><a href="#镜像删除" class="headerlink" title="镜像删除"></a>镜像删除</h4><blockquote>
+<p>指令：<code>docker rmi [OPTIONS] IMAGE [IMAGE...]</code>：删除指定的镜像文件<br>指令：<code>docker rmi -f ${docker images -qa}</code><br>OPTIONS<br>    -f：强制删除</p>
+</blockquote>
+<h3 id="指令解析-容器部分"><a href="#指令解析-容器部分" class="headerlink" title="指令解析-容器部分"></a>指令解析-容器部分</h3><h4 id="容器操作-创建容器"><a href="#容器操作-创建容器" class="headerlink" title="容器操作-创建容器"></a>容器操作-创建容器</h4><blockquote>
+<p>指令：<code>docker run [OPTIONS] image [COMMAND] [ARGS...]</code><br>OPTIONS<br>    –name=”Name”：指定容器名称<br>    -d：后台运行容器，并返回容器ID，即启动守护式容器<br>    -i：以交互模式运行容器，通常与-t同时使用<br>    -t：为容器重新分配一个伪输入终端，通常与-i同时使用<br>    -P：随机端口映射<br>    -p：指定端口，有四种模式<br>         ip:hostPort:containerPort<br>         ip:cantainerPort<br>         hostPort:containerPort<br>         cantainerPort</p>
+</blockquote>
+<h4 id="查询容器"><a href="#查询容器" class="headerlink" title="查询容器"></a>查询容器</h4><blockquote>
+<p>指令：<code>docker ps [OPTIONS]</code>：查看正在运行的docker容器<br>OPTIONS<br>    -a：查看所有正在运行的docker容器+历史运行的docker容器<br>    –format：按指定格式查看<br>    -n：查看指定数量的最近运行的docker容器<br>    -l：显示最近创建的docker容器<br>    -q：静默模式，只显示容器编号<br>    -s：显示容器大小<br>    –no-trunc：显示容器完整信息</p>
+</blockquote>
+<h4 id="启动容器"><a href="#启动容器" class="headerlink" title="启动容器"></a>启动容器</h4><blockquote>
+<p>指令：<code>docker start Name|ID</code></p>
+</blockquote>
+<h4 id="关闭容器"><a href="#关闭容器" class="headerlink" title="关闭容器"></a>关闭容器</h4><blockquote>
+<p>指令：<code>docker restart Name|ID</code></p>
+</blockquote>
+<h4 id="强制关闭"><a href="#强制关闭" class="headerlink" title="强制关闭"></a>强制关闭</h4><blockquote>
+<p>指令：<code>docker kill Name|ID</code></p>
+</blockquote>
+<h4 id="重启容器"><a href="#重启容器" class="headerlink" title="重启容器"></a>重启容器</h4><blockquote>
+<p>指令：<code>docker restart Name|ID</code></p>
+</blockquote>
+<h4 id="进入容器"><a href="#进入容器" class="headerlink" title="进入容器"></a>进入容器</h4><blockquote>
+<p>指令：<code>docker attach Name|ID</code><br>指令：<code>docker exec -it Name|ID</code><br>指令：<code>docker exec -t Name|ID [ls -l]</code>：不进入容器，但让容器执行指令</p>
+</blockquote>
+<h4 id="退出容器"><a href="#退出容器" class="headerlink" title="退出容器"></a>退出容器</h4><blockquote>
+<p>指令：<code>exit</code>：退出并关闭容器<br>快捷键：Ctrl+Q+P，退出容器，但不关闭容器</p>
+</blockquote>
+<h4 id="删除容器"><a href="#删除容器" class="headerlink" title="删除容器"></a>删除容器</h4><blockquote>
+<p>指令：<code>docker rm -f Name|ID</code><br>指令：<code>docker rm -f ${docker ps -qa}</code>:删除所有</p>
+</blockquote>
+<h4 id="查看容器日志"><a href="#查看容器日志" class="headerlink" title="查看容器日志"></a>查看容器日志</h4><blockquote>
+<p>指令：<code>docker logs [OPTIONS] Name|ID</code><br>OPTIONS<br> -t：显示日志时间戳<br> -f：显示最新的日志<br> –tail：显示最后指定行数的日志</p>
+</blockquote>
+<h4 id="查看容器内部运行的进程"><a href="#查看容器内部运行的进程" class="headerlink" title="查看容器内部运行的进程"></a>查看容器内部运行的进程</h4><blockquote>
+<p>指令：<code>docker top Name|ID</code></p>
+</blockquote>
+<h4 id="查看容器内部细节"><a href="#查看容器内部细节" class="headerlink" title="查看容器内部细节"></a>查看容器内部细节</h4><blockquote>
+<p>指令：<code>docker inspect Name|ID</code></p>
+</blockquote>
+<h4 id="Docker容器文件拷贝到宿主机"><a href="#Docker容器文件拷贝到宿主机" class="headerlink" title="Docker容器文件拷贝到宿主机"></a>Docker容器文件拷贝到宿主机</h4><blockquote>
+<p>指令：<code>docker cp Name|ID:容器内部路径 宿主机路径</code></p>
+</blockquote>
+<h4 id="通过容器创建镜像"><a href="#通过容器创建镜像" class="headerlink" title="通过容器创建镜像"></a>通过容器创建镜像</h4><p>通过对原有容器的改造，优化为自己的容器，并将容器打包为一个镜像</p>
+<blockquote>
+<p>指令：<code>docker commit -m=&quot;提交的描述信息&quot; -a=&quot;作者&quot; NewName[:TAG]</code></p>
+</blockquote>
+<h3 id="Docker容器与宿主机文件共享"><a href="#Docker容器与宿主机文件共享" class="headerlink" title="Docker容器与宿主机文件共享"></a>Docker容器与宿主机文件共享</h3><blockquote>
+<p>指令：<code>docker run -it -v 宿主机绝对路径（目录）:容器绝对路径（目录） imageNmae</code></p>
+</blockquote>
+<h3 id="Docker容器与宿主机文件共享-设置只读权限"><a href="#Docker容器与宿主机文件共享-设置只读权限" class="headerlink" title="Docker容器与宿主机文件共享(设置只读权限)"></a>Docker容器与宿主机文件共享(设置只读权限)</h3><blockquote>
+<p>指令：<code>docker run -it -v 宿主机绝对路径（目录）:容器绝对路径（目录）:ro imageNmae</code></p>
+</blockquote>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>对于容器的操作有很多，这边只是对个别操作进行展示。<br>多练，多记…</p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2020年09月08日 21:41</p>
+        <p>原始链接： <a class="post-url" href="/2020/09/09/1582786565/" title="Docker基础学习">https://maiyikai.github.io/2020/09/09/1582786565/</a></p>
+        <footer>
+            <a href="https://maiyikai.github.io">
+                <img src="/images/logo2.png" alt="maiyikai">
+                maiyikai
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        ~谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://maiyikai.github.io/2020/09/09/1582786565/&title=《Docker基础学习》 — FlyingFish's Blog&pic=https://maiyikai.github.io/img/docker/image1.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://maiyikai.github.io/2020/09/09/1582786565/&title=《Docker基础学习》 — FlyingFish's Blog&source=Docker是一开源的应用容器引擎，基于GO语言并遵循Apache2.0协议开源。" data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://maiyikai.github.io/2020/09/09/1582786565/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Docker基础学习》 — FlyingFish's Blog&url=https://maiyikai.github.io/2020/09/09/1582786565/&via=https://maiyikai.github.io" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://maiyikai.github.io/2020/09/09/1582786565/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://maiyikai.github.io/2020/09/09/1582786565/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/Docker/" class="color2">Docker</a>
+      
+    <a href="/tags/Linux/" class="color1">Linux</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#概述"><span class="post-toc-text">概述</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#简介"><span class="post-toc-text">简介</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#限制"><span class="post-toc-text">限制</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#安装Docker"><span class="post-toc-text">安装Docker</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Docker三要素"><span class="post-toc-text">Docker三要素</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Docker指令"><span class="post-toc-text">Docker指令</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#查看Docker帮助文档"><span class="post-toc-text">查看Docker帮助文档</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#指令解析-镜像部分"><span class="post-toc-text">指令解析-镜像部分</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#镜像操作"><span class="post-toc-text">镜像操作</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#指令实现"><span class="post-toc-text">指令实现</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#查看镜像"><span class="post-toc-text">查看镜像</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#指令实现-1"><span class="post-toc-text">指令实现</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#拉取镜像"><span class="post-toc-text">拉取镜像</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#镜像删除"><span class="post-toc-text">镜像删除</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#指令解析-容器部分"><span class="post-toc-text">指令解析-容器部分</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#容器操作-创建容器"><span class="post-toc-text">容器操作-创建容器</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#查询容器"><span class="post-toc-text">查询容器</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#启动容器"><span class="post-toc-text">启动容器</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#关闭容器"><span class="post-toc-text">关闭容器</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#强制关闭"><span class="post-toc-text">强制关闭</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#重启容器"><span class="post-toc-text">重启容器</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#进入容器"><span class="post-toc-text">进入容器</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#退出容器"><span class="post-toc-text">退出容器</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#删除容器"><span class="post-toc-text">删除容器</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#查看容器日志"><span class="post-toc-text">查看容器日志</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#查看容器内部运行的进程"><span class="post-toc-text">查看容器内部运行的进程</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#查看容器内部细节"><span class="post-toc-text">查看容器内部细节</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Docker容器文件拷贝到宿主机"><span class="post-toc-text">Docker容器文件拷贝到宿主机</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#通过容器创建镜像"><span class="post-toc-text">通过容器创建镜像</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Docker容器与宿主机文件共享"><span class="post-toc-text">Docker容器与宿主机文件共享</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Docker容器与宿主机文件共享-设置只读权限"><span class="post-toc-text">Docker容器与宿主机文件共享(设置只读权限)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#总结"><span class="post-toc-text">总结</span></a></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+  
+    <a href="/2020/02/27/1582786564/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">SpringBoot 之更改 Tomcat 的 URL 校验规则</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+        <div id="SOHUCS" sid="1582786565"></div>
+<script type="text/javascript">
+    (function(){
+        var appid = 'cyu3qrrJt';
+        var conf = '3f0da4017453d35b0c5dafb035646863';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2020 maiyikai<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "https://maiyikai.github.io",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/CenterOS/">CenterOS</a><a class="category-link" href="/categories/DataSource/">DataSource</a><a class="category-link" href="/categories/Docker/">Docker</a><a class="category-link" href="/categories/Hexo/">Hexo</a><a class="category-link" href="/categories/Java/">Java</a><a class="category-link" href="/categories/LoadRunner/">LoadRunner</a><a class="category-link" href="/categories/MyBatis/">MyBatis</a><a class="category-link" href="/categories/MySQL/">MySQL</a><a class="category-link" href="/categories/SpringBoot/">SpringBoot</a><a class="category-link" href="/categories/error/">error</a><a class="category-link" href="/categories/regex/">regex</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Database/" style="font-size: 10px;">Database</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/LoadRunner/" style="font-size: 16.67px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/MySQL/" style="font-size: 13.33px;">MySQL</a> <a href="/tags/MySQL-DataType/" style="font-size: 10px;">MySQL DataType</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Scheduled/" style="font-size: 10px;">Scheduled</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/Spring/" style="font-size: 13.33px;">Spring</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 16.67px;">Test</a> <a href="/tags/Tomcat/" style="font-size: 10px;">Tomcat</a> <a href="/tags/optimize/" style="font-size: 10px;">optimize</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 13.33px;">script</a> <a href="/tags/数据库/" style="font-size: 10px;">数据库</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/CenterOS/" style="font-size: 10px;">CenterOS</a> <a href="/tags/DataSource/" style="font-size: 16.67px;">DataSource</a> <a href="/tags/Database/" style="font-size: 10px;">Database</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Druid/" style="font-size: 10px;">Druid</a> <a href="/tags/Excel/" style="font-size: 10px;">Excel</a> <a href="/tags/Github/" style="font-size: 13.33px;">Github</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Hexo-Themes/" style="font-size: 10px;">Hexo Themes</a> <a href="/tags/Java/" style="font-size: 13.33px;">Java</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/LoadRunner/" style="font-size: 16.67px;">LoadRunner</a> <a href="/tags/MyBatis/" style="font-size: 10px;">MyBatis</a> <a href="/tags/MySQL/" style="font-size: 13.33px;">MySQL</a> <a href="/tags/MySQL-DataType/" style="font-size: 10px;">MySQL DataType</a> <a href="/tags/Mybatis/" style="font-size: 13.33px;">Mybatis</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/POI/" style="font-size: 10px;">POI</a> <a href="/tags/Scheduled/" style="font-size: 10px;">Scheduled</a> <a href="/tags/Shardbatis/" style="font-size: 10px;">Shardbatis</a> <a href="/tags/Spring/" style="font-size: 13.33px;">Spring</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/Test/" style="font-size: 16.67px;">Test</a> <a href="/tags/Tomcat/" style="font-size: 10px;">Tomcat</a> <a href="/tags/optimize/" style="font-size: 10px;">optimize</a> <a href="/tags/regex/" style="font-size: 10px;">regex</a> <a href="/tags/script/" style="font-size: 13.33px;">script</a> <a href="/tags/数据库/" style="font-size: 10px;">数据库</a> <a href="/tags/正则表达式/" style="font-size: 10px;">正则表达式</a> <a href="/tags/畅言/" style="font-size: 10px;">畅言</a> <a href="/tags/百度分析/" style="font-size: 10px;">百度分析</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>
